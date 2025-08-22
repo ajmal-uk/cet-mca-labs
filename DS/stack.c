@@ -1,8 +1,9 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<stdbool.h>
 
 #define Max 100
-int i,top, maxS, item;
+int i,top, maxSize, item;
 int stack[Max];
 void push();
 void pop();
@@ -12,7 +13,7 @@ void search();
 int main(){
     top = -1;
     printf("\nEnter the Maximum Size of Stack : ");
-    scanf("%d",&maxS);
+    scanf("%d",&maxSize);
     int option;
     while(1){
         printf("\n\n1.Push\n2.Pop\n3.Traversal\n4.Search\n5.Exit\n\nEnter the Option : ");
@@ -27,11 +28,12 @@ int main(){
                 break;
         }
     }
+    return 0;
 }
 
 
 void push(){
-    if(top == maxS-1){
+    if(top == maxSize-1){
         printf("\nOverflow");
 
     }
@@ -55,18 +57,28 @@ void pop(){
 
 void traversal(){
     printf("\n");
-    for(i = top; i>=0; i--){
-        printf("| %d |\n", stack[i]);
-        printf(" ___ \n");
+    if(top == -1){
+        printf("No items in stack");
+    }
+    else{
+        for(i = top; i>=0; i--){
+            printf("| %d |\n", stack[i]);
+            printf(" ___ \n");
+        }
     }
 }
 
 void search(){
     printf("\nEnter the Item to to search  : ");
     scanf("%d",&item);
+    bool itemFound = false;
     for(i = top; i>=0; i--){
         if(stack[i] == item){
             printf("\nItem ' %d ' Found Success Fully. At the %d",item,i);
+            itemFound = true;
         }
+    }
+    if(!itemFound){
+        printf("Item Not Found in Stack");
     }
 }
