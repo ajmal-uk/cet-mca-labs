@@ -24,6 +24,7 @@ int main(){
             case 2 : pop(); break;
             case 3 : traversal(); break;
             case 4 : search(); break;
+            case 5 : exit(0);
             default:
                 break;
         }
@@ -40,7 +41,7 @@ void push(){
     else{
         printf("\nEnter the item to Insert in Stack  : ");
         scanf("%d",&item);
-        stack[top++] = item;
+        stack[++top] = item;
         printf("\n%d inserted Sucess fully!!",item);
     }
 }

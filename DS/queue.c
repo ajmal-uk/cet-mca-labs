@@ -26,6 +26,7 @@ int main(){
             case 2 : decQueue(); break;
             case 3 : traversal(); break;
             case 4 : search(); break;
+            case 5 : exit(0);
             default:
                 break;
         }
