@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<stdbool.h>
 
 struct node
 {
@@ -8,19 +9,22 @@ struct node
 };
 
 struct node *head;
+struct node *temp;
+struct node *ptr;
+int option, item, position, i;
+bool itemFound;
 
 void insertFirst();
 void insertEnd();
-void insertRandom();
+void insertPosition();
 void deleteFirst();
 void deleteEnd();
-void deleteRandom();
+void deletePosition();
 void traversal();
 void search();
 
-int option, item;
-
 int main() {
+    head = (struct node*)malloc(sizeof(struct node));
     head->link = NULL;
     while(1){
         printf("\n========== MENU ==========\n");
@@ -44,7 +48,7 @@ int main() {
                 insertEnd();
                 break;
             case 3:
-                insertRandom();
+                insertPosition();
                 break;
             case 4:
                 deleteFirst();
@@ -53,7 +57,7 @@ int main() {
                 deleteEnd();
                 break;
             case 6:
-                deleteRandom();
+                deletePosition();
                 break;
             case 7:
                 traversal();
@@ -73,44 +77,128 @@ int main() {
 
 
 void insertFirst(){
-    struct node *ptr = (struct node*)malloc(sizeof(struct node));
-    if(prt == NULL){
+    ptr = (struct node*)malloc(sizeof(struct node));
+    if(ptr == NULL){
         printf("\nOverflow");
         return;
     }
-    prinf("\nEnter the Item to Enter : ");
+    printf("\nEnter the Item to Enter : ");
     scanf("%d",&item);
     ptr->data = item;
-    if(head->link == NULL){
-        head->link = ptr
-    }
-    else{
-        ptr->link = head->link;
-        head->link = prt;
-    }
+    ptr->link = head->link;
+    head->link = ptr;
 }
 
 void insertEnd(){
-    struct node *ptr = (struct node*)malloc(sizeof(struct node));
-    if(prt == NULL){
+    ptr = (struct node*)malloc(sizeof(struct node));
+    if(ptr == NULL){
         printf("\nOverflow");
         return;
     }
-    struct node *temp = head;
-    prinf("\nEnter the Item to Enter : ");
+    temp = head;
+    printf("\nEnter the Item to Enter : ");
     scanf("%d",&item);
     ptr->data = item;
     while(temp->link != NULL){
-        
+        temp = temp->link;
     }
+    temp->link = ptr;
+    ptr->link = NULL;
+
 }
+void insertPosition(){
+    temp = head;
+    ptr = (struct node*)malloc(sizeof(struct node));
+    if(ptr == NULL){
+        printf("\nOverflow");
+        return;
+    }
+    printf("\nEnter the Item to Enter : ");
+    scanf("%d",&item);
+    ptr->data = item;
+    printf("\nEnter the Position to insert Node : ");
+    scanf("%d",&position);
+    for(i=1;i<position;i++){
+        temp = temp->link;
+    }
+    ptr->link = temp->link;
+    temp->link = ptr;
+}
+
 
 void deleteFirst(){
     if(head->link == NULL){
-        printf("\nUnderFlow!");
+        printf("\nNo Node -- >  UnderFlow !!");
         return;
     }
-    struct node *ptr = head->link;
+    ptr = head->link;
     head->link = ptr->link;
+}
 
+void deleteEnd(){
+    ptr = head;
+    if(ptr->link == NULL){
+        printf("\nNo Node for Delete!!");
+        return;
+    }
+    while(ptr->link->link!=NULL){
+        ptr = ptr->link;
+    } 
+
+    ptr->link = NULL;
+}
+
+void deletePosition(){
+    if(head->link == NULL){
+        printf("\nNo Node -- >  UnderFlow !!");
+        return;
+    }
+    ptr = head;
+    printf("\nEnter the Position to Delete Node.");
+    scanf("%d",&position);
+    for(i=1;i<position;i++){
+        ptr = ptr->link;
+    }
+    ptr->link = ptr->link->link;
+}
+
+void traversal(){
+    temp = head->link;
+    if(temp == NULL){
+        printf("\nNo Node -- >  UnderFlow !!");
+        return;
+    }
+    printf("\n| HEAD | %p |", (void*)temp);
+    while(temp != NULL){
+        printf(" ---> | %d | ", temp->data);
+        if(temp->link != NULL)
+            printf("%p | ", (void*)temp->link);
+        else
+            printf("NULL | ");
+        temp = temp->link;
+    }
+    printf("\n");
+}
+
+
+void search(){
+    temp = head->link;
+    if(head->link == NULL){
+        printf("\nNo Node -- >  UnderFlow !!");
+        return;
+    };
+    itemFound = false;
+    printf("\nEnter the Item to Enter : ");
+    scanf("%d",&item);
+    i = 1;
+    while(temp->link == NULL){
+        if(item == temp->data){
+            printf("\nItem Found At Node - | Address | Position | Data | Link | --->  | %p | %d | %d | %p |",temp,i, temp->data, temp->link);
+            itemFound = true;
+        }
+        i++;
+    }
+    if(!itemFound){
+        printf("\nItem Not in List");
+    }
 }
