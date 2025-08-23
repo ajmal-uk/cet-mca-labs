@@ -188,15 +188,16 @@ void search(){
         return;
     };
     itemFound = false;
-    printf("\nEnter the Item to Enter : ");
+    printf("\nEnter the Item to Search : ");
     scanf("%d",&item);
     i = 1;
-    while(temp->link == NULL){
+    while(temp != NULL){
         if(item == temp->data){
             printf("\nItem Found At Node - | Address | Position | Data | Link | --->  | %p | %d | %d | %p |",temp,i, temp->data, temp->link);
             itemFound = true;
         }
         i++;
+        temp = temp->link;
     }
     if(!itemFound){
         printf("\nItem Not in List");
