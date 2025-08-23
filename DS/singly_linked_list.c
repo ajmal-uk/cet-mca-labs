@@ -261,22 +261,7 @@ void copyList(){
         tempCopy = ptr;
     }
     printf("\n=== Copying Success ===");
-    printf("\n=== Copied List ===");
-    temp = copyHead;
-    if(temp == NULL){
-        printf("\nNo Node -- >  UnderFlow !!");
-        return;
-    }
-    printf("\n| HEAD | %p |", (void*)temp);
-    while(temp != NULL){
-        printf(" ---> | %d | ", temp->data);
-        if(temp->link != NULL)
-            printf("%p | ", (void*)temp->link);
-        else
-            printf("NULL | ");
-        temp = temp->link;
-    }
-    printf("\n");
+    traversalCopy();
 }
 
 void traversalCopy(){
