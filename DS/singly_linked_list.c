@@ -8,9 +8,7 @@ struct node
     struct node *link;
 };
 
-struct node *head;
-struct node *temp;
-struct node *ptr;
+struct node *head,*temp,*ptr, *mergeHead, *copyHead;
 int option, item, position, i;
 bool itemFound;
 
@@ -22,10 +20,15 @@ void deleteEnd();
 void deletePosition();
 void traversal();
 void search();
+void merge();
+void copyList();
+void traversalCopy();
 
 int main() {
     head = (struct node*)malloc(sizeof(struct node));
     head->link = NULL;
+    copyHead = (struct node*)malloc(sizeof(struct node));
+    copyHead->link = NULL;
     while(1){
         printf("\n========== MENU ==========\n");
         printf("1. Insert at Beginning\n");
@@ -36,7 +39,10 @@ int main() {
         printf("6. Delete from Specific Position\n");
         printf("7. Traverse List\n");
         printf("8. Search in List\n");
-        printf("9. Exit\n");
+        printf("9. Merge\n");
+        printf("10. Copy List\n");
+        printf("11. Traverse Copied List\n");
+        printf("12. Exit\n");
         printf("==========================\n");
         printf("Enter your choice: ");
         scanf("%d", &option);
@@ -66,6 +72,15 @@ int main() {
                 search();
                 break;
             case 9:
+                merge();
+                break;
+            case 10:
+                copyList();
+                break;
+            case 11:
+                traversalCopy();
+                break;
+            case 12:
                 printf("Exiting the program.\n");
                 exit(0);
             default:
@@ -202,4 +217,83 @@ void search(){
     if(!itemFound){
         printf("\nItem Not in List");
     }
+}
+
+
+void merge(){
+    mergeHead = (struct node*)malloc(sizeof(struct node));
+    int count;
+    mergeHead->link = NULL;
+    temp = mergeHead;
+    printf("\n=== New Linked List ===");
+    printf("\nEnter the Number of Items Did You Want to Add in New is to Merge : ");
+    scanf("%d",&count);
+    printf("\nEnter The Item One By One");
+    for(i=0;i<count;i++){
+        printf("\nEnter the Item [%d] : ",i+1);
+        scanf("%d",&item);
+        ptr = (struct node*)malloc(sizeof(struct node));
+        ptr->link = NULL;
+        ptr->data = item;
+        while(temp->link !=NULL){
+            temp = temp->link;
+        }
+        temp->link = ptr;
+    }
+    temp = head;
+    while(temp->link!=NULL){
+        temp = temp->link;
+    }
+    temp->link = mergeHead->link;
+}
+
+
+void copyList(){
+    temp = head;
+    struct node *tempCopy = copyHead;
+    printf("\n=== Copying Started ===");
+    while(temp->link!=NULL){
+        temp = temp->link;
+        ptr = (struct node*)malloc(sizeof(struct node));
+        ptr->link = NULL;
+        ptr->data = temp->data;
+        tempCopy->link = ptr;
+        tempCopy = ptr;
+    }
+    printf("\n=== Copying Success ===");
+    printf("\n=== Copied List ===");
+    temp = copyHead;
+    if(temp == NULL){
+        printf("\nNo Node -- >  UnderFlow !!");
+        return;
+    }
+    printf("\n| HEAD | %p |", (void*)temp);
+    while(temp != NULL){
+        printf(" ---> | %d | ", temp->data);
+        if(temp->link != NULL)
+            printf("%p | ", (void*)temp->link);
+        else
+            printf("NULL | ");
+        temp = temp->link;
+    }
+    printf("\n");
+}
+
+void traversalCopy(){
+    temp = copyHead->link;
+    if(temp == NULL){
+        printf("\nNo Node -- >  UnderFlow !!");
+        return;
+    }
+    printf("\n=== Copied List ===");
+    printf("\n| HEAD | %p |", (void*)temp);
+    while(temp != NULL){
+        printf(" ---> | %d | ", temp->data);
+        if(temp->link != NULL)
+            printf("%p | ", (void*)temp->link);
+        else
+            printf("NULL | ");
+        temp = temp->link;
+    }
+    printf("\n");
 }
