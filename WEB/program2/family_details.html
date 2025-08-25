@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+        th,td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        td:nth-child(odd){
+            background-color: azure;
+        }
+
+        td:nth-child(even){
+            background-color: antiquewhite;
+        }
+
+        .next{
+            margin-top: 30px;
+        }
+        .next a{
+            padding: 10px;
+            text-decoration: none;
+            background-color: aqua;
+            border-radius: 10px;
+            color: black;
+        }
+    </style>
+</head> 
+<body>
+    <div class="container">
+        <table border="1">
+            <tr style="background-color: aqua;">
+                <th colspan="2">Family Details</th>
+            </tr>
+            <tr style="background-color: lightgreen;">
+                <th>Name</th>
+                <th>Reltion</th>
+            </tr>
+            <tr>
+                <td>AZE</td>
+                <td>FATHER</td>
+            </tr>
+            <tr>
+                <td>KHAI</td>
+                <td>MOTHER</td>
+            </tr>
+            <tr>
+                <td>ASH</td>
+                <td>BRO</td>
+            </tr>
+            <tr>
+                <td>ARH</td>
+                <td>BRO</td>
+            </tr>
+            <tr>
+                <td>APPU</td>
+                <td>BRO</td>
+            </tr>
+            <tr>
+                <td>AFNA</td>
+                <td>SIS</td>
+            </tr>
+        </table>
+        <div class="next">
+            <a href="./education_qualification.html">Prev</a>
+        </div>
+    </div>
+</body>
+</html>
