@@ -10,14 +10,13 @@ h1 {
   color: #fff;
   padding: 10px;
   text-align: center;
-  margin-bottom: 20px;
 }
 
 table {
   width: 80%;
   margin: 0 auto;
   border-collapse: collapse;
-  background-color: #fff;
+  background-color: antiquewhite;
 }
 
 td {
@@ -49,3 +48,7 @@ td#p1:hover, td#p2:hover, td#p3:hover {
 .p1, .p2, .p3 {
   margin-top: 15px;
 }
+
+#target1, #target2, #target3{
+  display: none;
+} 
