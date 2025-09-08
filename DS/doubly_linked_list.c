@@ -5,7 +5,7 @@
 struct node
 {
     int data;
-    struct node *r_link,l_link;
+    struct node *r_link, *l_link;
 };
 
 struct node *head,*temp,*ptr;
@@ -20,9 +20,7 @@ void deleteEnd();
 void deletePosition();
 void traversal();
 void search();
-void merge();
-void copyList();
-void traversalCopy();
+void reverse_traversal();
 
 int main() {
     head = (struct node*)malloc(sizeof(struct node));
@@ -64,9 +62,12 @@ int main() {
                 traversal();
                 break;
             case 8:
-                search();
+                reverse_traversal();
                 break;
             case 9:
+                search();
+                break;
+            case 10:
                 printf("Exiting the program.\n");
                 exit(0);
             default:
@@ -87,7 +88,7 @@ void insertFirst(){
     scanf("%d",&item);
     ptr->data = item;
     ptr->r_link = head->r_link;
-    prt->l_link = head;
+    ptr->l_link = head;
     head->r_link = ptr;
 }
 
@@ -177,9 +178,10 @@ void traversal(){
         printf("\nNo Node -- >  UnderFlow !!");
         return;
     }
-    printf("\n| HEAD | %p |", (void*)temp);
+    printf("\n| NULL | HEAD | %p |", (void*)temp);
     while(temp != NULL){
-        printf(" ---> | %d | ", temp->data);
+        printf(" ---> | %p | ", (void*)temp->l_link);
+        printf(" %d | ", temp->data);
         if(temp->r_link != NULL)
             printf("%p | ", (void*)temp->r_link);
         else
@@ -189,10 +191,29 @@ void traversal(){
     printf("\n");
 }
 
+void reverse_traversal(){
+    if (head->r_link == NULL) {
+        printf("\nNo Node -- >  UnderFlow !!");
+        return;
+    }
+    temp = head->r_link;
+    while (temp->r_link != NULL) {
+        temp = temp->r_link;
+    }
+    printf("\nReverse Traversal:\n");
+    while (temp != head) {
+        printf("| %d |", temp->data);
+        if (temp->l_link != head)
+            printf(" <--- ");
+        temp = temp->l_link;
+    }
+    printf(" <--- | HEAD |\n");
+}
+
 
 void search(){
-    temp = head->link;
-    if(head->link == NULL){
+    temp = head->r_link;
+    if(head->r_link == NULL){
         printf("\nNo Node -- >  UnderFlow !!");
         return;
     };
@@ -202,11 +223,11 @@ void search(){
     i = 1;
     while(temp != NULL){
         if(item == temp->data){
-            printf("\nItem Found At Node - | Address | Position | Data | Link | --->  | %p | %d | %d | %p |",temp,i, temp->data, temp->link);
+            printf("\nItem Found At Node - | Address | Position | Left Link | Data | Right Link | --->  | %p | %d | %p | %d | %p |",temp,i,temp->l_link, temp->data, temp->r_link);
             itemFound = true;
         }
         i++;
-        temp = temp->link;
+        temp = temp->r_link;
     }
     if(!itemFound){
         printf("\nItem Not in List");
