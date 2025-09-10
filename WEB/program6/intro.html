@@ -39,7 +39,7 @@
     }
 
     .content-box {
-      background-color: #d9eee1;
+      background-color:#d9eee1;
       padding: 1.5rem;
       border-radius: 8px;
       margin-bottom: 40px;
@@ -101,11 +101,14 @@
     }
 
     .button-container {
-        text-align: right;
-        margin-top: 1rem;
+        display:flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 30px;
+        margin-bottom: 20px;
     }
 
-    .next-button {
+    .button-bottom {
       display: inline-block;
       padding: 0.75rem 1.5rem;
       background-color: #04aa6d;
@@ -115,11 +118,10 @@
       font-size: 1rem;
       cursor: pointer;
       text-decoration: none;
-      transition: background-color 0.3s ease;
     }
 
 
-    .next-button:hover {
+    .button-bottom:hover {
       background-color: #038e5a;
     }
 
@@ -179,7 +181,8 @@
      <h2>CSS Saves a Lot of Work!</h2>
     <p>CSS is used to define styles for your web pages, including the design, layout and variations in display for different devices and screen sizes.</p>
     <div class="button-container">
-        <a href="intro.html" class="next-button">Next &gtcir; </a>
+        <a href="home.html" class="button-bottom">&ltcir; Back</a>
+        <a href="other.html" class="button-bottom">Next &gtcir; </a>
     </div>
     <p style="text-align: center;"><strong>Click on the "Next" To Start Learning</strong></p>
   </main>

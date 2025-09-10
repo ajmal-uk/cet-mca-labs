@@ -88,7 +88,6 @@
       font-size: 1rem;
       cursor: pointer;
       text-decoration: none;
-      transition: background-color 0.3s ease;
     }
 
     .learn-button:hover {
@@ -110,13 +109,30 @@
       font-size: 1rem;
       cursor: pointer;
       text-decoration: none;
-      transition: background-color 0.3s ease;
+      margin-bottom: 20px;
     }
 
 
     .next-button:hover {
       background-color: #038e5a;
     }
+
+    .submit{
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background-color: #04aa6d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .submit:hover {
+      background-color: #038e5a;
+    }
+
 
     @media screen and (max-width: 480px) {
       .container {
@@ -167,8 +183,57 @@
                 }
             </pre>
         </div>
-        
     </section>
+    
+    <p>Test your CSS skills with a quiz.</p>
+
+    <form>
+        <p style="margin-top:20px;">Full form of CSS:</p>
+        
+        <input type="radio" name="q1" id="q1a" value="a">
+        <label for="q1a">Cascading Style Sheets</label><br>
+        
+        <input type="radio" name="q1" id="q1b" value="b">
+        <label for="q1b">Creative Style System</label><br>
+        
+        <input type="radio" name="q1" id="q1c" value="c">
+        <label for="q1c">Computer Styled Sections</label><br>
+        
+        <input type="radio" name="q1" id="q1d" value="d">
+        <label for="q1d">Colorful Style Syntax</label><br>
+
+        <p style="margin-top:20px;">Which property is used to change text color in CSS?</p>
+        
+        <input type="radio" name="q2" id="q2a" value="a">
+        <label for="q2a">font-color</label><br>
+        
+        <input type="radio" name="q2" id="q2b" value="b">
+        <label for="q2b">text-style</label><br>
+        
+        <input type="radio" name="q2" id="q2c" value="c">
+        <label for="q2c">color</label><br>
+        
+        <input type="radio" name="q2" id="q2d" value="d">
+        <label for="q2d">background-color</label><br>
+
+        <p style="margin-top:20px;">Which CSS property controls the size of text?</p>
+        
+        <input type="radio" name="q3" id="q3a" value="a">
+        <label for="q3a">font-style</label><br>
+        
+        <input type="radio" name="q3" id="q3b" value="b">
+        <label for="q3b">font-size</label><br>
+        
+        <input type="radio" name="q3" id="q3c" value="c">
+        <label for="q3c">text-size</label><br>
+        
+        <input type="radio" name="q3" id="q3d" value="d">
+        <label for="q3d">text-style</label><br>
+
+        <p style="margin-top:20px;">
+            <button type="submit" class="submit">Submit Quiz</button>
+        </p>
+    </form>
     <div class="button-container">
         <a href="intro.html" class="next-button">Next &gtcir; </a>
     </div>
