@@ -4,23 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>String Functions</title>
+    <style>
+        .container {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .optionContainer {
+            margin-bottom: 20px;
+        }
+        .result input {
+            display: block;
+            margin: 10px 0;
+        }
+        .result button {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="optionContainer">
-        <h1>Select the Option : </h1>
-        <ul>
-            <li id="sLen">String Length</li>
-            <li id="sRev">String Reverse</li>
-            <li id="sCat">String Concatination</li>
-        </ul>
+            <h1>Select the Option:</h1>
+            <button onclick="cat();">Concat</button>
+            <button onclick="len();">Length</button>
+            <button onclick="char();">Char At</button>
         </div>
-        <div class="result" id="resultFrame">
-
-        </div>
+        <div class="result" id="resultFrame"></div>
     </div>
+
     <script>
-        
+        const textBox = `<input type="text" name="string" id="string" class="string" placeholder="Enter string">`;
+        const catTextBox2 = `<input type="text" name="catString" id="catString" class="catString" placeholder="Enter string to concatenate">`;
+        const numBox = `<input type="number" name="num" id="num" class="num" placeholder="Enter index">`;
+        const resultFrame = document.getElementById("resultFrame");
+
+        function cat() {
+            resultFrame.innerHTML = textBox + catTextBox2 + `<button onclick="showConcat()">Show Result</button>`;
+        }
+
+        function len() {
+            resultFrame.innerHTML = textBox + `<button onclick="showLength()">Show Result</button>`;
+        }
+
+        function char() {
+            resultFrame.innerHTML = textBox + numBox + `<button onclick="showCharAt()">Show Result</button>`;
+        }
+
+        function showConcat() {
+            const str1 = document.getElementById("string").value;
+            const str2 = document.getElementById("catString").value;
+            resultFrame.innerHTML += `<p>Concatenated String: ${str1 + str2}</p>`;
+        }
+
+        function showLength() {
+            const str = document.getElementById("string").value;
+            resultFrame.innerHTML += `<p>Length of String: ${str.length}</p>`;
+        }
+
+        function showCharAt() {
+            const str = document.getElementById("string").value;
+            const index = parseInt(document.getElementById("num").value);
+            if (index >= 0 && index < str.length) {
+                resultFrame.innerHTML += `<p>Character at index ${index}: ${str.charAt(index)}</p>`;
+            } else {
+                resultFrame.innerHTML += `<p>Invalid index. Please enter a value between 0 and ${str.length - 1}.</p>`;
+            }
+        }
     </script>
 </body>
 </html>
