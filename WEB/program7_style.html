@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 id="colorMe">Color Me</h1>
+    <button onclick="red();">Red</button>
+    <button onclick="green();">Green</button>
+    <button onclick="blue();">Blue</button>
+
+
+    <br><br>
+
+
+    <img src="https://my.alfred.edu/zoom/_images/foster-lake.jpg" id="image" width="200px">
+
+    <button onclick="image1();">Image 1</button>
+    <button onclick="image2();">Image 2</button>
+    <button onclick="image3();">Image 3</button>
+    
+    <script>
+        let colorMe = document.getElementById("colorMe");
+        let image = document.getElementById("image");
+        let c1 = 'https://my.alfred.edu/zoom/_images/foster-lake.jpg';
+        let c2 = 'https://cdn.photographylife.com/wp-content/uploads/2014/09/Nikon-D750-Image-Samples-2.jpg';
+        let c3 = 'https://cdn.pixabay.com/photo/2022/09/27/19/46/ai-generated-7483596_960_720.jpg';
+        function red(){
+            colorMe.style.color = 'red';
+        }
+
+        function blue(){
+            colorMe.style.color = 'blue';
+        }
+
+        function green(){
+            colorMe.style.color = 'green';
+        }
+
+        function image1(){
+            image.src = c1;
+        }
+
+        function image2(){
+            image.src = c2;
+        }
+
+        function image3(){
+            image.src = c3;
+        }
+
+    </script>
+</body>
+</html>
