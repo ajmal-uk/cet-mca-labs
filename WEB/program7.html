@@ -39,16 +39,9 @@
     <button onclick="sSub()">Substring(2, 4)</button>
     <button onclick="sIndexOf()">indexOf('l')</button>
     <button onclick="sReplace()">Replace (hello → hai)</button>
-    <p>JavaScript provides many methods to work with strings. Here are a few commonly used ones:</p>
-    <ul>
-      <li><strong>length</strong> - Returns the length of the string.</li>
-      <li><strong>toUpperCase()</strong> - Converts string to uppercase.</li>
-      <li><strong>toLowerCase()</strong> - Converts string to lowercase.</li>
-      <li><strong>charAt(index)</strong> - Returns the character at a given position.</li>
-      <li><strong>substring(start, end)</strong> - Extracts part of a string.</li>
-      <li><strong>indexOf(value)</strong> - Finds the position of the first occurrence.</li>
-      <li><strong>replace(search, replace)</strong> - Replaces part of the string.</li>
-    </ul>
+    <button onclick="sCat()">Concat with 'World'</button>
+    <button onclick="sSlice()">Slice (1, 4)</button>
+    <button onclick="sTrim()">Trim</button>
   </div>
 
   <div class="section">
@@ -58,21 +51,10 @@
     <button onclick="mFloor()">Floor</button>
     <button onclick="mCeil()">Ceil</button>
     <button onclick="mRandom()">Random (1 to 10)</button>
-    <button onclick="mMax()">Max of [20.44, 1, 10, 13, 100, 20, 400]</button>
-    <button onclick="mMin()">Min of [20.44, 1, 10, 13, 100, 20, 400]</button>
+    <button onclick="mMax()">Max of 20.44, 1, 10, 13, 100, 20, 400</button>
+    <button onclick="mMin()">Min of 20.44, 1, 10, 13, 100, 20, 400</button>
     <button onclick="mSqrt()">Square Root</button>
     <button onclick="mPower()">20.44 to Power 2</button>
-    <p>The <code>Math</code> object has many useful methods for mathematical calculations:</p>
-    <ul>
-      <li><strong>Math.round(x)</strong> - Rounds to the nearest integer.</li>
-      <li><strong>Math.floor(x)</strong> - Rounds down.</li>
-      <li><strong>Math.ceil(x)</strong> - Rounds up.</li>
-      <li><strong>Math.random()</strong> - Returns a random number between 0 and 1.</li>
-      <li><strong>Math.max(...values)</strong> - Returns the largest value.</li>
-      <li><strong>Math.min(...values)</strong> - Returns the smallest value.</li>
-      <li><strong>Math.sqrt(x)</strong> - Returns square root.</li>
-      <li><strong>Math.pow(x, y)</strong> - Returns x to the power of y.</li>
-    </ul>
   </div>
 
   <script>
@@ -113,6 +95,19 @@
 
     function sReplace() {
       replaceS(string.replace("hello", "hai"));
+    }
+
+    function sCat(){
+      replaceS(string.concat("world"));
+    }
+
+    function sSlice() {
+      replaceS(string.slice(1, 4));
+    }
+
+    function sTrim() {
+      let strWithSpaces = "  hello world   ";
+      replaceS(strWithSpaces.trim());
     }
 
     function mRound() {
