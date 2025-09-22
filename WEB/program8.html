@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yearly Calendar Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: #f0f0f0;
+    }
+    h1 {
+      text-align: center;
+    }
+    input[type="number"] {
+      padding: 8px;
+      font-size: 16px;
+      width: 150px;
+      margin-right: 10px;
+    }
+    button {
+      padding: 9px 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #calendar {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .month {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      padding: 15px;
+    }
+    .month h3 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: center;
+      padding: 5px;
+      border: 1px solid #ddd;
+      width: 14.28%;
+    }
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+    td.empty {
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Yearly Calendar Generator</h1>
+  <div style="text-align:center;">
+    <input type="number" id="yearInput" placeholder="Enter year" min="1" />
+    <button onclick="generateCalendar()">Generate Calendar</button>
+  </div>
+
+  <div id="calendar"></div>
+
+  <script>
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    function generateCalendar() {
+      const year = parseInt(document.getElementById('yearInput').value);
+      const calendarDiv = document.getElementById('calendar');
+      calendarDiv.innerHTML = '';
+
+      if (!year || year < 1) {
+        calendarDiv.innerHTML = '<p style="color:red; text-align:center;">Please enter a valid positive year.</p>';
+        return;
+      }
+
+      for (let month = 0; month < 12; month++) {
+        const monthDiv = document.createElement('div');
+        monthDiv.classList.add('month');
+
+        const monthTitle = document.createElement('h3');
+        monthTitle.textContent = `${monthNames[month]} ${year}`;
+        monthDiv.appendChild(monthTitle);
+
+        const table = document.createElement('table');
+
+        const daysRow = document.createElement('tr');
+        const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        days.forEach(day => {
+          const th = document.createElement('th');
+          th.textContent = day;
+          daysRow.appendChild(th);
+        });
+        table.appendChild(daysRow);
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        let date = 1;
+        for (let i = 0; i < 6; i++) {
+          const row = document.createElement('tr');
+
+          for (let j = 0; j < 7; j++) {
+            const cell = document.createElement('td');
+
+            if (i === 0 && j < firstDay) {
+              cell.classList.add('empty');
+              cell.textContent = '';
+            } else if (date > daysInMonth) {
+              cell.classList.add('empty');
+              cell.textContent = '';
+            } else {
+              cell.textContent = date;
+              date++;
+            }
+            row.appendChild(cell);
+          }
+
+          table.appendChild(row);
+
+          if (date > daysInMonth) {
+            break;
+          }
+        }
+
+        monthDiv.appendChild(table);
+        calendarDiv.appendChild(monthDiv);
+      }
+    }
+  </script>
+
+</body>
+</html>
