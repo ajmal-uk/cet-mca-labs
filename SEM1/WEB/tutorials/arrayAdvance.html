@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="result"></div>
+
+    <script>
+        let result = document.getElementById("result");
+        let arr = ["Mango", "Apple", "Banana"];
+        arr.push("Grape");
+        arr.reverse();
+        arr.pop();
+        let text = "";
+
+        for (let i = 0; i < arr.length; i++) {
+            text += `<li>${arr[i]}</li>`;
+        }
+
+        text = `<ol>${text}</ol>`;
+        result.innerHTML = text;
+    </script>
+</body>
+</html>
