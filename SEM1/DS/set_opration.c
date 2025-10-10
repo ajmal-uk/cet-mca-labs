@@ -7,15 +7,13 @@
 int data[MAX], parent[MAX];
 int position = -1;
 
-// Function declarations
+
 void make_set(int item);
 int find_set(int item);
 void union_set(int item1, int item2);
 void print_set();
 
-// Main function for testing
 int main() {
-    // Sample test
     make_set(1);
     make_set(2);
     make_set(3);
