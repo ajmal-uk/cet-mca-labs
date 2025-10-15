@@ -13,9 +13,9 @@ def fib(n):
 
     a, b = 0, 1
     print(a, b, end=', ')
-    for _ in range(n - 2):
+    for i in range(n - 2):
         c = a + b
-        print(c, end=', ' if _ < n - 3 else '')
+        print(c, end=', ' if i < n - 3 else '')
         a, b = b, c
     print() 
 
