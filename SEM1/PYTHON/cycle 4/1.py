@@ -27,8 +27,6 @@ owner1 = BankAccount("Ajmal",1000)
 owner2 = BankAccount("Amar",200)
 owner3 = BankAccount("Abhinav",10)
 
-
-
 print("\n\n<=== Printing the All User Details ===>\n")
 owner1.display()
 owner2.display()
