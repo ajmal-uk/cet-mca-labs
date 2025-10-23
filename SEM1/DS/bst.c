@@ -62,7 +62,7 @@ void insertion() {
     while (ptr != NULL) {
         parent = ptr;
         if (item == ptr->data) {
-            printf("Item already exists in the Tree!\n");
+            printf("Item already exists in the Tree!😁😁\n");
             return;
         } else if (item < ptr->data) {
             ptr = ptr->left;
