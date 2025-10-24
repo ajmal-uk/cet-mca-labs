@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Registration Form With Validation</title>
+    <style>
+        body {
+            background: #f4f4f4;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .t_container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        td:first-child {
+            font-weight: bold;
+            width: 30%;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="email"],
+        input[type="number"],
+        input[type="tel"],
+        input[type="password"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            height: 60px;
+            resize: vertical;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        label {
+            margin-right: 15px;
+        }
+
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn-container {
+            text-align: center;
+            padding-top: 20px;
+        }
+
+        .btn-container input {
+            margin: 0 10px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-container input[type="reset"] {
+            background: #6c757d;
+        }
+
+        .btn-container input:hover {
+            opacity: 0.9;
+        }
+
+        span.required {
+            color: red;
+            font-size: 0.9em;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.7em;
+            display: none;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>JOB REGISTRATION FORM</h1>
+
+    <div class="t_container">
+        <form>
+            <table>
+                <tr>
+                    <td>Name <span class="required">*</span></td>
+                    <td>
+                        <input type="text" name="name" id="name">
+                        <span class="error" id="name-error">Please Enter Your Name</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>DOB <span class="required">*</span></td>
+                    <td>
+                        <input type="date" name="dob" id="dob">
+                        <span class="error" id="dob-error">Please Enter Your DOB</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Gender <span class="required">*</span></td>
+                    <td>
+                        <div class="radio-group">
+                            <label><input type="radio" name="gender" value="male" id="male"> Male</label>
+                            <label><input type="radio" name="gender" value="female" id="female"> Female</label>
+                            <label><input type="radio" name="gender" value="other" id="other"> Other</label>
+                        </div>
+                        <span class="error" id="gender-error">Please Select Your Gender</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Email <span class="required">*</span></td>
+                    <td>
+                        <input type="email" name="email" id="email">
+                        <span class="error" id="email-error">Please Enter a Valid Email</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Mobile no <span class="required">*</span></td>
+                    <td>
+                        <input type="tel" name="mob" id="mob" pattern="[0-9]{10}">
+                        <span class="error" id="mob-error">Please Enter a Valid Mobile Number (10 digits)</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Address <span class="required">*</span></td>
+                    <td>
+                        <textarea name="address" id="address"></textarea>
+                        <span class="error" id="address-error">Please Enter Your Address</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Known Languages <span class="required">*</span></td>
+                    <td>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="knownlang" value="mal" id="mal"> Malayalam</label>
+                            <label><input type="checkbox" name="knownlang" value="hin" id="hin"> Hindi</label>
+                            <label><input type="checkbox" name="knownlang" value="eng" id="eng"> English</label>
+                        </div>
+                        <span class="error" id="lang-error">Please Select At Least One Language</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Upload CV <span class="required">*</span></td>
+                    <td>
+                        <input type="file" name="file" id="file" accept=".pdf,.doc,.docx">
+                        <span class="error" id="file-error">Please Upload Your CV</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Password <span class="required">*</span></td>
+                    <td>
+                        <input type="password" name="password" id="password">
+                        <span class="error" id="password-error">Please Enter Your Password</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Security Ques <span class="required">*</span></td>
+                    <td>
+                        <select name="security_ques" id="security_ques">
+                            <option value="">---Select---</option>
+                            <option value="your_nick">What is your nick name</option>
+                            <option value="your_color">What is your Fav color</option>
+                        </select>
+                        <span class="error" id="sec-error">Please Select a Security Question</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Answer <span class="required">*</span></td>
+                    <td>
+                        <input type="text" name="answer" id="answer">
+                        <span class="error" id="answer-error">Please Enter Your Answer</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="btn-container">
+                            <input type="submit" value="Submit">
+                            <input type="reset" value="Reset">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+
+            document.querySelectorAll('.error').forEach(function(el) {
+                el.style.display = 'none';
+            });
+
+            let nameVal = document.getElementById('name').value.trim();
+            if (!nameVal) {
+                document.getElementById('name-error').style.display = 'block';
+                isValid = false;
+            }
+
+            let dobVal = document.getElementById('dob').value;
+            if (!dobVal) {
+                document.getElementById('dob-error').style.display = 'block';
+                isValid = false;
+            }
+
+            let genderChecked = document.querySelector('input[name="gender"]:checked');
+            if (!genderChecked) {
+                document.getElementById('gender-error').style.display = 'block';
+                isValid = false;
+            }
+
+            let emailVal = document.getElementById('email').value.trim();
+            let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailVal || !emailRegex.test(emailVal)) {
+                document.getElementById('email-error').style.display = 'block';
+                isValid = false;
+            }
+
+            let mobVal = document.getElementById('mob').value;
+            let mobRegex = /^\d{10}$/;
+            if (!mobVal || !mobRegex.test(mobVal)) {
+                document.getElementById('mob-error').style.display = 'block';
+                isValid = false;
+            }
+
+            let addressVal = document.getElementById('address').value.trim();
+            if (!addressVal) {
+                document.getElementById('address-error').style.display = 'block';
+                isValid = false;
+            }
+
+            let langChecked = document.querySelector('input[name="knownlang"]:checked');
+            if (!langChecked) {
+                document.getElementById('lang-error').style.display = 'block';
+                isValid = false;
+            }
+
+            let fileVal = document.getElementById('file').value;
+            if (!fileVal) {
+                document.getElementById('file-error').style.display = 'block';
+                isValid = false;
+            }
+
+            let passVal = document.getElementById('password').value;
+            if (!passVal) {
+                document.getElementById('password-error').style.display = 'block';
+                isValid = false;
+            }
+
+            let secVal = document.getElementById('security_ques').value;
+            if (!secVal) {
+                document.getElementById('sec-error').style.display = 'block';
+                isValid = false;
+            }
+
+            let ansVal = document.getElementById('answer').value.trim();
+            if (!ansVal) {
+                document.getElementById('answer-error').style.display = 'block';
+                isValid = false;
+            }
+
+            if (isValid) {
+                alert('Form submitted successfully!');
+            }
+        });
+
+        document.querySelector('input[type="reset"]').addEventListener('click', function() {
+            setTimeout(() => {
+                document.querySelectorAll('.error').forEach(function(el) {
+                    el.style.display = 'none';
+                });
+            }, 0);
+        });
+    </script>
+</body>
+</html>
