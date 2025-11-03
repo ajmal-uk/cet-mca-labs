@@ -1,2 +1,8 @@
-/SEM1/DS/output/
-.vscode
+# Ignore all compiled executables
+*.exe
+
+# Ignore VS Code settings
+.vscode/
+
+# Keep C source files
+!*.c
