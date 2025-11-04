@@ -1,443 +1,294 @@
 <!DOCTYPE html>
 <html lang="en">
-
-  <head>
-    <meta charset="UTF-8">
-    <title>drive mad</title>
-    
-
-  </head>
-    
-  <body>
-  <html>
-<html lang="en-us">
-
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drive Mad</title>
   <script src="https://deckard.openprocessing.org/user485717/visual2458132/hf42bec4b58ab09712c0f3bedb92cada1/index.wasm.js"></script>
   <script src="https://deckard.openprocessing.org/user485717/visual2458132/hf42bec4b58ab09712c0f3bedb92cada1/index.data.js"></script>
-  <title>Drive Mad</title>
-</head>
-
-<body id="body">
   <style>
     @font-face {
-      font-family: 'baloo 2';
+      font-family: 'Baloo 2';
       font-style: normal;
       font-weight: 800;
       font-display: swap;
       src: url(baloo2.woff) format('woff');
-      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      font-family: 'Baloo 2', Ubuntu, Verdana, sans-serif;
+      font-size: 18px;
+      color: #e0f7fa;
+      background: linear-gradient(135deg, #0d1b2a, #1b263b);
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #body {
+      position: relative;
+      width: 100%;
+      height: 100%;
     }
 
     .fullscreen {
       position: absolute;
       width: 100%;
-      height: 100%
+      height: 100%;
     }
 
-    .center {
-      text-align: center
+    #canvas_border {
+      position: relative;
+      width: 1024px;
+      height: 768px;
+      max-width: 100%;
+      max-height: 100%;
+      margin: auto;
     }
 
-    .centered {
-      margin-left: auto;
-      margin-right: auto;
+    canvas.emscripten {
+      background-color: #000;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
       display: block;
-      text-align: center
+      margin: 0 auto;
     }
 
-    #play_overlay {
-      display: none;
-      z-index: 10
-    }
-
-    .middle {
+    #play_content {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%)
-    }
-
-    .middle_vertical {
-      position: absolute;
-      top: 50%;
-      transform: translate(0%, -50%)
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 10;
+      background: rgba(13, 27, 42, 0.85);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(0, 162, 255, 0.5);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(0, 162, 255, 0.3);
+      max-width: 90%;
+      width: 300px;
     }
 
     .edge {
-      margin-left: auto;
-      margin-right: auto;
+      margin: 0 auto 20px;
       width: 164px;
       height: 180px;
-      background-color: #cfdaed;
-      box-shadow: 5px 1px 5px rgba(0, 0, 0, .25);
-      transform: rotate(-5deg)
+      background: linear-gradient(135deg, #1e3a5f, #3a5f8a);
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+      transform: rotate(-3deg);
     }
 
     .box {
       width: 164px;
       height: 164px;
-      background-color: #fff;
-      position: relative
+      background: #0f1c2e;
+      border-radius: 10px;
+      position: relative;
     }
 
     .black {
       width: 132px;
       height: 156px;
-      background-color: #000;
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      margin: 0 auto
+      background: #000;
+      margin: 4px auto;
+      border-radius: 8px;
+      overflow: hidden;
     }
 
     .cover {
       width: 128px;
       height: 128px;
-      margin: 2px
+      margin: 2px;
+      border: 2px solid #00a2ff;
+      border-radius: 6px;
     }
 
     .title {
-      font-size: 14px;
-      font-family: 'baloo 2', ubuntu, verdana, sans-serif
+      font-size: 20px;
+      font-weight: 800;
+      color: #4fc3f7;
+      margin-top: 8px;
     }
 
     .author {
-      font-family: 'baloo 2', ubuntu, verdana, sans-serif;
-      border-spacing: 0;
       font-size: 14px;
-      color: #ccc;
-      text-align: right;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      position: absolute;
-      width: 150px;
-      top: 4px;
-      right: 142px;
-      transform-origin: right top;
-      transform: rotate(-90deg)
-    }
-
-    .loading {
-      margin-top: 20px;
-      margin-bottom: 10px
+      color: #90a4ae;
+      margin-top: 4px;
     }
 
     .description {
-      font-family: 'baloo 2', ubuntu, verdana, sans-serif;
-      display: inline-block;
       font-size: 16px;
-      line-height: 1.2em;
-      width: 240px
+      line-height: 1.4em;
+      margin: 15px 0;
+      color: #e0f7fa;
     }
 
     .button {
       display: inline-block;
-      border: 2px solid #00a2ff;
-      border-radius: 7px;
-      width: 133px;
-      height: 43px;
-      font-size: 16px;
-      line-height: 43px;
-      margin: 0 auto
-    }
-
-    .overlay_button {
-      display: inline-block;
-      border: 2px solid #000;
-      border-radius: 12px;
-      width: 200px;
+      background: linear-gradient(to right, #00a2ff, #0077c2);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      width: 150px;
       height: 50px;
       font-size: 18px;
+      font-weight: bold;
       line-height: 50px;
-      margin: 11px
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 10px;
+      box-shadow: 0 4px 10px rgba(0, 100, 200, 0.4);
     }
 
-    #play_button {
-      color: #333;
-      background-color: #eee
+    .button:hover {
+      background: linear-gradient(to right, #00c2ff, #0088d0);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0, 100, 200, 0.6);
     }
 
-    .emscripten_border {
-      position: relative
-    }
-
-    #gradient {
-      background-image: linear-gradient(135deg, #70e1fd, #00a2ff);
-      position: absolute;
-      top: 0;
+    progress {
       width: 100%;
-      height: 768px
+      height: 10px;
+      border-radius: 5px;
+      border: none;
+      appearance: none;
+      margin: 20px 0;
     }
 
-    * {
-      margin: 0;
-      padding: 0
+    progress::-webkit-progress-bar {
+      background: #2c3e50;
+      border-radius: 5px;
     }
 
-    p,
-    ul,
-    ol,
-    dl {
-      margin-bottom: 1em
-    }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    p,
-    ul,
-    ol,
-    dl {
-      margin-left: 16px;
-      margin-right: 16px
-    }
-
-    img {
-      vertical-align: top
-    }
-
-    html,
-    body {
-      font-family: 'baloo 2', ubuntu, verdana, sans-serif;
-      font-size: 18px;
-      color: #bbb;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      border: 0;
-      line-height: 1.8;
-      overflow: hidden;
-      display: block
-    }
-
-    canvas {
-      padding-right: 0;
-      margin-left: auto;
-      margin-right: auto;
-      display: block;
-      margin-top: auto;
-      margin-bottom: auto;
-      position: relative;
-      width: 1024px;
-      height: 768px
-    }
-
-    div.emscripten {
-      text-align: center
-    }
-
-    canvas.emscripten {
-      border: 0;
-      background-color: #000
-    }
-
-    #status {
-      display: inline-block;
-      width: 100%;
-      font-weight: 700;
-      color: #787878;
-      text-align: center
+    progress::-webkit-progress-value {
+      background: linear-gradient(to right, #00c2ff, #4fc3f7);
+      border-radius: 5px;
     }
 
     #modal_parent {
       display: none;
       position: fixed;
-      z-index: 1;
+      z-index: 100;
       left: 0;
       top: 0;
       width: 100%;
       height: 100%;
-      overflow: auto;
-      background-color: #000;
-      background-color: rgba(0, 0, 0, .4)
-    }
-
-    .modal_inner {
-      display: none
-    }
-
-    #play_content {
-      color: #fff;
-      z-index: 10
+      background: rgba(0, 0, 0, 0.7);
     }
 
     #modal_content {
-      position: relative;
-      background-color: #fefefe;
-      margin: auto;
-      padding: 20px;
-      border: 1px solid #888;
-      box-sizing: border-box
-    }
-
-    .error_message {
-      color: red
-    }
-
-    .error_text {
-      color: red;
-      font-family: sans-serif;
-      font-size: .8em
+      background: #0f1c2e;
+      margin: 10% auto;
+      padding: 25px;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 16px;
+      border: 1px solid #00a2ff;
+      color: #e0f7fa;
     }
 
     #modal_close_button {
       color: #aaa;
-      position: absolute;
-      right: 15px;
-      top: 10px;
+      float: right;
       font-size: 28px;
-      line-height: 28px;
-      font-weight: 700;
-      transition: .2s
+      cursor: pointer;
+      transition: color 0.2s;
     }
 
-    #modal_close_button:hover,
-    #modal_close_button:focus {
-      color: #000;
+    #modal_close_button:hover {
+      color: #fff;
+    }
+
+    a {
+      color: #4fc3f7;
       text-decoration: none;
-      cursor: pointer
     }
 
-    a:link {
-      color: #00b9fe;
-      text-decoration: none;
-      transition: .2s
-    }
-
-    a:visited {
-      color: #00b9fe
-    }
-
-    a:hover,
-    a:active {
-      opacity: .5
-    }
-
-    .link_image_button {
-      margin-right: 10px
-    }
-
-    .playstore075 {
-      width: 153px;
-      height: 45px
-    }
-
-    .appstore075 {
-      width: 135px;
-      height: 45px
-    }
-
-    #progress_or_play {
-      margin-top: 10px
-    }
-
-    #terms_p {
-      font-family: sans-serif;
-      color: #141414;
-      font-size: .7em;
-      margin-bottom: 0
-    }
-
-    #terms_p a {
-      color: #f0f0f0
-    }
-
-    .deeplink_message {
-      font-size: 1em;
-      color: #f0f0f0;
-      line-height: 1.1em;
-      font-size: 20px
+    a:hover {
+      opacity: 0.8;
     }
 
     .menu {
-      color: #f0f0f0
+      color: #e0f7fa;
+    }
+
+    .menu_header {
+      font-size: 2.5em;
+      margin: 20px 0;
+      color: #4fc3f7;
+      text-shadow: 0 0 10px rgba(79, 195, 247, 0.6);
     }
 
     .level_button {
-      border: 2px solid #222;
-      border-radius: 1em;
-      color: #f0f0f0;
-      background-color: #00a2ff;
-      line-height: 1em;
-      height: 2.5em;
-      width: 5em;
-      justify-self: center;
-      position: relative;
-      padding-top: .6em
-    }
-
-    .grid_element_center {
-      justify-self: center
-    }
-
-    .level_button_name {
-      font-size: .6em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis
-    }
-
-    .level_button_number {
-      font-size: 1.2em
+      background: linear-gradient(135deg, #1e3a5f, #2a527a);
+      border: 2px solid #00a2ff;
+      color: white;
+      border-radius: 12px;
+      padding: 12px 0;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
     }
 
     .level_button:hover {
-      background-color: #00c2ff
+      background: linear-gradient(135deg, #2a527a, #3a6f9a);
+      transform: scale(1.05);
     }
 
     .level_checkmark {
       position: absolute;
-      right: 0;
-      top: 0;
-      margin: 0;
-      padding: 0;
-      text-align: right;
-      font-size: 1.2em;
-      line-height: 1.2em
-    }
-
-    .level_button a {
-      color: #f0f0f0;
-      opacity: 1
+      top: 4px;
+      right: 8px;
+      color: #4caf50;
+      font-weight: bold;
     }
 
     .menu_items {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 20px
-    }
-
-    .menu_header {
-      font-size: 3em;
-      margin-top: 40px
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
     }
 
     #webview_content {
       display: none;
-      background-color: transparent;
-      position: absolute;
-      top: 0;
-      width: 100%;
-      height: 768px
     }
 
-    .webview {
-      width: 100%;
-      height: 100%;
-      background: 0 0;
-      margin: 0;
-      border: 0;
-      overflow: hidden
+    @media (max-width: 768px) {
+      #play_content {
+        padding: 20px;
+        width: 90%;
+      }
+
+      .edge {
+        transform: rotate(0);
+      }
+
+      .title {
+        font-size: 18px;
+      }
+
+      .button {
+        width: 130px;
+        height: 45px;
+        font-size: 16px;
+      }
     }
   </style>
-
+</head>
+<body id="body">
   <div id="modal_parent">
     <div id="modal_content">
       <span id="modal_close_button">&times;</span>
@@ -445,6 +296,7 @@
       <div id="share_file_modal_content" class="modal_inner"></div>
     </div>
   </div>
+
   <div id="canvas_border" class="emscripten_border">
     <div id="play_content" class="middle center">
       <div class="edge">
@@ -456,13 +308,16 @@
           </div>
         </div>
       </div>
-      <div id="progress_or_play"><progress id="progress" class="loading" value="0" max="100"></progress></div>
-      <p class="description"></p>
+      <div id="progress_or_play">
+        <progress id="progress" value="0" max="100"></progress>
+      </div>
+      <p class="description">Race, drift, and crash through physics-defying tracks!</p>
+      <div id="play_button" class="button">PLAY NOW</div>
     </div>
+
     <canvas class="emscripten" id="canvas" tabindex="-1"></canvas>
-    <div id="gradient"></div>
-    <div id="webview_content"></div>
   </div>
+
   <script type="text/javascript">
     var pokiDebug = false;
     var postRunDone = false;
@@ -488,7 +343,6 @@
         });
       }
     });
-
     function inIframe() {
       try {
         return window.self !== window.top;
@@ -496,7 +350,6 @@
         return true;
       }
     }
-
     function updateLoadProgress() {
       let progressElement = document.getElementById('progress');
       if (progressElement) {
@@ -508,7 +361,6 @@
         tryStartGame();
       }
     }
-
     function domContentLoaded() {
       initPokiSdk();
       console.log("DOM content loaded event received");
@@ -523,27 +375,22 @@
       canvas.onpointerup = endPointerDrag;
       theDomLoaded = true;
     }
-
     function beginPointerDrag(e) {
       let canvas = document.getElementById('canvas');
       canvas.setPointerCapture(e.pointerId);
     }
-
     function endPointerDrag(e) {
       let canvas = document.getElementById('canvas');
       canvas.releasePointerCapture(e.pointerId);
     }
-
     function setGameFocus(f) {
       if (postRunDone) {
         Module.ccall('set_game_focus', 'v', ['number'], [f]);
       }
     }
-
     function canBeGameGuid(str) {
       return str && str.match('([A-F]|[0-9]){16}');
     }
-
     function getMeta(metaName) {
       const metas = document.getElementsByTagName('meta');
       for (let i = 0; i < metas.length; i++) {
@@ -553,40 +400,33 @@
       }
       return '';
     }
-
     function getCSSRgb(color) {
       return `rgb(${Math.round(color[0])}, ${Math.round(color[1])}, ${Math.round(color[2])})`;
     }
     let lastGradientStyleStr = "";
     let lastDeepLinkLoadFraction = 0;
-
     function getGradientStr(frac) {
       let fromColor = [frac * 0x70, frac * 0xe1, frac * 0xfd];
       let toColor = [frac * 0x00, frac * 0xa2, frac * 0xff];
       let str = `linear-gradient(135deg, ${getCSSRgb(fromColor)}, ${getCSSRgb(toColor)})`
       return str;
     }
-
     function hideOverlayGradient() {
       var gradient = document.getElementById('gradient');
       gradient.style.display = "none";
     }
     var showedStartGameError = false;
-
     function setPokiInited() {
       pokiInited = true;
     }
-
     function initPokiSdk() {
       setPokiInited();
     }
-
     function hideOverlay() {
       var playContent = document.getElementById('play_content');
       playContent.style.display = "none";
       hideOverlayGradient();
     }
-
     function startGame() {
       try {
         console.log("Registering event listeners");
@@ -630,13 +470,11 @@
       }
     }
     var pokiStopped = true;
-
     function pokiEnsureStop() {
       if (!pokiStopped) {
         pokiStopped = true;
       }
     }
-
     function pokiEnsureStart() {
       if (pokiStopped) {
         pokiStopped = false;
@@ -644,7 +482,6 @@
     }
     var startGameAttempts = 0;
     var tryStartGameTimeout = null;
-
     function tryStartGame() {
       console.log("tryStartGame()", gameReadyToStart);
       if (gameReadyToStart) {
@@ -666,7 +503,6 @@
       console.log("Starting game");
       startGame();
     }
-
     function simpleLogC(str) {
       if (postRunDone) {
         Module.ccall('log_simple', 'v', ['string'], [str]);
@@ -674,7 +510,6 @@
         console.log(str);
       }
     }
-
     function appErrorC(code, str) {
       if (postRunDone) {
         Module.ccall('app_error', 'v', ['number', 'string'], [code, str]);
@@ -682,11 +517,9 @@
         console.error(str, code);
       }
     }
-
     function simpleAppErrorC(str) {
       appErrorC(1, str);
     }
-
     function parseUrlArgument(name) {
       let result = "";
       let str = window.location.search;
@@ -701,7 +534,6 @@
       }
       return result;
     }
-
     function parseUrlArgumentInt(name) {
       let str = parseUrlArgument(name);
       let parsed = parseInt(str);
@@ -711,7 +543,6 @@
         return parsed;
       }
     }
-
     function resizeCanvas(informC) {
       let iw = window.innerWidth;
       let ih = window.innerHeight;
@@ -739,7 +570,6 @@
         updatedScreenSize = true;
       }
     }
-
     function stopContextMenu(event) {
       event.preventDefault();
       return false;
@@ -833,7 +663,6 @@
         return false;
       }
     }
-
     function checkHintFileExist(src, li) {
       isUrlFound(src).then(found => {
         if (found) {
@@ -841,27 +670,22 @@
         }
       });
     }
-
     function postStored() {
       for (var i = 0; i < storedScripts.length; i++) {
         webViewIframe.contentWindow.postMessage("eval:" + storedScripts[i], '*');
       }
       storedScripts = [];
     }
-
     function onWebviewDomContentLoaded() {
       webviewDomLoaded = true;
       postStored();
     }
-
     function webViewPostMessage(message) {
       Module.ccall("app_webview_message", "v", ["string"], [message]);
     }
-
     function webViewError(type, message) {
       webViewPostMessage(`error|${type}|${message}`);
     }
-
     function webViewClose() {
       try {
         var content = document.getElementById("webview_content");
@@ -878,7 +702,6 @@
         webViewError("unknown", err);
       }
     }
-
     function webViewOpen(path) {
       try {
         let arr = readLocalFile(path);
@@ -905,7 +728,6 @@
         webViewError("unknown", err);
       }
     }
-
     function webViewExecuteJS(jsString) {
       try {
         if (!webviewDomLoaded) {
@@ -917,7 +739,6 @@
         webViewError("unknown", err);
       }
     }
-
     function getHostname() {
       let hostname = window.location.hostname.split(':')[0];
       let lengthBytes = lengthBytesUTF8(hostname) + 1;
@@ -925,7 +746,6 @@
       stringToUTF8(hostname, stringOnWasmHeap, lengthBytes);
       return stringOnWasmHeap;
     }
-
     function parseUrlArgumentString(name) {
       let str = parseUrlArgument(name);
       let lengthBytes = lengthBytesUTF8(str) + 1;
@@ -933,14 +753,12 @@
       stringToUTF8(str, stringOnWasmHeap, lengthBytes);
       return stringOnWasmHeap;
     }
-
     function writeLocalFile(buffer, pathDevice) {
       let arr = new Uint8Array(buffer);
       let stream = FS.open(pathDevice, 'w');
       FS.write(stream, arr, 0, arr.length, 0);
       FS.close(stream);
     }
-
     function readLocalFile(path) {
       let stream = FS.open(path, 'r');
       FS.llseek(stream, 0, 2);
@@ -951,7 +769,6 @@
       FS.close(stream);
       return buf;
     }
-
     function resizeModal(modal, modalContent, maxWidth) {
       let iw = window.innerWidth;
       let ih = window.innerHeight;
@@ -962,37 +779,27 @@
       modal.style.paddingTop = top + "px";
       return w;
     }
-
     function fetchUrl(url, id, useToken) {}
-
     function adInit() {
       setTimeout(() => Module.ccall("ad_on_inited", "v"), 100);
     }
-
     function firebasePause() {}
-
     function firebaseResume() {}
-
     function adInterstitialLoad() {
       setTimeout(() => Module.ccall("ad_interstitial_on_loaded", "v", ["number"], [1]), 100);
     }
-
     function adInterstitialShow() {
       Module.ccall("ad_interstitial_on_showed", "v", ["number"], [1]);
     }
-
     function adRewardedLoad() {
       setTimeout(() => Module.ccall("ad_rewarded_on_loaded", "v", ["number"], [1]), 100);
     }
-
     function adRewardedShow() {
       pokiEnsureStop();
       Module.ccall("ad_rewarded_on_reward", "v");
       Module.ccall("ad_rewarded_on_showed", "v", ["number"], [true]);
     }
-
     function firebaseDeinit() {}
-
     function currentTimeSecondsRound() {
       return Math.round(Date.now() / 1000);
     }
@@ -1020,7 +827,6 @@
         }
         var REMOTE_PACKAGE_NAME = Module["locateFile"] ? Module["locateFile"](REMOTE_PACKAGE_BASE, "") : REMOTE_PACKAGE_BASE;
         var REMOTE_PACKAGE_SIZE = metadata["remote_package_size"];
-
         function fetchRemotePackage(packageName, packageSize, callback, errback) {
           if (typeof process === "object" && typeof process.versions === "object" && typeof process.versions.node === "string") {
             require("fs").readFile(packageName, function(err, contents) {
@@ -1078,7 +884,6 @@
           };
           xhr.send(null)
         }
-
         function handleError(error) {
           console.error("package error:", error)
         }
@@ -1092,7 +897,6 @@
             fetched = data
           }
         }, handleError);
-
         function runWithFS() {
           function assert(check, msg) {
             if (!check) throw msg + (new Error).stack
@@ -1102,7 +906,6 @@
           Module["FS_createPath"]("/assets", "views", true, true);
           Module["FS_createPath"]("/assets", "games", true, true);
           Module["FS_createPath"]("/assets", "sounds", true, true);
-
           function DataRequest(start, end, audio) {
             this.start = start;
             this.end = end;
@@ -1131,7 +934,6 @@
           for (var i = 0; i < files.length; ++i) {
             new DataRequest(files[i]["start"], files[i]["end"], files[i]["audio"] || 0).open("GET", files[i]["filename"])
           }
-
           function processPackageData(arrayBuffer) {
             assert(arrayBuffer, "Loading data file failed.");
             assert(arrayBuffer instanceof ArrayBuffer, "bad input to processPackageData");
@@ -1163,1018 +965,8 @@
         }
       };
       loadPackage({
-        "files": [{
-          "filename": "/assets/blocks/ACCELEROMETER_V",
-          "start": 0,
-          "end": 313
-        }, {
-          "filename": "/assets/blocks/ARCH",
-          "start": 313,
-          "end": 490
-        }, {
-          "filename": "/assets/blocks/BALL",
-          "start": 490,
-          "end": 635
-        }, {
-          "filename": "/assets/blocks/BOX",
-          "start": 635,
-          "end": 850
-        }, {
-          "filename": "/assets/blocks/BRICKS",
-          "start": 850,
-          "end": 1033
-        }, {
-          "filename": "/assets/blocks/BUTTERFLY",
-          "start": 1033,
-          "end": 2330
-        }, {
-          "filename": "/assets/blocks/BUTTON",
-          "start": 2330,
-          "end": 2853
-        }, {
-          "filename": "/assets/blocks/BUTTON_B",
-          "start": 2853,
-          "end": 3738
-        }, {
-          "filename": "/assets/blocks/CAMERA_ORBIT",
-          "start": 3738,
-          "end": 5126
-        }, {
-          "filename": "/assets/blocks/COMMENT",
-          "start": 5126,
-          "end": 5240
-        }, {
-          "filename": "/assets/blocks/CpF_LIST_ELEMENT_Cp",
-          "start": 5240,
-          "end": 5606
-        }, {
-          "filename": "/assets/blocks/DASH_CAT",
-          "start": 5606,
-          "end": 7471
-        }, {
-          "filename": "/assets/blocks/DINO",
-          "start": 7471,
-          "end": 12090
-        }, {
-          "filename": "/assets/blocks/DINO_RED",
-          "start": 12090,
-          "end": 13825
-        }, {
-          "filename": "/assets/blocks/DIRT",
-          "start": 13825,
-          "end": 13918
-        }, {
-          "filename": "/assets/blocks/DIRT_B",
-          "start": 13918,
-          "end": 14097
-        }, {
-          "filename": "/assets/blocks/DIRT_SLAB",
-          "start": 14097,
-          "end": 14219
-        }, {
-          "filename": "/assets/blocks/ECpC_SET_VAR_E",
-          "start": 14219,
-          "end": 14596
-        }, {
-          "filename": "/assets/blocks/ECVV_SET_ANG_LIMITS_E",
-          "start": 14596,
-          "end": 15053
-        }, {
-          "filename": "/assets/blocks/ECVV_SET_ANG_MOTOR_E",
-          "start": 15053,
-          "end": 15508
-        }, {
-          "filename": "/assets/blocks/ECVV_SET_ANG_SPRING_E",
-          "start": 15508,
-          "end": 15963
-        }, {
-          "filename": "/assets/blocks/ECVV_SET_LIN_LIMITS_E",
-          "start": 15963,
-          "end": 16418
-        }, {
-          "filename": "/assets/blocks/ECVV_SET_LIN_MOTOR_E",
-          "start": 16418,
-          "end": 16874
-        }, {
-          "filename": "/assets/blocks/ECVV_SET_LIN_SPRING_E",
-          "start": 16874,
-          "end": 17324
-        }, {
-          "filename": "/assets/blocks/EC_SET_VAR_E",
-          "start": 17324,
-          "end": 17579
-        }, {
-          "filename": "/assets/blocks/EFFF_VOLUME_PITCH_E",
-          "start": 17579,
-          "end": 18022
-        }, {
-          "filename": "/assets/blocks/EFF_LOOP_EFE",
-          "start": 18022,
-          "end": 18392
-        }, {
-          "filename": "/assets/blocks/EFF_SET_SCORE_E",
-          "start": 18392,
-          "end": 18776
-        }, {
-          "filename": "/assets/blocks/EFF_SFX_PLAY_FE",
-          "start": 18776,
-          "end": 19158
-        }, {
-          "filename": "/assets/blocks/EFpF_SET_VAR_E",
-          "start": 19158,
-          "end": 19532
-        }, {
-          "filename": "/assets/blocks/EFpO_MENU_ITEM_E",
-          "start": 19532,
-          "end": 19904
-        }, {
-          "filename": "/assets/blocks/EFp_DEC_VAR_E",
-          "start": 19904,
-          "end": 20170
-        }, {
-          "filename": "/assets/blocks/EFp_INC_VAR_E",
-          "start": 20170,
-          "end": 20442
-        }, {
-          "filename": "/assets/blocks/EF_INSPECT_E",
-          "start": 20442,
-          "end": 20791
-        }, {
-          "filename": "/assets/blocks/EF_RANDOM_SEED_E",
-          "start": 20791,
-          "end": 21179
-        }, {
-          "filename": "/assets/blocks/EF_SET_VAR_E",
-          "start": 21179,
-          "end": 21430
-        }, {
-          "filename": "/assets/blocks/EF_SFX_STOP_E",
-          "start": 21430,
-          "end": 21806
-        }, {
-          "filename": "/assets/blocks/EOF_SET_BOUNCE_E",
-          "start": 21806,
-          "end": 22198
-        }, {
-          "filename": "/assets/blocks/EOF_SET_FRICTION_E",
-          "start": 22198,
-          "end": 22594
-        }, {
-          "filename": "/assets/blocks/EOF_SET_MASS_E",
-          "start": 22594,
-          "end": 22977
-        }, {
-          "filename": "/assets/blocks/EOOV_ADD_CONSTRAINT_EC",
-          "start": 22977,
-          "end": 23428
-        }, {
-          "filename": "/assets/blocks/EOpO_SET_VAR_E",
-          "start": 23428,
-          "end": 23802
-        }, {
-          "filename": "/assets/blocks/EOT_SET_VISIBLE_E",
-          "start": 23802,
-          "end": 24180
-        }, {
-          "filename": "/assets/blocks/EOVQ_SET_POS_E",
-          "start": 24180,
-          "end": 24642
-        }, {
-          "filename": "/assets/blocks/EOVVV_ADD_FORCE_E",
-          "start": 24642,
-          "end": 25155
-        }, {
-          "filename": "/assets/blocks/EOVV_SET_LOCKED_E",
-          "start": 25155,
-          "end": 25617
-        }, {
-          "filename": "/assets/blocks/EOVV_SET_VEL_E",
-          "start": 25617,
-          "end": 26075
-        }, {
-          "filename": "/assets/blocks/EO_COLLISION_EOFVE",
-          "start": 26075,
-          "end": 26596
-        }, {
-          "filename": "/assets/blocks/EO_CREATE_EO",
-          "start": 26596,
-          "end": 26972
-        }, {
-          "filename": "/assets/blocks/EO_DESTROY_E",
-          "start": 26972,
-          "end": 27349
-        }, {
-          "filename": "/assets/blocks/EO_INSPECT_E",
-          "start": 27349,
-          "end": 27697
-        }, {
-          "filename": "/assets/blocks/EO_SET_VAR_E",
-          "start": 27697,
-          "end": 27948
-        }, {
-          "filename": "/assets/blocks/EQpQ_SET_VAR_E",
-          "start": 27948,
-          "end": 28324
-        }, {
-          "filename": "/assets/blocks/EQ_INSPECT_E",
-          "start": 28324,
-          "end": 28675
-        }, {
-          "filename": "/assets/blocks/EQ_SET_VAR_E",
-          "start": 28675,
-          "end": 28928
-        }, {
-          "filename": "/assets/blocks/ETpT_SET_VAR_E",
-          "start": 28928,
-          "end": 29302
-        }, {
-          "filename": "/assets/blocks/ET_IF_EEE",
-          "start": 29302,
-          "end": 29666
-        }, {
-          "filename": "/assets/blocks/ET_INSPECT_E",
-          "start": 29666,
-          "end": 30015
-        }, {
-          "filename": "/assets/blocks/ET_SET_VAR_E",
-          "start": 30015,
-          "end": 30265
-        }, {
-          "filename": "/assets/blocks/EVpV_SET_VAR_E",
-          "start": 30265,
-          "end": 30640
-        }, {
-          "filename": "/assets/blocks/EVQF_SET_CAM_E",
-          "start": 30640,
-          "end": 31090
-        }, {
-          "filename": "/assets/blocks/EVQ_SET_LIT_E",
-          "start": 31090,
-          "end": 31487
-        }, {
-          "filename": "/assets/blocks/EV_INSPECT_E",
-          "start": 31487,
-          "end": 31835
-        }, {
-          "filename": "/assets/blocks/EV_SET_GRAVITY_E",
-          "start": 31835,
-          "end": 32214
-        }, {
-          "filename": "/assets/blocks/EV_SET_VAR_E",
-          "start": 32214,
-          "end": 32466
-        }, {
-          "filename": "/assets/blocks/E_BUT_SENSOR_EE",
-          "start": 32466,
-          "end": 32836
-        }, {
-          "filename": "/assets/blocks/E_JOY_SENSOR_VE",
-          "start": 32836,
-          "end": 33198
-        }, {
-          "filename": "/assets/blocks/E_LATE_UPDATE_EE",
-          "start": 33198,
-          "end": 33563
-        }, {
-          "filename": "/assets/blocks/E_LOSE_E",
-          "start": 33563,
-          "end": 33936
-        }, {
-          "filename": "/assets/blocks/E_PLAY_EE",
-          "start": 33936,
-          "end": 34298
-        }, {
-          "filename": "/assets/blocks/E_SCREENSHOT_EE",
-          "start": 34298,
-          "end": 34687
-        }, {
-          "filename": "/assets/blocks/E_SWIPE_EVE",
-          "start": 34687,
-          "end": 35059
-        }, {
-          "filename": "/assets/blocks/E_TOUCH_EFFE",
-          "start": 35059,
-          "end": 35494
-        }, {
-          "filename": "/assets/blocks/E_WIN_E",
-          "start": 35494,
-          "end": 35871
-        }, {
-          "filename": "/assets/blocks/FALSE_T",
-          "start": 35871,
-          "end": 36118
-        }, {
-          "filename": "/assets/blocks/FFF_EULER_Q",
-          "start": 36118,
-          "end": 36507
-        }, {
-          "filename": "/assets/blocks/FFF_JOIN_V",
-          "start": 36507,
-          "end": 36894
-        }, {
-          "filename": "/assets/blocks/FF_ADD_F",
-          "start": 36894,
-          "end": 37193
-        }, {
-          "filename": "/assets/blocks/FF_DIV_F",
-          "start": 37193,
-          "end": 37487
-        }, {
-          "filename": "/assets/blocks/FF_EQL_T",
-          "start": 37487,
-          "end": 37788
-        }, {
-          "filename": "/assets/blocks/FF_GT_T",
-          "start": 37788,
-          "end": 38097
-        }, {
-          "filename": "/assets/blocks/FF_LOG_F",
-          "start": 38097,
-          "end": 38413
-        }, {
-          "filename": "/assets/blocks/FF_LT_T",
-          "start": 38413,
-          "end": 38720
-        }, {
-          "filename": "/assets/blocks/FF_MAX_F",
-          "start": 38720,
-          "end": 39025
-        }, {
-          "filename": "/assets/blocks/FF_MIN_F",
-          "start": 39025,
-          "end": 39331
-        }, {
-          "filename": "/assets/blocks/FF_MOD_F",
-          "start": 39331,
-          "end": 39625
-        }, {
-          "filename": "/assets/blocks/FF_MUL_F",
-          "start": 39625,
-          "end": 39930
-        }, {
-          "filename": "/assets/blocks/FF_POW_F",
-          "start": 39930,
-          "end": 40229
-        }, {
-          "filename": "/assets/blocks/FF_RANDOM_F",
-          "start": 40229,
-          "end": 40545
-        }, {
-          "filename": "/assets/blocks/FF_S2W_VV",
-          "start": 40545,
-          "end": 40876
-        }, {
-          "filename": "/assets/blocks/FF_SUB_F",
-          "start": 40876,
-          "end": 41174
-        }, {
-          "filename": "/assets/blocks/FLOWERS",
-          "start": 41174,
-          "end": 41311
-        }, {
-          "filename": "/assets/blocks/FOLDER_EMPTY",
-          "start": 41311,
-          "end": 41451
-        }, {
-          "filename": "/assets/blocks/FOLDER_LOCKED",
-          "start": 41451,
-          "end": 41644
-        }, {
-          "filename": "/assets/blocks/FOLDER_UNKNOWN",
-          "start": 41644,
-          "end": 41809
-        }, {
-          "filename": "/assets/blocks/FOLIAGE",
-          "start": 41809,
-          "end": 41901
-        }, {
-          "filename": "/assets/blocks/FOLIAGE_B",
-          "start": 41901,
-          "end": 42076
-        }, {
-          "filename": "/assets/blocks/FOLIAGE_BOT",
-          "start": 42076,
-          "end": 42209
-        }, {
-          "filename": "/assets/blocks/FOLIAGE_SLAB",
-          "start": 42209,
-          "end": 42370
-        }, {
-          "filename": "/assets/blocks/FOLIAGE_TOP",
-          "start": 42370,
-          "end": 42499
-        }, {
-          "filename": "/assets/blocks/FpF_LIST_ELEMENT_Fp",
-          "start": 42499,
-          "end": 42861
-        }, {
-          "filename": "/assets/blocks/FRAME_F",
-          "start": 42861,
-          "end": 43071
-        }, {
-          "filename": "/assets/blocks/F_ABS_F",
-          "start": 43071,
-          "end": 43288
-        }, {
-          "filename": "/assets/blocks/F_CEIL_F",
-          "start": 43288,
-          "end": 43506
-        }, {
-          "filename": "/assets/blocks/F_COS_F",
-          "start": 43506,
-          "end": 43724
-        }, {
-          "filename": "/assets/blocks/F_FLOOR_F",
-          "start": 43724,
-          "end": 43945
-        }, {
-          "filename": "/assets/blocks/F_NEG_F",
-          "start": 43945,
-          "end": 44158
-        }, {
-          "filename": "/assets/blocks/F_ROUND_F",
-          "start": 44158,
-          "end": 44378
-        }, {
-          "filename": "/assets/blocks/F_SIN_F",
-          "start": 44378,
-          "end": 44600
-        }, {
-          "filename": "/assets/blocks/GOAL",
-          "start": 44600,
-          "end": 45039
-        }, {
-          "filename": "/assets/blocks/GRASS_A",
-          "start": 45039,
-          "end": 45182
-        }, {
-          "filename": "/assets/blocks/GRASS_B",
-          "start": 45182,
-          "end": 45344
-        }, {
-          "filename": "/assets/blocks/L2R",
-          "start": 45344,
-          "end": 45452
-        }, {
-          "filename": "/assets/blocks/MARKER",
-          "start": 45452,
-          "end": 45565
-        }, {
-          "filename": "/assets/blocks/MOTOR_X",
-          "start": 45565,
-          "end": 46196
-        }, {
-          "filename": "/assets/blocks/MOTOR_Y",
-          "start": 46196,
-          "end": 47053
-        }, {
-          "filename": "/assets/blocks/MOTOR_Z",
-          "start": 47053,
-          "end": 47710
-        }, {
-          "filename": "/assets/blocks/MULTI_IN",
-          "start": 47710,
-          "end": 47819
-        }, {
-          "filename": "/assets/blocks/MULTI_IN_E",
-          "start": 47819,
-          "end": 47932
-        }, {
-          "filename": "/assets/blocks/MULTI_OUT",
-          "start": 47932,
-          "end": 48044
-        }, {
-          "filename": "/assets/blocks/MULTI_OUT_E",
-          "start": 48044,
-          "end": 48159
-        }, {
-          "filename": "/assets/blocks/NONE",
-          "start": 48159,
-          "end": 48369
-        }, {
-          "filename": "/assets/blocks/NUMBER_F",
-          "start": 48369,
-          "end": 48618
-        }, {
-          "filename": "/assets/blocks/OBSTACLE",
-          "start": 48618,
-          "end": 48746
-        }, {
-          "filename": "/assets/blocks/OO_EQL_T",
-          "start": 48746,
-          "end": 49049
-        }, {
-          "filename": "/assets/blocks/OpF_LIST_ELEMENT_Op",
-          "start": 49049,
-          "end": 49410
-        }, {
-          "filename": "/assets/blocks/O_GET_POS_VQ",
-          "start": 49410,
-          "end": 49744
-        }, {
-          "filename": "/assets/blocks/O_GET_SIZE_VV",
-          "start": 49744,
-          "end": 50068
-        }, {
-          "filename": "/assets/blocks/O_GET_VEL_VV",
-          "start": 50068,
-          "end": 50400
-        }, {
-          "filename": "/assets/blocks/PARTICLE",
-          "start": 50400,
-          "end": 50512
-        }, {
-          "filename": "/assets/blocks/PASS_THROUGH",
-          "start": 50512,
-          "end": 50636
-        }, {
-          "filename": "/assets/blocks/QpF_LIST_ELEMENT_Qp",
-          "start": 50636,
-          "end": 51e3
-        }, {
-          "filename": "/assets/blocks/QQF_LERP_Q",
-          "start": 51e3,
-          "end": 51389
-        }, {
-          "filename": "/assets/blocks/QQ_MUL_Q",
-          "start": 51389,
-          "end": 51692
-        }, {
-          "filename": "/assets/blocks/QUATERNION_Q",
-          "start": 51692,
-          "end": 52037
-        }, {
-          "filename": "/assets/blocks/Q_EULER_FFF",
-          "start": 52037,
-          "end": 52426
-        }, {
-          "filename": "/assets/blocks/Q_INV_Q",
-          "start": 52426,
-          "end": 52641
-        }, {
-          "filename": "/assets/blocks/SCREEN_SIZE_FF",
-          "start": 52641,
-          "end": 52956
-        }, {
-          "filename": "/assets/blocks/SCRIPT",
-          "start": 52956,
-          "end": 53102
-        }, {
-          "filename": "/assets/blocks/SFX_Fp",
-          "start": 53102,
-          "end": 53424
-        }, {
-          "filename": "/assets/blocks/SHRUB",
-          "start": 53424,
-          "end": 53623
-        }, {
-          "filename": "/assets/blocks/SLATE",
-          "start": 53623,
-          "end": 53717
-        }, {
-          "filename": "/assets/blocks/SLATE_B",
-          "start": 53717,
-          "end": 53922
-        }, {
-          "filename": "/assets/blocks/SLATE_BOT",
-          "start": 53922,
-          "end": 54060
-        }, {
-          "filename": "/assets/blocks/SLATE_NE",
-          "start": 54060,
-          "end": 54173
-        }, {
-          "filename": "/assets/blocks/SLATE_NW",
-          "start": 54173,
-          "end": 54293
-        }, {
-          "filename": "/assets/blocks/SLATE_SE",
-          "start": 54293,
-          "end": 54409
-        }, {
-          "filename": "/assets/blocks/SLATE_SW",
-          "start": 54409,
-          "end": 54529
-        }, {
-          "filename": "/assets/blocks/SLATE_TOP",
-          "start": 54529,
-          "end": 54653
-        }, {
-          "filename": "/assets/blocks/SLIDER",
-          "start": 54653,
-          "end": 56555
-        }, {
-          "filename": "/assets/blocks/SLIDER_X",
-          "start": 56555,
-          "end": 56835
-        }, {
-          "filename": "/assets/blocks/SLIDER_Y",
-          "start": 56835,
-          "end": 57156
-        }, {
-          "filename": "/assets/blocks/SLIDER_Z",
-          "start": 57156,
-          "end": 57454
-        }, {
-          "filename": "/assets/blocks/SPHERE",
-          "start": 57454,
-          "end": 57594
-        }, {
-          "filename": "/assets/blocks/STEEL",
-          "start": 57594,
-          "end": 57734
-        }, {
-          "filename": "/assets/blocks/STICK_DE",
-          "start": 57734,
-          "end": 57885
-        }, {
-          "filename": "/assets/blocks/STICK_DN",
-          "start": 57885,
-          "end": 58037
-        }, {
-          "filename": "/assets/blocks/STICK_DS",
-          "start": 58037,
-          "end": 58194
-        }, {
-          "filename": "/assets/blocks/STICK_DW",
-          "start": 58194,
-          "end": 58352
-        }, {
-          "filename": "/assets/blocks/STICK_NE",
-          "start": 58352,
-          "end": 58506
-        }, {
-          "filename": "/assets/blocks/STICK_NW",
-          "start": 58506,
-          "end": 58669
-        }, {
-          "filename": "/assets/blocks/STICK_SE",
-          "start": 58669,
-          "end": 58826
-        }, {
-          "filename": "/assets/blocks/STICK_SW",
-          "start": 58826,
-          "end": 58986
-        }, {
-          "filename": "/assets/blocks/STICK_UE",
-          "start": 58986,
-          "end": 59140
-        }, {
-          "filename": "/assets/blocks/STICK_UN",
-          "start": 59140,
-          "end": 59310
-        }, {
-          "filename": "/assets/blocks/STICK_US",
-          "start": 59310,
-          "end": 59467
-        }, {
-          "filename": "/assets/blocks/STICK_UW",
-          "start": 59467,
-          "end": 59622
-        }, {
-          "filename": "/assets/blocks/STICK_X",
-          "start": 59622,
-          "end": 59764
-        }, {
-          "filename": "/assets/blocks/STICK_Y",
-          "start": 59764,
-          "end": 59913
-        }, {
-          "filename": "/assets/blocks/STICK_Z",
-          "start": 59913,
-          "end": 60051
-        }, {
-          "filename": "/assets/blocks/STONE",
-          "start": 60051,
-          "end": 60145
-        }, {
-          "filename": "/assets/blocks/STONE_B",
-          "start": 60145,
-          "end": 60322
-        }, {
-          "filename": "/assets/blocks/STONE_BLOCK",
-          "start": 60322,
-          "end": 60520
-        }, {
-          "filename": "/assets/blocks/STONE_BOT",
-          "start": 60520,
-          "end": 60658
-        }, {
-          "filename": "/assets/blocks/STONE_LOWER",
-          "start": 60658,
-          "end": 60799
-        }, {
-          "filename": "/assets/blocks/STONE_PILLAR",
-          "start": 60799,
-          "end": 60954
-        }, {
-          "filename": "/assets/blocks/STONE_SLAB",
-          "start": 60954,
-          "end": 61102
-        }, {
-          "filename": "/assets/blocks/STONE_TOP",
-          "start": 61102,
-          "end": 61227
-        }, {
-          "filename": "/assets/blocks/SWIPE_CHICK",
-          "start": 61227,
-          "end": 64004
-        }, {
-          "filename": "/assets/blocks/THIS_O",
-          "start": 64004,
-          "end": 64119
-        }, {
-          "filename": "/assets/blocks/TILT_BALL",
-          "start": 64119,
-          "end": 64366
-        }, {
-          "filename": "/assets/blocks/TpF_LIST_ELEMENT_Tp",
-          "start": 64366,
-          "end": 64728
-        }, {
-          "filename": "/assets/blocks/TRUE_T",
-          "start": 64728,
-          "end": 64974
-        }, {
-          "filename": "/assets/blocks/TT_AND_T",
-          "start": 64974,
-          "end": 65267
-        }, {
-          "filename": "/assets/blocks/TT_EQL_T",
-          "start": 65267,
-          "end": 65568
-        }, {
-          "filename": "/assets/blocks/TT_OR_T",
-          "start": 65568,
-          "end": 65859
-        }, {
-          "filename": "/assets/blocks/T_NOT_T",
-          "start": 65859,
-          "end": 66073
-        }, {
-          "filename": "/assets/blocks/VAR_Cp",
-          "start": 66073,
-          "end": 66326
-        }, {
-          "filename": "/assets/blocks/VAR_Fp",
-          "start": 66326,
-          "end": 66575
-        }, {
-          "filename": "/assets/blocks/VAR_Op",
-          "start": 66575,
-          "end": 66825
-        }, {
-          "filename": "/assets/blocks/VAR_Qp",
-          "start": 66825,
-          "end": 67077
-        }, {
-          "filename": "/assets/blocks/VAR_Tp",
-          "start": 67077,
-          "end": 67327
-        }, {
-          "filename": "/assets/blocks/VAR_Vp",
-          "start": 67327,
-          "end": 67577
-        }, {
-          "filename": "/assets/blocks/VECTOR_V",
-          "start": 67577,
-          "end": 67920
-        }, {
-          "filename": "/assets/blocks/VF_AXIS_ANG_Q",
-          "start": 67920,
-          "end": 68245
-        }, {
-          "filename": "/assets/blocks/VF_MUL_V",
-          "start": 68245,
-          "end": 68546
-        }, {
-          "filename": "/assets/blocks/VpF_LIST_ELEMENT_Vp",
-          "start": 68546,
-          "end": 68909
-        }, {
-          "filename": "/assets/blocks/VQ_MUL_V",
-          "start": 68909,
-          "end": 69211
-        }, {
-          "filename": "/assets/blocks/VVVV_LINE_VS_PLANE_V",
-          "start": 69211,
-          "end": 69656
-        }, {
-          "filename": "/assets/blocks/VV_ADD_V",
-          "start": 69656,
-          "end": 69955
-        }, {
-          "filename": "/assets/blocks/VV_CROSS_V",
-          "start": 69955,
-          "end": 70260
-        }, {
-          "filename": "/assets/blocks/VV_DIST_F",
-          "start": 70260,
-          "end": 70559
-        }, {
-          "filename": "/assets/blocks/VV_DOT_F",
-          "start": 70559,
-          "end": 70872
-        }, {
-          "filename": "/assets/blocks/VV_EQL_T",
-          "start": 70872,
-          "end": 71174
-        }, {
-          "filename": "/assets/blocks/VV_LOOK_ROT_Q",
-          "start": 71174,
-          "end": 71501
-        }, {
-          "filename": "/assets/blocks/VV_RAYCAST_TVO",
-          "start": 71501,
-          "end": 71886
-        }, {
-          "filename": "/assets/blocks/VV_SUB_V",
-          "start": 71886,
-          "end": 72184
-        }, {
-          "filename": "/assets/blocks/V_NORMALIZE_V",
-          "start": 72184,
-          "end": 72408
-        }, {
-          "filename": "/assets/blocks/V_SPLIT_FFF",
-          "start": 72408,
-          "end": 72794
-        }, {
-          "filename": "/assets/blocks/V_W2S_FF",
-          "start": 72794,
-          "end": 73126
-        }, {
-          "filename": "/assets/blocks/WHEEL",
-          "start": 73126,
-          "end": 74867
-        }, {
-          "filename": "/assets/blocks/WOOD_LOWER_X",
-          "start": 74867,
-          "end": 75058
-        }, {
-          "filename": "/assets/blocks/WOOD_LOWER_Z",
-          "start": 75058,
-          "end": 75248
-        }, {
-          "filename": "/assets/blocks/WOOD_UPPER_X",
-          "start": 75248,
-          "end": 75439
-        }, {
-          "filename": "/assets/blocks/WOOD_UPPER_Z",
-          "start": 75439,
-          "end": 75629
-        }, {
-          "filename": "/assets/blocks/WOOD_X",
-          "start": 75629,
-          "end": 75804
-        }, {
-          "filename": "/assets/blocks/WOOD_Y",
-          "start": 75804,
-          "end": 75994
-        }, {
-          "filename": "/assets/blocks/WOOD_Z",
-          "start": 75994,
-          "end": 76165
-        }, {
-          "filename": "/assets/views/baloo2.woff",
-          "start": 76165,
-          "end": 100237
-        }, {
-          "filename": "/assets/views/block_settings.html",
-          "start": 100237,
-          "end": 102302
-        }, {
-          "filename": "/assets/views/common.css",
-          "start": 102302,
-          "end": 107895
-        }, {
-          "filename": "/assets/views/common.js",
-          "start": 107895,
-          "end": 115815
-        }, {
-          "filename": "/assets/views/confirm_deletion.html",
-          "start": 115815,
-          "end": 118184
-        }, {
-          "filename": "/assets/views/create_user.html",
-          "start": 118184,
-          "end": 120412
-        }, {
-          "filename": "/assets/views/game_moderation.html",
-          "start": 120412,
-          "end": 125080
-        }, {
-          "filename": "/assets/views/messagebox.html",
-          "start": 125080,
-          "end": 127196
-        }, {
-          "filename": "/assets/views/select_level.html",
-          "start": 127196,
-          "end": 139970
-        }, {
-          "filename": "/assets/views/show_hint.html",
-          "start": 139970,
-          "end": 141099
-        }, {
-          "filename": "/assets/views/sign_in.html",
-          "start": 141099,
-          "end": 143557
-        }, {
-          "filename": "/assets/atlas.png",
-          "start": 143557,
-          "end": 395104
-        }, {
-          "filename": "/assets/db",
-          "start": 395104,
-          "end": 395346
-        }, {
-          "filename": "/assets/games/menu",
-          "start": 395346,
-          "end": 400941
-        }, {
-          "filename": "/assets/games/5F084A0BCE06B710",
-          "start": 400941,
-          "end": 451559
-        }, {
-          "filename": "/bundle_games.txt",
-          "start": 451559,
-          "end": 451575
-        }, {
-          "filename": "/assets/sounds/36837_engine_no_click.wav",
-          "start": 451575,
-          "end": 463613,
-          "audio": 1
-        }, {
-          "filename": "/assets/sounds/188204_scrape.wav",
-          "start": 463613,
-          "end": 495649,
-          "audio": 1
-        }, {
-          "filename": "/assets/sounds/78937_squeek.wav",
-          "start": 495649,
-          "end": 505759,
-          "audio": 1
-        }, {
-          "filename": "/assets/sounds/257357_button.wav",
-          "start": 505759,
-          "end": 507123,
-          "audio": 1
-        }, {
-          "filename": "/assets/sounds/249929_splash1.wav",
-          "start": 507123,
-          "end": 518827,
-          "audio": 1
-        }, {
-          "filename": "/assets/sounds/315935_bang.wav",
-          "start": 518827,
-          "end": 571337,
-          "audio": 1
-        }, {
-          "filename": "/assets/sounds/floor6.wav",
-          "start": 571337,
-          "end": 602361,
-          "audio": 1
-        }, {
-          "filename": "/assets/sounds/399095_jump.wav",
-          "start": 602361,
-          "end": 607739,
-          "audio": 1
-        }, {
-          "filename": "/assets/sounds/521481_camera.wav",
-          "start": 607739,
-          "end": 623171,
-          "audio": 1
-        }, {
-          "filename": "/assets/sounds/194795_ui_button.wav",
-          "start": 623171,
-          "end": 625273,
-          "audio": 1
-        }, {
-          "filename": "/assets/sounds/146721_ui_beep.wav",
-          "start": 625273,
-          "end": 629775,
-          "audio": 1
-        }, {
-          "filename": "/assets/sounds/chaching.wav",
-          "start": 629775,
-          "end": 679055,
-          "audio": 1
-        }, {
-          "filename": "/assets/sounds/363090_coin.wav",
-          "start": 679055,
-          "end": 683813,
-          "audio": 1
-        }, {
-          "filename": "/assets/sounds/coin02_band.wav",
-          "start": 683813,
-          "end": 695797,
-          "audio": 1
-        }, {
-          "filename": "/assets/sounds/error1.wav",
-          "start": 695797,
-          "end": 717057,
-          "audio": 1
-        }],
+        "files": [{ "filename": "/assets/blocks/ACCELEROMETER_V", "start": 0, "end": 313 }, { "filename": "/assets/blocks/ARCH", "start": 313, "end": 490 }, { "filename": "/assets/blocks/BALL", "start": 490, "end": 635 }, { "filename": "/assets/blocks/BOX", "start": 635, "end": 850 }, { "filename": "/assets/blocks/BRICKS", "start": 850, "end": 1033 }, { "filename": "/assets/blocks/BUTTERFLY", "start": 1033, "end": 2330 }, { "filename": "/assets/blocks/BUTTON", "start": 2330, "end": 2853 }, { "filename": "/assets/blocks/BUTTON_B", "start": 2853, "end": 3738 }, { "filename": "/assets/blocks/CAMERA_ORBIT", "start": 3738, "end": 5126 }, { "filename": "/assets/blocks/COMMENT", "start": 5126, "end": 5240 }, { "filename": "/assets/blocks/CpF_LIST_ELEMENT_Cp", "start": 5240, "end": 5606 }, { "filename": "/assets/blocks/DASH_CAT", "start": 5606, "end": 7471 }, { "filename": "/assets/blocks/DINO", "start": 7471, "end": 12090 }, { "filename": "/assets/blocks/DINO_RED", "start": 12090, "end": 13825 }, { "filename": "/assets/blocks/DIRT", "start": 13825, "end": 13918 }, { "filename": "/assets/blocks/DIRT_B", "start": 13918, "end": 14097 }, { "filename": "/assets/blocks/DIRT_SLAB", "start": 14097, "end": 14219 }, { "filename": "/assets/blocks/ECpC_SET_VAR_E", "start": 14219, "end": 14596 }, { "filename": "/assets/blocks/ECVV_SET_ANG_LIMITS_E", "start": 14596, "end": 15053 }, { "filename": "/assets/blocks/ECVV_SET_ANG_MOTOR_E", "start": 15053, "end": 15508 }, { "filename": "/assets/blocks/ECVV_SET_ANG_SPRING_E", "start": 15508, "end": 15963 }, { "filename": "/assets/blocks/ECVV_SET_LIN_LIMITS_E", "start": 15963, "end": 16418 }, { "filename": "/assets/blocks/ECVV_SET_LIN_MOTOR_E", "start": 16418, "end": 16874 }, { "filename": "/assets/blocks/ECVV_SET_LIN_SPRING_E", "start": 16874, "end": 17324 }, { "filename": "/assets/blocks/EC_SET_VAR_E", "start": 17324, "end": 17579 }, { "filename": "/assets/blocks/EFFF_VOLUME_PITCH_E", "start": 17579, "end": 18022 }, { "filename": "/assets/blocks/EFF_LOOP_EFE", "start": 18022, "end": 18392 }, { "filename": "/assets/blocks/EFF_SET_SCORE_E", "start": 18392, "end": 18776 }, { "filename": "/assets/blocks/EFF_SFX_PLAY_FE", "start": 18776, "end": 19158 }, { "filename": "/assets/blocks/EFpF_SET_VAR_E", "start": 19158, "end": 19532 }, { "filename": "/assets/blocks/EFpO_MENU_ITEM_E", "start": 19532, "end": 19904 }, { "filename": "/assets/blocks/EFp_DEC_VAR_E", "start": 19904, "end": 20170 }, { "filename": "/assets/blocks/EFp_INC_VAR_E", "start": 20170, "end": 20442 }, { "filename": "/assets/blocks/EF_INSPECT_E", "start": 20442, "end": 20791 }, { "filename": "/assets/blocks/EF_RANDOM_SEED_E", "start": 20791, "end": 21179 }, { "filename": "/assets/blocks/EF_SET_VAR_E", "start": 21179, "end": 21430 }, { "filename": "/assets/blocks/EF_SFX_STOP_E", "start": 21430, "end": 21806 }, { "filename": "/assets/blocks/EOF_SET_BOUNCE_E", "start": 21806, "end": 22198 }, { "filename": "/assets/blocks/EOF_SET_FRICTION_E", "start": 22198, "end": 22594 }, { "filename": "/assets/blocks/EOF_SET_MASS_E", "start": 22594, "end": 22977 }, { "filename": "/assets/blocks/EOOV_ADD_CONSTRAINT_EC", "start": 22977, "end": 23428 }, { "filename": "/assets/blocks/EOpO_SET_VAR_E", "start": 23428, "end": 23802 }, { "filename": "/assets/blocks/EOT_SET_VISIBLE_E", "start": 23802, "end": 24180 }, { "filename": "/assets/blocks/EOVQ_SET_POS_E", "start": 24180, "end": 24642 }, { "filename": "/assets/blocks/EOVVV_ADD_FORCE_E", "start": 24642, "end": 25155 }, { "filename": "/assets/blocks/EOVV_SET_LOCKED_E", "start": 25155, "end": 25617 }, { "filename": "/assets/blocks/EOVV_SET_VEL_E", "start": 25617, "end": 26075 }, { "filename": "/assets/blocks/EO_COLLISION_EOFVE", "start": 26075, "end": 26596 }, { "filename": "/assets/blocks/EO_CREATE_EO", "start": 26596, "end": 26972 }, { "filename": "/assets/blocks/EO_DESTROY_E", "start": 26972, "end": 27349 }, { "filename": "/assets/blocks/EO_INSPECT_E", "start": 27349, "end": 27697 }, { "filename": "/assets/blocks/EO_SET_VAR_E", "start": 27697, "end": 27948 }, { "filename": "/assets/blocks/EQpQ_SET_VAR_E", "start": 27948, "end": 28324 }, { "filename": "/assets/blocks/EQ_INSPECT_E", "start": 28324, "end": 28675 }, { "filename": "/assets/blocks/EQ_SET_VAR_E", "start": 28675, "end": 28928 }, { "filename": "/assets/blocks/ETpT_SET_VAR_E", "start": 28928, "end": 29302 }, { "filename": "/assets/blocks/ET_IF_EEE", "start": 29302, "end": 29666 }, { "filename": "/assets/blocks/ET_INSPECT_E", "start": 29666, "end": 30015 }, { "filename": "/assets/blocks/ET_SET_VAR_E", "start": 30015, "end": 30265 }, { "filename": "/assets/blocks/EVpV_SET_VAR_E", "start": 30265, "end": 30640 }, { "filename": "/assets/blocks/EVQF_SET_CAM_E", "start": 30640, "end": 31090 }, { "filename": "/assets/blocks/EVQ_SET_LIT_E", "start": 31090, "end": 31487 }, { "filename": "/assets/blocks/EV_INSPECT_E", "start": 31487, "end": 31835 }, { "filename": "/assets/blocks/EV_SET_GRAVITY_E", "start": 31835, "end": 32214 }, { "filename": "/assets/blocks/EV_SET_VAR_E", "start": 32214, "end": 32466 }, { "filename": "/assets/blocks/E_BUT_SENSOR_EE", "start": 32466, "end": 32836 }, { "filename": "/assets/blocks/E_JOY_SENSOR_VE", "start": 32836, "end": 33198 }, { "filename": "/assets/blocks/E_LATE_UPDATE_EE", "start": 33198, "end": 33563 }, { "filename": "/assets/blocks/E_LOSE_E", "start": 33563, "end": 33936 }, { "filename": "/assets/blocks/E_PLAY_EE", "start": 33936, "end": 34298 }, { "filename": "/assets/blocks/E_SCREENSHOT_EE", "start": 34298, "end": 34687 }, { "filename": "/assets/blocks/E_SWIPE_EVE", "start": 34687, "end": 35059 }, { "filename": "/assets/blocks/E_TOUCH_EFFE", "start": 35059, "end": 35494 }, { "filename": "/assets/blocks/E_WIN_E", "start": 35494, "end": 35871 }, { "filename": "/assets/blocks/FALSE_T", "start": 35871, "end": 36118 }, { "filename": "/assets/blocks/FFF_EULER_Q", "start": 36118, "end": 36507 }, { "filename": "/assets/blocks/FFF_JOIN_V", "start": 36507, "end": 36894 }, { "filename": "/assets/blocks/FF_ADD_F", "start": 36894, "end": 37193 }, { "filename": "/assets/blocks/FF_DIV_F", "start": 37193, "end": 37487 }, { "filename": "/assets/blocks/FF_EQL_T", "start": 37487, "end": 37788 }, { "filename": "/assets/blocks/FF_GT_T", "start": 37788, "end": 38097 }, { "filename": "/assets/blocks/FF_LOG_F", "start": 38097, "end": 38413 }, { "filename": "/assets/blocks/FF_LT_T", "start": 38413, "end": 38720 }, { "filename": "/assets/blocks/FF_MAX_F", "start": 38720, "end": 39025 }, { "filename": "/assets/blocks/FF_MIN_F", "start": 39025, "end": 39331 }, { "filename": "/assets/blocks/FF_MOD_F", "start": 39331, "end": 39625 }, { "filename": "/assets/blocks/FF_MUL_F", "start": 39625, "end": 39930 }, { "filename": "/assets/blocks/FF_POW_F", "start": 39930, "end": 40229 }, { "filename": "/assets/blocks/FF_RANDOM_F", "start": 40229, "end": 40545 }, { "filename": "/assets/blocks/FF_S2W_VV", "start": 40545, "end": 40876 }, { "filename": "/assets/blocks/FF_SUB_F", "start": 40876, "end": 41174 }, { "filename": "/assets/blocks/FLOWERS", "start": 41174, "end": 41311 }, { "filename": "/assets/blocks/FOLDER_EMPTY", "start": 41311, "end": 41451 }, { "filename": "/assets/blocks/FOLDER_LOCKED", "start": 41451, "end": 41644 }, { "filename": "/assets/blocks/FOLDER_UNKNOWN", "start": 41644, "end": 41809 }, { "filename": "/assets/blocks/FOLIAGE", "start": 41809, "end": 41901 }, { "filename": "/assets/blocks/FOLIAGE_B", "start": 41901, "end": 42076 }, { "filename": "/assets/blocks/FOLIAGE_BOT", "start": 42076, "end": 42209 }, { "filename": "/assets/blocks/FOLIAGE_SLAB", "start": 42209, "end": 42370 }, { "filename": "/assets/blocks/FOLIAGE_TOP", "start": 42370, "end": 42499 }, { "filename": "/assets/blocks/FpF_LIST_ELEMENT_Fp", "start": 42499, "end": 42861 }, { "filename": "/assets/blocks/FRAME_F", "start": 42861, "end": 43071 }, { "filename": "/assets/blocks/F_ABS_F", "start": 43071, "end": 43288 }, { "filename": "/assets/blocks/F_CEIL_F", "start": 43288, "end": 43506 }, { "filename": "/assets/blocks/F_COS_F", "start": 43506, "end": 43724 }, { "filename": "/assets/blocks/F_FLOOR_F", "start": 43724, "end": 43945 }, { "filename": "/assets/blocks/F_NEG_F", "start": 43945, "end": 44158 }, { "filename": "/assets/blocks/F_ROUND_F", "start": 44158, "end": 44378 }, { "filename": "/assets/blocks/F_SIN_F", "start": 44378, "end": 44600 }, { "filename": "/assets/blocks/GOAL", "start": 44600, "end": 45039 }, { "filename": "/assets/blocks/GRASS_A", "start": 45039, "end": 45182 }, { "filename": "/assets/blocks/GRASS_B", "start": 45182, "end": 45344 }, { "filename": "/assets/blocks/L2R", "start": 45344, "end": 45452 }, { "filename": "/assets/blocks/MARKER", "start": 45452, "end": 45565 }, { "filename": "/assets/blocks/MOTOR_X", "start": 45565, "end": 46196 }, { "filename": "/assets/blocks/MOTOR_Y", "start": 46196, "end": 47053 }, { "filename": "/assets/blocks/MOTOR_Z", "start": 47053, "end": 47710 }, { "filename": "/assets/blocks/MULTI_IN", "start": 47710, "end": 47819 }, { "filename": "/assets/blocks/MULTI_IN_E", "start": 47819, "end": 47932 }, { "filename": "/assets/blocks/MULTI_OUT", "start": 47932, "end": 48044 }, { "filename": "/assets/blocks/MULTI_OUT_E", "start": 48044, "end": 48159 }, { "filename": "/assets/blocks/NONE", "start": 48159, "end": 48369 }, { "filename": "/assets/blocks/NUMBER_F", "start": 48369, "end": 48618 }, { "filename": "/assets/blocks/OBSTACLE", "start": 48618, "end": 48746 }, { "filename": "/assets/blocks/OO_EQL_T", "start": 48746, "end": 49049 }, { "filename": "/assets/blocks/OpF_LIST_ELEMENT_Op", "start": 49049, "end": 49410 }, { "filename": "/assets/blocks/O_GET_POS_VQ", "start": 49410, "end": 49744 }, { "filename": "/assets/blocks/O_GET_SIZE_VV", "start": 49744, "end": 50068 }, { "filename": "/assets/blocks/O_GET_VEL_VV", "start": 50068, "end": 50400 }, { "filename": "/assets/blocks/PARTICLE", "start": 50400, "end": 50512 }, { "filename": "/assets/blocks/PASS_THROUGH", "start": 50512, "end": 50636 }, { "filename": "/assets/blocks/QpF_LIST_ELEMENT_Qp", "start": 50636, "end": 51000 }, { "filename": "/assets/blocks/QQF_LERP_Q", "start": 51000, "end": 51389 }, { "filename": "/assets/blocks/QQ_MUL_Q", "start": 51389, "end": 51692 }, { "filename": "/assets/blocks/QUATERNION_Q", "start": 51692, "end": 52037 }, { "filename": "/assets/blocks/Q_EULER_FFF", "start": 52037, "end": 52426 }, { "filename": "/assets/blocks/Q_INV_Q", "start": 52426, "end": 52641 }, { "filename": "/assets/blocks/SCREEN_SIZE_FF", "start": 52641, "end": 52956 }, { "filename": "/assets/blocks/SCRIPT", "start": 52956, "end": 53102 }, { "filename": "/assets/blocks/SFX_Fp", "start": 53102, "end": 53424 }, { "filename": "/assets/blocks/SHRUB", "start": 53424, "end": 53623 }, { "filename": "/assets/blocks/SLATE", "start": 53623, "end": 53717 }, { "filename": "/assets/blocks/SLATE_B", "start": 53717, "end": 53922 }, { "filename": "/assets/blocks/SLATE_BOT", "start": 53922, "end": 54060 }, { "filename": "/assets/blocks/SLATE_NE", "start": 54060, "end": 54173 }, { "filename": "/assets/blocks/SLATE_NW", "start": 54173, "end": 54293 }, { "filename": "/assets/blocks/SLATE_SE", "start": 54293, "end": 54409 }, { "filename": "/assets/blocks/SLATE_SW", "start": 54409, "end": 54529 }, { "filename": "/assets/blocks/SLATE_TOP", "start": 54529, "end": 54653 }, { "filename": "/assets/blocks/SLIDER", "start": 54653, "end": 56555 }, { "filename": "/assets/blocks/SLIDER_X", "start": 56555, "end": 56835 }, { "filename": "/assets/blocks/SLIDER_Y", "start": 56835, "end": 57156 }, { "filename": "/assets/blocks/SLIDER_Z", "start": 57156, "end": 57454 }, { "filename": "/assets/blocks/SPHERE", "start": 57454, "end": 57594 }, { "filename": "/assets/blocks/STEEL", "start": 57594, "end": 57734 }, { "filename": "/assets/blocks/STICK_DE", "start": 57734, "end": 57885 },
+        { "filename": "/assets/blocks/STICK_DN", "start": 57885, "end": 58037 }, { "filename": "/assets/blocks/STICK_DS", "start": 58037, "end": 58194 }, { "filename": "/assets/blocks/STICK_DW", "start": 58194, "end": 58352 }, { "filename": "/assets/blocks/STICK_NE", "start": 58352, "end": 58506 }, { "filename": "/assets/blocks/STICK_NW", "start": 58506, "end": 58669 }, { "filename": "/assets/blocks/STICK_SE", "start": 58669, "end": 58826 }, { "filename": "/assets/blocks/STICK_SW", "start": 58826, "end": 58986 }, { "filename": "/assets/blocks/STICK_UE", "start": 58986, "end": 59140 }, { "filename": "/assets/blocks/STICK_UN", "start": 59140, "end": 59310 }, { "filename": "/assets/blocks/STICK_US", "start": 59310, "end": 59467 }, { "filename": "/assets/blocks/STICK_UW", "start": 59467, "end": 59622 }, { "filename": "/assets/blocks/STICK_X", "start": 59622, "end": 59764 }, { "filename": "/assets/blocks/STICK_Y", "start": 59764, "end": 59913 }, { "filename": "/assets/blocks/STICK_Z", "start": 59913, "end": 60051 }, { "filename": "/assets/blocks/STONE", "start": 60051, "end": 60145 }, { "filename": "/assets/blocks/STONE_B", "start": 60145, "end": 60322 }, { "filename": "/assets/blocks/STONE_BLOCK", "start": 60322, "end": 60520 }, { "filename": "/assets/blocks/STONE_BOT", "start": 60520, "end": 60658 }, { "filename": "/assets/blocks/STONE_LOWER", "start": 60658, "end": 60799 }, { "filename": "/assets/blocks/STONE_PILLAR", "start": 60799, "end": 60954 }, { "filename": "/assets/blocks/STONE_SLAB", "start": 60954, "end": 61102 }, { "filename": "/assets/blocks/STONE_TOP", "start": 61102, "end": 61227 }, { "filename": "/assets/blocks/SWIPE_CHICK", "start": 61227, "end": 64004 }, { "filename": "/assets/blocks/THIS_O", "start": 64004, "end": 64119 }, { "filename": "/assets/blocks/TILT_BALL", "start": 64119, "end": 64366 }, { "filename": "/assets/blocks/TpF_LIST_ELEMENT_Tp", "start": 64366, "end": 64728 }, { "filename": "/assets/blocks/TRUE_T", "start": 64728, "end": 64974 }, { "filename": "/assets/blocks/TT_AND_T", "start": 64974, "end": 65267 }, { "filename": "/assets/blocks/TT_EQL_T", "start": 65267, "end": 65568 }, { "filename": "/assets/blocks/TT_OR_T", "start": 65568, "end": 65859 }, { "filename": "/assets/blocks/T_NOT_T", "start": 65859, "end": 66073 }, { "filename": "/assets/blocks/VAR_Cp", "start": 66073, "end": 66326 }, { "filename": "/assets/blocks/VAR_Fp", "start": 66326, "end": 66575 }, { "filename": "/assets/blocks/VAR_Op", "start": 66575, "end": 66825 }, { "filename": "/assets/blocks/VAR_Qp", "start": 66825, "end": 67077 }, { "filename": "/assets/blocks/VAR_Tp", "start": 67077, "end": 67327 }, { "filename": "/assets/blocks/VAR_Vp", "start": 67327, "end": 67577 }, { "filename": "/assets/blocks/VECTOR_V", "start": 67577, "end": 67920 }, { "filename": "/assets/blocks/VF_AXIS_ANG_Q", "start": 67920, "end": 68245 }, { "filename": "/assets/blocks/VF_MUL_V", "start": 68245, "end": 68546 }, { "filename": "/assets/blocks/VpF_LIST_ELEMENT_Vp", "start": 68546, "end": 68909 }, { "filename": "/assets/blocks/VQ_MUL_V", "start": 68909, "end": 69211 }, { "filename": "/assets/blocks/VVVV_LINE_VS_PLANE_V", "start": 69211, "end": 69656 }, { "filename": "/assets/blocks/VV_ADD_V", "start": 69656, "end": 69955 }, { "filename": "/assets/blocks/VV_CROSS_V", "start": 69955, "end": 70260 }, { "filename": "/assets/blocks/VV_DIST_F", "start": 70260, "end": 70559 }, { "filename": "/assets/blocks/VV_DOT_F", "start": 70559, "end": 70872 }, { "filename": "/assets/blocks/VV_EQL_T", "start": 70872, "end": 71174 }, { "filename": "/assets/blocks/VV_LOOK_ROT_Q", "start": 71174, "end": 71501 }, { "filename": "/assets/blocks/VV_RAYCAST_TVO", "start": 71501, "end": 71886 }, { "filename": "/assets/blocks/VV_SUB_V", "start": 71886, "end": 72184 }, { "filename": "/assets/blocks/V_NORMALIZE_V", "start": 72184, "end": 72408 }, { "filename": "/assets/blocks/V_SPLIT_FFF", "start": 72408, "end": 72794 }, { "filename": "/assets/blocks/V_W2S_FF", "start": 72794, "end": 73126 }, { "filename": "/assets/blocks/WHEEL", "start": 73126, "end": 74867 }, { "filename": "/assets/blocks/WOOD_LOWER_X", "start": 74867, "end": 75058 }, { "filename": "/assets/blocks/WOOD_LOWER_Z", "start": 75058, "end": 75248 }, { "filename": "/assets/blocks/WOOD_UPPER_X", "start": 75248, "end": 75439 }, { "filename": "/assets/blocks/WOOD_UPPER_Z", "start": 75439, "end": 75629 }, { "filename": "/assets/blocks/WOOD_X", "start": 75629, "end": 75804 }, { "filename": "/assets/blocks/WOOD_Y", "start": 75804, "end": 75994 }, { "filename": "/assets/blocks/WOOD_Z", "start": 75994, "end": 76165 }, { "filename": "/assets/views/baloo2.woff", "start": 76165, "end": 100237 }, { "filename": "/assets/views/block_settings.html", "start": 100237, "end": 102302 }, { "filename": "/assets/views/common.css", "start": 102302, "end": 107895 }, { "filename": "/assets/views/common.js", "start": 107895, "end": 115815 }, { "filename": "/assets/views/confirm_deletion.html", "start": 115815, "end": 118184 }, { "filename": "/assets/views/create_user.html", "start": 118184, "end": 120412 }, { "filename": "/assets/views/game_moderation.html", "start": 120412, "end": 125080 }, { "filename": "/assets/views/messagebox.html", "start": 125080, "end": 127196 }, { "filename": "/assets/views/select_level.html", "start": 127196, "end": 139970 }, { "filename": "/assets/views/show_hint.html", "start": 139970, "end": 141099 }, { "filename": "/assets/views/sign_in.html", "start": 141099, "end": 143557 }, { "filename": "/assets/atlas.png", "start": 143557, "end": 395104 }, { "filename": "/assets/db", "start": 395104, "end": 395346 }, { "filename": "/assets/games/menu", "start": 395346, "end": 400941 }, { "filename": "/assets/games/5F084A0BCE06B710", "start": 400941, "end": 451559 }, { "filename": "/bundle_games.txt", "start": 451559, "end": 451575 }, { "filename": "/assets/sounds/36837_engine_no_click.wav", "start": 451575, "end": 463613, "audio": 1 }, { "filename": "/assets/sounds/188204_scrape.wav", "start": 463613, "end": 495649, "audio": 1 }, { "filename": "/assets/sounds/78937_squeek.wav", "start": 495649, "end": 505759, "audio": 1 }, { "filename": "/assets/sounds/257357_button.wav", "start": 505759, "end": 507123, "audio": 1 }, { "filename": "/assets/sounds/249929_splash1.wav", "start": 507123, "end": 518827, "audio": 1 }, { "filename": "/assets/sounds/315935_bang.wav", "start": 518827, "end": 571337, "audio": 1 }, { "filename": "/assets/sounds/floor6.wav", "start": 571337, "end": 602361, "audio": 1 }, { "filename": "/assets/sounds/399095_jump.wav", "start": 602361, "end": 607739, "audio": 1 }, { "filename": "/assets/sounds/521481_camera.wav", "start": 607739, "end": 623171, "audio": 1 }, { "filename": "/assets/sounds/194795_ui_button.wav", "start": 623171, "end": 625273, "audio": 1 }, { "filename": "/assets/sounds/146721_ui_beep.wav", "start": 625273, "end": 629775, "audio": 1 }, { "filename": "/assets/sounds/chaching.wav", "start": 629775, "end": 679055, "audio": 1 }, { "filename": "/assets/sounds/363090_coin.wav", "start": 679055, "end": 683813, "audio": 1 }, { "filename": "/assets/sounds/coin02_band.wav", "start": 683813, "end": 695797, "audio": 1 }, { "filename": "/assets/sounds/error1.wav", "start": 695797, "end": 717057, "audio": 1 }],
         "remote_package_size": 717057
       })
     })();
@@ -2188,7 +980,6 @@
     var ENVIRONMENT_IS_WORKER = typeof importScripts == "function";
     var ENVIRONMENT_IS_NODE = typeof process == "object" && typeof process.versions == "object" && typeof process.versions.node == "string";
     var scriptDirectory = "";
-
     function locateFile(path) {
       if (Module["locateFile"]) {
         return Module["locateFile"](path, scriptDirectory)
@@ -2196,7 +987,6 @@
       return scriptDirectory + path
     }
     var read_, readAsync, readBinary, setWindowTitle;
-
     function logExceptionOnExit(e) {
       if (e instanceof ExitStatus) return;
       let toLog = e;
@@ -2313,7 +1103,6 @@
     if (Module["arguments"]) arguments_ = Module["arguments"];
     if (Module["thisProgram"]) thisProgram = Module["thisProgram"];
     if (Module["quit"]) quit_ = Module["quit"];
-
     function warnOnce(text) {
       if (!warnOnce.shown) warnOnce.shown = {};
       if (!warnOnce.shown[text]) {
@@ -2330,18 +1119,15 @@
     var wasmMemory;
     var ABORT = false;
     var EXITSTATUS;
-
     function assert(condition, text) {
       if (!condition) {
         abort(text)
       }
     }
-
     function getCFunc(ident) {
       var func = Module["_" + ident];
       return func
     }
-
     function ccall(ident, returnType, argTypes, args, opts) {
       var toC = {
         "string": function(str) {
@@ -2359,7 +1145,6 @@
           return ret
         }
       };
-
       function convertReturnValue(ret) {
         if (returnType === "string") {
           return UTF8ToString(ret)
@@ -2382,7 +1167,6 @@
         }
       }
       var ret = func.apply(null, cArgs);
-
       function onDone(ret) {
         if (stack !== 0) stackRestore(stack);
         return convertReturnValue(ret)
@@ -2390,7 +1174,6 @@
       ret = onDone(ret);
       return ret
     }
-
     function cwrap(ident, returnType, argTypes, opts) {
       argTypes = argTypes || [];
       var numericArgs = argTypes.every(function(type) {
@@ -2405,7 +1188,6 @@
       }
     }
     var UTF8Decoder = typeof TextDecoder != "undefined" ? new TextDecoder("utf8") : undefined;
-
     function UTF8ArrayToString(heapOrArray, idx, maxBytesToRead) {
       var endIdx = idx + maxBytesToRead;
       var endPtr = idx;
@@ -2441,11 +1223,9 @@
       }
       return str
     }
-
     function UTF8ToString(ptr, maxBytesToRead) {
       return ptr ? UTF8ArrayToString(HEAPU8, ptr, maxBytesToRead) : ""
     }
-
     function stringToUTF8Array(str, heap, outIdx, maxBytesToWrite) {
       if (!(maxBytesToWrite > 0)) return 0;
       var startIdx = outIdx;
@@ -2479,11 +1259,9 @@
       heap[outIdx] = 0;
       return outIdx - startIdx
     }
-
     function stringToUTF8(str, outPtr, maxBytesToWrite) {
       return stringToUTF8Array(str, HEAPU8, outPtr, maxBytesToWrite)
     }
-
     function lengthBytesUTF8(str) {
       var len = 0;
       for (var i = 0; i < str.length; ++i) {
@@ -2496,26 +1274,22 @@
       }
       return len
     }
-
     function allocateUTF8(str) {
       var size = lengthBytesUTF8(str) + 1;
       var ret = _malloc(size);
       if (ret) stringToUTF8Array(str, HEAP8, ret, size);
       return ret
     }
-
     function allocateUTF8OnStack(str) {
       var size = lengthBytesUTF8(str) + 1;
       var ret = stackAlloc(size);
       stringToUTF8Array(str, HEAP8, ret, size);
       return ret
     }
-
     function writeArrayToMemory(array, buffer) {
       HEAP8.set(array, buffer)
     }
     var buffer, HEAP8, HEAPU8, HEAP16, HEAPU16, HEAP32, HEAPU32, HEAPF32, HEAPF64;
-
     function updateGlobalBufferAndViews(buf) {
       buffer = buf;
       Module["HEAP8"] = HEAP8 = new Int8Array(buf);
@@ -2535,11 +1309,9 @@
     var __ATEXIT__ = [];
     var __ATPOSTRUN__ = [];
     var runtimeInitialized = false;
-
     function keepRuntimeAlive() {
       return noExitRuntime
     }
-
     function preRun() {
       if (Module["preRun"]) {
         if (typeof Module["preRun"] == "function") Module["preRun"] = [Module["preRun"]];
@@ -2549,7 +1321,6 @@
       }
       callRuntimeCallbacks(__ATPRERUN__)
     }
-
     function initRuntime() {
       runtimeInitialized = true;
       if (!Module["noFSInit"] && !FS.init.initialized) FS.init();
@@ -2557,11 +1328,9 @@
       TTY.init();
       callRuntimeCallbacks(__ATINIT__)
     }
-
     function preMain() {
       callRuntimeCallbacks(__ATMAIN__)
     }
-
     function postRun() {
       if (Module["postRun"]) {
         if (typeof Module["postRun"] == "function") Module["postRun"] = [Module["postRun"]];
@@ -2571,33 +1340,27 @@
       }
       callRuntimeCallbacks(__ATPOSTRUN__)
     }
-
     function addOnPreRun(cb) {
       __ATPRERUN__.unshift(cb)
     }
-
     function addOnInit(cb) {
       __ATINIT__.unshift(cb)
     }
-
     function addOnPostRun(cb) {
       __ATPOSTRUN__.unshift(cb)
     }
     var runDependencies = 0;
     var runDependencyWatcher = null;
     var dependenciesFulfilled = null;
-
     function getUniqueRunDependency(id) {
       return id
     }
-
     function addRunDependency(id) {
       runDependencies++;
       if (Module["monitorRunDependencies"]) {
         Module["monitorRunDependencies"](runDependencies)
       }
     }
-
     function removeRunDependency(id) {
       runDependencies--;
       if (Module["monitorRunDependencies"]) {
@@ -2615,7 +1378,6 @@
         }
       }
     }
-
     function abort(what) {
       {
         if (Module["onAbort"]) {
@@ -2630,12 +1392,10 @@
       var e = new WebAssembly.RuntimeError(what);
       throw e
     }
-    var dataURIPrefix = "data:application/octet-stream;base64,";
-
+    var dataURIPrefix = "application/octet-stream;base64,";
     function isDataURI(filename) {
       return filename.startsWith(dataURIPrefix)
     }
-
     function isFileURI(filename) {
       return filename.startsWith("file://")
     }
@@ -2644,7 +1404,6 @@
     if (!isDataURI(window["index.wasm"])) {
       window["index.wasm"] = locateFile(window["index.wasm"])
     }
-
     function getBinary(file) {
       try {
         if (file == window["index.wasm"] && wasmBinary) {
@@ -2659,7 +1418,6 @@
         abort(err)
       }
     }
-
     function getBinaryPromise() {
       if (!wasmBinary && (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER)) {
         if (typeof fetch == "function" && !isFileURI(window["index.wasm"])) {
@@ -2687,12 +1445,10 @@
         return getBinary(window["index.wasm"])
       })
     }
-
     function createWasm() {
       var info = {
         "a": asmLibraryArg
       };
-
       function receiveInstance(instance, module) {
         var exports = instance.exports;
         Module["asm"] = exports;
@@ -2703,11 +1459,9 @@
         removeRunDependency("wasm-instantiate")
       }
       addRunDependency("wasm-instantiate");
-
       function receiveInstantiationResult(result) {
         receiveInstance(result["instance"])
       }
-
       function instantiateArrayBuffer(receiver) {
         return getBinaryPromise().then(function(binary) {
           return WebAssembly.instantiate(binary, info)
@@ -2718,7 +1472,6 @@
           abort(reason)
         })
       }
-
       function instantiateAsync() {
         if (!wasmBinary && typeof WebAssembly.instantiateStreaming == "function" && !isDataURI(window["index.wasm"]) && !isFileURI(window["index.wasm"]) && !ENVIRONMENT_IS_NODE && typeof fetch == "function") {
           return fetch(window["index.wasm"], {
@@ -2846,23 +1599,18 @@
         setDeepLinkLoadingFraction($0)
       }
     };
-
     function get_device_pixel_ratio() {
       return window.devicePixelRatio
     }
-
     function get_hostname() {
       return getHostname()
     }
-
     function get_url_level_index() {
       return getUrlLevelIndex()
     }
-
     function is_daily_reward_possible() {
       return dailyRewardPossible
     }
-
     function is_latest_browser_tab() {
       try {
         return localStorage["startup-time"] == startupTimeStr
@@ -2870,26 +1618,21 @@
         return true
       }
     }
-
     function poki_gameplay_start() {
       pokiEnsureStart()
     }
-
     function poki_gameplay_stop() {
       pokiEnsureStop()
     }
-
     function poki_level_start(li) {
       try {} catch (err) {}
     }
-
     function set_latest_browser_tab() {
       startupTimeStr = Date.now().toString();
       try {
         localStorage["startup-time"] = startupTimeStr
       } catch (err) {}
     }
-
     function callRuntimeCallbacks(callbacks) {
       while (callbacks.length > 0) {
         var callback = callbacks.shift();
@@ -2909,7 +1652,6 @@
         }
       }
     }
-
     function withStackSave(f) {
       var stack = stackSave();
       var ret = f();
@@ -2917,7 +1659,6 @@
       return ret
     }
     var wasmTableMirror = [];
-
     function getWasmTableEntry(funcPtr) {
       var func = wasmTableMirror[funcPtr];
       if (!func) {
@@ -2926,14 +1667,12 @@
       }
       return func
     }
-
     function handleException(e) {
       if (e instanceof ExitStatus || e == "unwind") {
         return EXITSTATUS
       }
       quit_(1, e)
     }
-
     function getRandomDevice() {
       if (typeof crypto == "object" && typeof crypto["getRandomValues"] == "function") {
         var randomBuffer = new Uint8Array(1);
@@ -3040,7 +1779,6 @@
       relative: (from, to) => {
         from = PATH_FS.resolve(from).substr(1);
         to = PATH_FS.resolve(to).substr(1);
-
         function trim(arr) {
           var start = 0;
           for (; start < arr.length; start++) {
@@ -3208,11 +1946,9 @@
         }
       }
     };
-
     function zeroMemory(address, size) {
       HEAPU8.fill(0, address, address + size)
     }
-
     function mmapAlloc(size) {
       abort()
     }
@@ -3527,7 +2263,6 @@
         }
       }
     };
-
     function asyncLoad(url, onload, onerror, noRunDep) {
       var dep = !noRunDep ? getUniqueRunDependency("al " + url) : "";
       readAsync(url, function(arrayBuffer) {
@@ -3613,11 +2348,9 @@
       },
       getLocalSet: (mount, callback) => {
         var entries = {};
-
         function isRealDir(p) {
           return p !== "." && p !== ".."
         }
-
         function toAbsolute(root) {
           return p => {
             return PATH.join2(root, p)
@@ -3791,7 +2524,6 @@
         var db = src.type === "remote" ? src.db : dst.db;
         var transaction = db.transaction([IDBFS.DB_STORE_NAME], "readwrite");
         var store = transaction.objectStore(IDBFS.DB_STORE_NAME);
-
         function done(err) {
           if (err && !errored) {
             errored = true;
@@ -4175,12 +2907,10 @@
         }
         var mounts = FS.getMounts(FS.root.mount);
         var completed = 0;
-
         function doCallback(errCode) {
           FS.syncFSRequests--;
           return callback(errCode)
         }
-
         function done(errCode) {
           if (errCode) {
             if (!done.errored) {
@@ -5240,7 +3970,6 @@
             return fn.apply(null, arguments)
           }
         });
-
         function writeChunks(stream, buffer, offset, length, position) {
           var contents = stream.node.contents;
           if (position >= contents.length) return 0;
@@ -5278,7 +4007,6 @@
       createPreloadedFile: (parent, name, url, canRead, canWrite, onload, onerror, dontCreateFile, canOwn, preFinish) => {
         var fullname = name ? PATH_FS.resolve(PATH.join2(parent, name)) : parent;
         var dep = getUniqueRunDependency("cp " + fullname);
-
         function processData(byteArray) {
           function finish(byteArray) {
             if (preFinish) preFinish();
@@ -5332,7 +4060,6 @@
           var ok = 0,
             fail = 0,
             total = paths.length;
-
           function finish() {
             if (fail == 0) onload();
             else onerror()
@@ -5374,7 +4101,6 @@
           var ok = 0,
             fail = 0,
             total = paths.length;
-
           function finish() {
             if (fail == 0) onload();
             else onerror()
@@ -5399,7 +4125,6 @@
         openRequest.onerror = onerror
       }
     };
-
     function _emscripten_set_main_loop_timing(mode, value) {
       Browser.mainLoop.timingMode = mode;
       Browser.mainLoop.timingValue = value;
@@ -5456,19 +4181,15 @@
         return t[0] * 1e3 + t[1] / 1e6
       }
     } else _emscripten_get_now = () => performance.now();
-
     function _exit(status) {
       exit(status)
     }
-
     function maybeExit() {}
-
     function setMainLoop(browserIterationFunc, fps, simulateInfiniteLoop, arg, noSetTiming) {
       assert(!Browser.mainLoop.func, "emscripten_set_main_loop: there can only be one main loop function at once: call emscripten_cancel_main_loop to cancel the previous one before setting a new one with different parameters.");
       Browser.mainLoop.func = browserIterationFunc;
       Browser.mainLoop.arg = arg;
       var thisMainLoopId = Browser.mainLoop.currentlyRunningMainloop;
-
       function checkIsRunning() {
         if (thisMainLoopId < Browser.mainLoop.currentlyRunningMainloop) {
           maybeExit();
@@ -5521,7 +4242,6 @@
         throw "unwind"
       }
     }
-
     function callUserCallback(func, synchronous) {
       if (ABORT) {
         return
@@ -5536,7 +4256,6 @@
         handleException(e)
       }
     }
-
     function safeSetTimeout(func, timeout) {
       return setTimeout(function() {
         callUserCallback(func)
@@ -5672,14 +4391,12 @@
         };
         audioPlugin["handle"] = function audioPlugin_handle(byteArray, name, onload, onerror) {
           var done = false;
-
           function finish(audio) {
             if (done) return;
             done = true;
             preloadedAudios[name] = audio;
             if (onload) onload(byteArray)
           }
-
           function fail() {
             if (done) return;
             done = true;
@@ -5702,7 +4419,6 @@
             audio.onerror = function audio_onerror(event) {
               if (done) return;
               out("warning: browser could not fully decode audio " + name + ", trying slower base64 approach");
-
               function encode64(data) {
                 var BASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
                 var PAD = "=";
@@ -5727,7 +4443,7 @@
                 }
                 return ret
               }
-              audio.src = "data:audio/x-" + name.substr(-3) + ";base64," + encode64(byteArray);
+              audio.src = "audio/x-" + name.substr(-3) + ";base64," + encode64(byteArray);
               finish(audio)
             };
             audio.src = url;
@@ -5739,7 +4455,6 @@
           }
         };
         Module["preloadPlugins"].push(audioPlugin);
-
         function pointerLockChange() {
           Browser.pointerLock = document["pointerLockElement"] === Module["canvas"] || document["mozPointerLockElement"] === Module["canvas"] || document["webkitPointerLockElement"] === Module["canvas"] || document["msPointerLockElement"] === Module["canvas"]
         }
@@ -5821,7 +4536,6 @@
         if (typeof Browser.lockPointer == "undefined") Browser.lockPointer = true;
         if (typeof Browser.resizeCanvas == "undefined") Browser.resizeCanvas = false;
         var canvas = Module["canvas"];
-
         function fullscreenChange() {
           Browser.isFullscreen = false;
           var canvasContainer = canvas.parentNode;
@@ -6090,11 +4804,9 @@
         }
       }
     };
-
     function _SDL_GetTicks() {
       return Date.now() - SDL.startTime | 0
     }
-
     function _SDL_LockSurface(surf) {
       var surfData = SDL.surfaces[surf];
       surfData.locked++;
@@ -6129,15 +4841,12 @@
       }
       return 0
     }
-
     function SDL_unicode() {
       return SDL.unicode
     }
-
     function SDL_ttfContext() {
       return SDL.ttfContext
     }
-
     function SDL_audio() {
       return SDL.audio
     }
@@ -7113,7 +5822,7 @@
           else if (typeof webkitAudioContext != "undefined") SDL.audioContext = new webkitAudioContext
         }
       },
-      webAudioAvailable: function() {
+            webAudioAvailable: function() {
         return !!SDL.audioContext
       },
       fillWebAudioBufferFromHeap: function(heapPtr, sizeSamplesPerChannel, dstAudioBuffer) {
@@ -7228,11 +5937,9 @@
         return null
       }
     };
-
     function _SDL_GetNumAudioDrivers() {
       return 1
     }
-
     function _SDL_Init(initFlags) {
       SDL.startTime = Date.now();
       SDL.initFlags = initFlags;
@@ -7268,13 +5975,11 @@
       SDL.DOMEventToSDLEvent["joystick_button_up"] = 1540;
       return 0
     }
-
     function listenOnce(object, event, func) {
       object.addEventListener(event, func, {
         "once": true
       })
     }
-
     function autoResumeAudioContext(ctx, elements) {
       if (!elements) {
         elements = [document, document.getElementById("canvas")]
@@ -7288,7 +5993,6 @@
         })
       })
     }
-
     function _SDL_OpenAudio(desired, obtained) {
       try {
         SDL.audio = {
@@ -7297,10 +6001,11 @@
           channels: HEAPU8[desired + 6 >> 0],
           samples: HEAPU16[desired + 8 >> 1],
           callback: HEAPU32[desired + 16 >> 2],
-          userdata: HEAPU32[desired + 20 >> 2],
+          user: HEAPU32[desired + 20 >> 2],
           paused: true,
           timer: null
         };
+
         if (SDL.audio.format == 8) {
           SDL.audio.silence = 128
         } else if (SDL.audio.format == 32784) {
@@ -7435,7 +6140,6 @@
       }
       return 0
     }
-
     function _SDL_PauseAudio(pauseOn) {
       if (!SDL.audio) {
         return
@@ -7452,7 +6156,6 @@
       }
       SDL.audio.paused = pauseOn
     }
-
     function _SDL_AudioQuit() {
       for (var i = 0; i < SDL.numChannels; ++i) {
         var chan = SDL.channels[i];
@@ -7465,12 +6168,10 @@
       if (audio) audio.pause();
       SDL.music.audio = undefined
     }
-
     function _SDL_Quit() {
       _SDL_AudioQuit();
       out("SDL_Quit called (and ignored)")
     }
-
     function ___assert_fail(condition, filename, line, func) {
       abort("Assertion failed: " + UTF8ToString(condition) + ", at: " + [filename ? UTF8ToString(filename) : "unknown filename", line, func ? UTF8ToString(func) : "unknown function"])
     }
@@ -7546,7 +6247,6 @@
         return stream
       }
     };
-
     function ___syscall_faccessat(dirfd, path, amode, flags) {
       try {
         path = SYSCALLS.getStr(path);
@@ -7574,12 +6274,10 @@
         return -e.errno
       }
     }
-
     function setErrNo(value) {
       HEAP32[___errno_location() >> 2] = value;
       return value
     }
-
     function ___syscall_fcntl64(fd, cmd, varargs) {
       SYSCALLS.varargs = varargs;
       try {
@@ -7628,7 +6326,6 @@
         return -e.errno
       }
     }
-
     function ___syscall_getdents64(fd, dirp, count) {
       try {
         var stream = SYSCALLS.getStreamFromFD(fd);
@@ -7672,7 +6369,6 @@
         return -e.errno
       }
     }
-
     function ___syscall_ioctl(fd, op, varargs) {
       SYSCALLS.varargs = varargs;
       try {
@@ -7722,7 +6418,6 @@
         return -e.errno
       }
     }
-
     function ___syscall_mkdirat(dirfd, path, mode) {
       try {
         path = SYSCALLS.getStr(path);
@@ -7736,7 +6431,6 @@
         return -e.errno
       }
     }
-
     function ___syscall_openat(dirfd, path, flags, varargs) {
       SYSCALLS.varargs = varargs;
       try {
@@ -7749,7 +6443,6 @@
         return -e.errno
       }
     }
-
     function ___syscall_renameat(olddirfd, oldpath, newdirfd, newpath) {
       try {
         oldpath = SYSCALLS.getStr(oldpath);
@@ -7763,7 +6456,6 @@
         return -e.errno
       }
     }
-
     function ___syscall_rmdir(path) {
       try {
         path = SYSCALLS.getStr(path);
@@ -7774,7 +6466,6 @@
         return -e.errno
       }
     }
-
     function ___syscall_stat64(path, buf) {
       try {
         path = SYSCALLS.getStr(path);
@@ -7784,7 +6475,6 @@
         return -e.errno
       }
     }
-
     function ___syscall_unlinkat(dirfd, path, flags) {
       try {
         path = SYSCALLS.getStr(path);
@@ -7802,11 +6492,9 @@
         return -e.errno
       }
     }
-
     function __emscripten_date_now() {
       return Date.now()
     }
-
     function __localtime_js(time, tmPtr) {
       var date = new Date(HEAP32[time >> 2] * 1e3);
       HEAP32[tmPtr >> 2] = date.getSeconds();
@@ -7825,7 +6513,6 @@
       var dst = (summerOffset != winterOffset && date.getTimezoneOffset() == Math.min(winterOffset, summerOffset)) | 0;
       HEAP32[tmPtr + 32 >> 2] = dst
     }
-
     function __mktime_js(tmPtr) {
       var date = new Date(HEAP32[tmPtr + 20 >> 2] + 1900, HEAP32[tmPtr + 16 >> 2], HEAP32[tmPtr + 12 >> 2], HEAP32[tmPtr + 8 >> 2], HEAP32[tmPtr + 4 >> 2], HEAP32[tmPtr >> 2], 0);
       var dst = HEAP32[tmPtr + 32 >> 2];
@@ -7851,7 +6538,6 @@
       HEAP32[tmPtr + 16 >> 2] = date.getMonth();
       return date.getTime() / 1e3 | 0
     }
-
     function _tzset_impl(timezone, daylight, tzname) {
       var currentYear = (new Date).getFullYear();
       var winter = new Date(currentYear, 0, 1);
@@ -7861,7 +6547,6 @@
       var stdTimezoneOffset = Math.max(winterOffset, summerOffset);
       HEAP32[timezone >> 2] = stdTimezoneOffset * 60;
       HEAP32[daylight >> 2] = Number(winterOffset != summerOffset);
-
       function extractZone(date) {
         var match = date.toTimeString().match(/\(([A-Za-z ]+)\)$/);
         return match ? match[1] : "GMT"
@@ -7878,18 +6563,15 @@
         HEAPU32[tzname + 4 >> 2] = winterNamePtr
       }
     }
-
     function __tzset_js(timezone, daylight, tzname) {
       if (__tzset_js.called) return;
       __tzset_js.called = true;
       _tzset_impl(timezone, daylight, tzname)
     }
-
     function _abort() {
       abort("")
     }
     var readAsmConstArgsArray = [];
-
     function readAsmConstArgs(sigPtr, buf) {
       readAsmConstArgsArray.length = 0;
       var ch;
@@ -7901,17 +6583,14 @@
       }
       return readAsmConstArgsArray
     }
-
     function _emscripten_asm_const_int(code, sigPtr, argbuf) {
       var args = readAsmConstArgs(sigPtr, argbuf);
       return ASM_CONSTS[code].apply(null, args)
     }
-
     function _emscripten_cancel_main_loop() {
       Browser.mainLoop.pause();
       Browser.mainLoop.func = null
     }
-
     function _emscripten_memcpy_big(dest, src, num) {
       HEAPU8.copyWithin(dest, src, src + num)
     }
@@ -8021,27 +6700,22 @@
         return document.fullscreenEnabled || document.webkitFullscreenEnabled
       }
     };
-
     function setLetterbox(element, topBottom, leftRight) {
       element.style.paddingLeft = element.style.paddingRight = leftRight + "px";
       element.style.paddingTop = element.style.paddingBottom = topBottom + "px"
     }
-
     function maybeCStringToJsString(cString) {
       return cString > 2 ? UTF8ToString(cString) : cString
     }
     var specialHTMLTargets = [0, typeof document != "undefined" ? document : 0, typeof window != "undefined" ? window : 0];
-
     function findEventTarget(target) {
       target = maybeCStringToJsString(target);
       var domElement = specialHTMLTargets[target] || (typeof document != "undefined" ? document.querySelector(target) : undefined);
       return domElement
     }
-
     function findCanvasEventTarget(target) {
       return findEventTarget(target)
     }
-
     function _emscripten_set_canvas_element_size(target, width, height) {
       var canvas = findCanvasEventTarget(target);
       if (!canvas) return -4;
@@ -8049,14 +6723,12 @@
       canvas.height = height;
       return 0
     }
-
     function _emscripten_get_canvas_element_size(target, width, height) {
       var canvas = findCanvasEventTarget(target);
       if (!canvas) return -4;
       HEAP32[width >> 2] = canvas.width;
       HEAP32[height >> 2] = canvas.height
     }
-
     function getCanvasElementSize(target) {
       return withStackSave(function() {
         var w = stackAlloc(8);
@@ -8068,7 +6740,6 @@
         return size
       })
     }
-
     function setCanvasElementSize(target, width, height) {
       if (!target.controlTransferredOffscreen) {
         target.width = width;
@@ -8081,7 +6752,6 @@
         })
       }
     }
-
     function registerRestoreOldStyle(canvas) {
       var canvasSize = getCanvasElementSize(canvas);
       var oldWidth = canvasSize[0];
@@ -8102,7 +6772,6 @@
       var oldDocumentOverflow = document.documentElement.style.overflow;
       var oldDocumentScroll = document.body.scroll;
       var oldImageRendering = canvas.style.imageRendering;
-
       function restoreOldStyle() {
         var fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
         if (!fullscreenElement) {
@@ -8136,14 +6805,12 @@
       document.addEventListener("webkitfullscreenchange", restoreOldStyle);
       return restoreOldStyle
     }
-
     function getBoundingClientRect(e) {
       return specialHTMLTargets.indexOf(e) < 0 ? e.getBoundingClientRect() : {
         "left": 0,
         "top": 0
       }
     }
-
     function JSEvents_resizeCanvasForFullscreen(target, strategy) {
       var restoreOldStyle = registerRestoreOldStyle(target);
       var cssWidth = strategy.softFullscreen ? innerWidth : screen.width;
@@ -8191,7 +6858,6 @@
       }
       return restoreOldStyle
     }
-
     function JSEvents_requestFullscreen(target, strategy) {
       if (strategy.scaleMode != 0 || strategy.canvasResolutionScaleMode != 0) {
         JSEvents_resizeCanvasForFullscreen(target, strategy)
@@ -8209,7 +6875,6 @@
       }
       return 0
     }
-
     function doRequestFullscreen(target, strategy) {
       if (!JSEvents.fullscreenEnabled()) return -1;
       target = findEventTarget(target);
@@ -8229,7 +6894,6 @@
       return JSEvents_requestFullscreen(target, strategy)
     }
     var currentFullscreenStrategy = {};
-
     function _emscripten_request_fullscreen_strategy(target, deferUntilInEventHandler, fullscreenStrategy) {
       var strategy = {
         scaleMode: HEAP32[fullscreenStrategy >> 2],
@@ -8241,11 +6905,9 @@
       };
       return doRequestFullscreen(target, strategy)
     }
-
     function getHeapMax() {
       return 2147483648
     }
-
     function emscripten_realloc_buffer(size) {
       try {
         wasmMemory.grow(size - buffer.byteLength + 65535 >>> 16);
@@ -8253,7 +6915,6 @@
         return 1
       } catch (e) {}
     }
-
     function _emscripten_resize_heap(requestedSize) {
       var oldSize = HEAPU8.length;
       requestedSize = requestedSize >>> 0;
@@ -8273,12 +6934,10 @@
       }
       return false
     }
-
     function _emscripten_set_main_loop(func, fps, simulateInfiniteLoop) {
       var browserIterationFunc = getWasmTableEntry(func);
       setMainLoop(browserIterationFunc, fps, simulateInfiniteLoop)
     }
-
     function fillMouseEventData(eventStruct, e, target) {
       HEAPF64[eventStruct >> 3] = e.timeStamp;
       var idx = eventStruct >> 2;
@@ -8298,7 +6957,6 @@
       HEAP32[idx + 13] = e.clientX - rect.left;
       HEAP32[idx + 14] = e.clientY - rect.top
     }
-
     function registerMouseEventCallback(target, userData, useCapture, callbackfunc, eventTypeId, eventTypeString, targetThread) {
       if (!JSEvents.mouseEvent) JSEvents.mouseEvent = _malloc(72);
       target = findEventTarget(target);
@@ -8317,22 +6975,18 @@
       };
       JSEvents.registerOrRemoveHandler(eventHandler)
     }
-
     function _emscripten_set_mousedown_callback_on_thread(target, userData, useCapture, callbackfunc, targetThread) {
       registerMouseEventCallback(target, userData, useCapture, callbackfunc, 5, "mousedown", targetThread);
       return 0
     }
-
     function _emscripten_set_mousemove_callback_on_thread(target, userData, useCapture, callbackfunc, targetThread) {
       registerMouseEventCallback(target, userData, useCapture, callbackfunc, 8, "mousemove", targetThread);
       return 0
     }
-
     function _emscripten_set_mouseup_callback_on_thread(target, userData, useCapture, callbackfunc, targetThread) {
       registerMouseEventCallback(target, userData, useCapture, callbackfunc, 6, "mouseup", targetThread);
       return 0
     }
-
     function registerTouchEventCallback(target, userData, useCapture, callbackfunc, eventTypeId, eventTypeString, targetThread) {
       if (!JSEvents.touchEvent) JSEvents.touchEvent = _malloc(1696);
       target = findEventTarget(target);
@@ -8393,27 +7047,22 @@
       };
       JSEvents.registerOrRemoveHandler(eventHandler)
     }
-
     function _emscripten_set_touchcancel_callback_on_thread(target, userData, useCapture, callbackfunc, targetThread) {
       registerTouchEventCallback(target, userData, useCapture, callbackfunc, 25, "touchcancel", targetThread);
       return 0
     }
-
     function _emscripten_set_touchend_callback_on_thread(target, userData, useCapture, callbackfunc, targetThread) {
       registerTouchEventCallback(target, userData, useCapture, callbackfunc, 23, "touchend", targetThread);
       return 0
     }
-
     function _emscripten_set_touchmove_callback_on_thread(target, userData, useCapture, callbackfunc, targetThread) {
       registerTouchEventCallback(target, userData, useCapture, callbackfunc, 24, "touchmove", targetThread);
       return 0
     }
-
     function _emscripten_set_touchstart_callback_on_thread(target, userData, useCapture, callbackfunc, targetThread) {
       registerTouchEventCallback(target, userData, useCapture, callbackfunc, 22, "touchstart", targetThread);
       return 0
     }
-
     function _fd_close(fd) {
       try {
         var stream = SYSCALLS.getStreamFromFD(fd);
@@ -8424,7 +7073,6 @@
         return e.errno
       }
     }
-
     function doReadv(stream, iov, iovcnt, offset) {
       var ret = 0;
       for (var i = 0; i < iovcnt; i++) {
@@ -8438,7 +7086,6 @@
       }
       return ret
     }
-
     function _fd_read(fd, iov, iovcnt, pnum) {
       try {
         var stream = SYSCALLS.getStreamFromFD(fd);
@@ -8450,11 +7097,9 @@
         return e.errno
       }
     }
-
     function convertI32PairToI53Checked(lo, hi) {
       return hi + 2097152 >>> 0 < 4194305 - !!lo ? (lo >>> 0) + hi * 4294967296 : NaN
     }
-
     function _fd_seek(fd, offset_low, offset_high, whence, newOffset) {
       try {
         var offset = convertI32PairToI53Checked(offset_low, offset_high);
@@ -8469,7 +7114,6 @@
         return e.errno
       }
     }
-
     function doWritev(stream, iov, iovcnt, offset) {
       var ret = 0;
       for (var i = 0; i < iovcnt; i++) {
@@ -8482,7 +7126,6 @@
       }
       return ret
     }
-
     function _fd_write(fd, iov, iovcnt, pnum) {
       try {
         var stream = SYSCALLS.getStreamFromFD(fd);
@@ -8494,7 +7137,6 @@
         return e.errno
       }
     }
-
     function __webgl_enable_ANGLE_instanced_arrays(ctx) {
       var ext = ctx.getExtension("ANGLE_instanced_arrays");
       if (ext) {
@@ -8510,7 +7152,6 @@
         return 1
       }
     }
-
     function __webgl_enable_OES_vertex_array_object(ctx) {
       var ext = ctx.getExtension("OES_vertex_array_object");
       if (ext) {
@@ -8529,7 +7170,6 @@
         return 1
       }
     }
-
     function __webgl_enable_WEBGL_draw_buffers(ctx) {
       var ext = ctx.getExtension("WEBGL_draw_buffers");
       if (ext) {
@@ -8539,15 +7179,12 @@
         return 1
       }
     }
-
     function __webgl_enable_WEBGL_draw_instanced_base_vertex_base_instance(ctx) {
       return !!(ctx.dibvbi = ctx.getExtension("WEBGL_draw_instanced_base_vertex_base_instance"))
     }
-
     function __webgl_enable_WEBGL_multi_draw_instanced_base_vertex_base_instance(ctx) {
       return !!(ctx.mdibvbi = ctx.getExtension("WEBGL_multi_draw_instanced_base_vertex_base_instance"))
     }
-
     function __webgl_enable_WEBGL_multi_draw(ctx) {
       return !!(ctx.multiDrawWebgl = ctx.getExtension("WEBGL_multi_draw"))
     }
@@ -8592,7 +7229,6 @@
       createContext: function(canvas, webGLContextAttributes) {
         if (!canvas.getContextSafariWebGL2Fixed) {
           canvas.getContextSafariWebGL2Fixed = canvas.getContext;
-
           function fixedGetContext(ver, attrs) {
             var gl = canvas.getContextSafariWebGL2Fixed(ver, attrs);
             return ver == "webgl" == gl instanceof WebGLRenderingContext ? gl : null
@@ -8658,15 +7294,12 @@
         })
       }
     };
-
     function _glActiveTexture(x0) {
       GLctx["activeTexture"](x0)
     }
-
     function _glAttachShader(program, shader) {
       GLctx.attachShader(GL.programs[program], GL.shaders[shader])
     }
-
     function _glBindBuffer(target, buffer) {
       if (target == 35051) {
         GLctx.currentPixelPackBufferBinding = buffer
@@ -8675,23 +7308,18 @@
       }
       GLctx.bindBuffer(target, GL.buffers[buffer])
     }
-
     function _glBindFramebuffer(target, framebuffer) {
       GLctx.bindFramebuffer(target, GL.framebuffers[framebuffer])
     }
-
     function _glBindRenderbuffer(target, renderbuffer) {
       GLctx.bindRenderbuffer(target, GL.renderbuffers[renderbuffer])
     }
-
     function _glBindTexture(target, texture) {
       GLctx.bindTexture(target, GL.textures[texture])
     }
-
     function _glBlendFunc(x0, x1) {
       GLctx["blendFunc"](x0, x1)
     }
-
     function _glBufferData(target, size, data, usage) {
       if (GL.currentContext.version >= 2) {
         if (data && size) {
@@ -8703,23 +7331,18 @@
         GLctx.bufferData(target, data ? HEAPU8.subarray(data, data + size) : size, usage)
       }
     }
-
     function _glCheckFramebufferStatus(x0) {
       return GLctx["checkFramebufferStatus"](x0)
     }
-
     function _glClear(x0) {
       GLctx["clear"](x0)
     }
-
     function _glClearColor(x0, x1, x2, x3) {
       GLctx["clearColor"](x0, x1, x2, x3)
     }
-
     function _glCompileShader(shader) {
       GLctx.compileShader(GL.shaders[shader])
     }
-
     function _glCreateProgram() {
       var id = GL.getNewId(GL.programs);
       var program = GLctx.createProgram();
@@ -8729,13 +7352,11 @@
       GL.programs[id] = program;
       return id
     }
-
     function _glCreateShader(shaderType) {
       var id = GL.getNewId(GL.shaders);
       GL.shaders[id] = GLctx.createShader(shaderType);
       return id
     }
-
     function _glDeleteBuffers(n, buffers) {
       for (var i = 0; i < n; i++) {
         var id = HEAP32[buffers + i * 4 >> 2];
@@ -8748,7 +7369,6 @@
         if (id == GLctx.currentPixelUnpackBufferBinding) GLctx.currentPixelUnpackBufferBinding = 0
       }
     }
-
     function _glDeleteFramebuffers(n, framebuffers) {
       for (var i = 0; i < n; ++i) {
         var id = HEAP32[framebuffers + i * 4 >> 2];
@@ -8759,7 +7379,6 @@
         GL.framebuffers[id] = null
       }
     }
-
     function _glDeleteRenderbuffers(n, renderbuffers) {
       for (var i = 0; i < n; i++) {
         var id = HEAP32[renderbuffers + i * 4 >> 2];
@@ -8770,7 +7389,6 @@
         GL.renderbuffers[id] = null
       }
     }
-
     function _glDeleteTextures(n, textures) {
       for (var i = 0; i < n; i++) {
         var id = HEAP32[textures + i * 4 >> 2];
@@ -8781,43 +7399,33 @@
         GL.textures[id] = null
       }
     }
-
     function _glDepthFunc(x0) {
       GLctx["depthFunc"](x0)
     }
-
     function _glDepthMask(flag) {
       GLctx.depthMask(!!flag)
     }
-
     function _glDisable(x0) {
       GLctx["disable"](x0)
     }
-
     function _glDisableVertexAttribArray(index) {
       GLctx.disableVertexAttribArray(index)
     }
-
     function _glDrawArrays(mode, first, count) {
       GLctx.drawArrays(mode, first, count)
     }
-
     function _glEnable(x0) {
       GLctx["enable"](x0)
     }
-
     function _glEnableVertexAttribArray(index) {
       GLctx.enableVertexAttribArray(index)
     }
-
     function _glFramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer) {
       GLctx.framebufferRenderbuffer(target, attachment, renderbuffertarget, GL.renderbuffers[renderbuffer])
     }
-
     function _glFramebufferTexture2D(target, attachment, textarget, texture, level) {
       GLctx.framebufferTexture2D(target, attachment, textarget, GL.textures[texture], level)
     }
-
     function __glGenObject(n, buffers, createFunction, objectTable) {
       for (var i = 0; i < n; i++) {
         var buffer = GLctx[createFunction]();
@@ -8831,32 +7439,25 @@
         HEAP32[buffers + i * 4 >> 2] = id
       }
     }
-
     function _glGenBuffers(n, buffers) {
       __glGenObject(n, buffers, "createBuffer", GL.buffers)
     }
-
     function _glGenFramebuffers(n, ids) {
       __glGenObject(n, ids, "createFramebuffer", GL.framebuffers)
     }
-
     function _glGenRenderbuffers(n, renderbuffers) {
       __glGenObject(n, renderbuffers, "createRenderbuffer", GL.renderbuffers)
     }
-
     function _glGenTextures(n, textures) {
       __glGenObject(n, textures, "createTexture", GL.textures)
     }
-
     function _glGetAttribLocation(program, name) {
       return GLctx.getAttribLocation(GL.programs[program], UTF8ToString(name))
     }
-
     function writeI53ToI64(ptr, num) {
       HEAPU32[ptr >> 2] = num;
       HEAPU32[ptr + 4 >> 2] = (num - HEAPU32[ptr >> 2]) / 4294967296
     }
-
     function emscriptenWebGLGet(name_, p, type) {
       if (!p) {
         GL.recordError(1281);
@@ -8985,18 +7586,15 @@
           break
       }
     }
-
     function _glGetIntegerv(name_, p) {
       emscriptenWebGLGet(name_, p, 0)
     }
-
     function _glGetProgramInfoLog(program, maxLength, length, infoLog) {
       var log = GLctx.getProgramInfoLog(GL.programs[program]);
       if (log === null) log = "(unknown error)";
       var numBytesWrittenExclNull = maxLength > 0 && infoLog ? stringToUTF8(log, infoLog, maxLength) : 0;
       if (length) HEAP32[length >> 2] = numBytesWrittenExclNull
     }
-
     function _glGetProgramiv(program, pname, p) {
       if (!p) {
         GL.recordError(1281);
@@ -9036,14 +7634,12 @@
         HEAP32[p >> 2] = GLctx.getProgramParameter(program, pname)
       }
     }
-
     function _glGetShaderInfoLog(shader, maxLength, length, infoLog) {
       var log = GLctx.getShaderInfoLog(GL.shaders[shader]);
       if (log === null) log = "(unknown error)";
       var numBytesWrittenExclNull = maxLength > 0 && infoLog ? stringToUTF8(log, infoLog, maxLength) : 0;
       if (length) HEAP32[length >> 2] = numBytesWrittenExclNull
     }
-
     function _glGetShaderiv(shader, pname, p) {
       if (!p) {
         GL.recordError(1281);
@@ -9062,15 +7658,12 @@
         HEAP32[p >> 2] = GLctx.getShaderParameter(GL.shaders[shader], pname)
       }
     }
-
     function jstoi_q(str) {
       return parseInt(str)
     }
-
     function webglGetLeftBracePos(name) {
       return name.slice(-1) == "]" && name.lastIndexOf("[")
     }
-
     function webglPrepareUniformLocationsBeforeFirstUse(program) {
       var uniformLocsById = program.uniformLocsById,
         uniformSizeAndIdsByName = program.uniformSizeAndIdsByName,
@@ -9094,7 +7687,6 @@
         }
       }
     }
-
     function _glGetUniformLocation(program, name) {
       name = UTF8ToString(name);
       if (program = GL.programs[program]) {
@@ -9119,14 +7711,12 @@
       }
       return -1
     }
-
     function _glLinkProgram(program) {
       program = GL.programs[program];
       GLctx.linkProgram(program);
       program.uniformLocsById = 0;
       program.uniformSizeAndIdsByName = {}
     }
-
     function computeUnpackAlignedImageSize(width, height, sizePerPixel, alignment) {
       function roundedToNextMultipleOf(x, y) {
         return x + y - 1 & -y
@@ -9135,7 +7725,6 @@
       var alignedRowSize = roundedToNextMultipleOf(plainRowSize, alignment);
       return height * alignedRowSize
     }
-
     function __colorChannelsInGlTextureFormat(format) {
       var colorChannels = {
         5: 3,
@@ -9150,7 +7739,6 @@
       };
       return colorChannels[format - 6402] || 1
     }
-
     function heapObjectForWebGLType(type) {
       type -= 5120;
       if (type == 0) return HEAP8;
@@ -9161,11 +7749,9 @@
       if (type == 5 || type == 28922 || type == 28520 || type == 30779 || type == 30782) return HEAPU32;
       return HEAPU16
     }
-
     function heapAccessShiftForWebGLHeap(heap) {
       return 31 - Math.clz32(heap.BYTES_PER_ELEMENT)
     }
-
     function emscriptenWebGLGetTexPixelData(type, format, width, height, pixels, internalFormat) {
       var heap = heapObjectForWebGLType(type);
       var shift = heapAccessShiftForWebGLHeap(heap);
@@ -9174,7 +7760,6 @@
       var bytes = computeUnpackAlignedImageSize(width, height, sizePerPixel, GL.unpackAlignment);
       return heap.subarray(pixels >> shift, pixels + bytes >> shift)
     }
-
     function _glReadPixels(x, y, width, height, format, type, pixels) {
       if (GL.currentContext.version >= 2) {
         if (GLctx.currentPixelPackBufferBinding) {
@@ -9192,16 +7777,13 @@
       }
       GLctx.readPixels(x, y, width, height, format, type, pixelData)
     }
-
     function _glRenderbufferStorage(x0, x1, x2, x3) {
       GLctx["renderbufferStorage"](x0, x1, x2, x3)
     }
-
     function _glShaderSource(shader, count, string, length) {
       var source = GL.getSource(shader, count, string, length);
       GLctx.shaderSource(GL.shaders[shader], source)
     }
-
     function _glTexImage2D(target, level, internalFormat, width, height, border, format, type, pixels) {
       if (GL.currentContext.version >= 2) {
         if (GLctx.currentPixelUnpackBufferBinding) {
@@ -9216,15 +7798,12 @@
       }
       GLctx.texImage2D(target, level, internalFormat, width, height, border, format, type, pixels ? emscriptenWebGLGetTexPixelData(type, format, width, height, pixels, internalFormat) : null)
     }
-
     function _glTexParameterf(x0, x1, x2) {
       GLctx["texParameterf"](x0, x1, x2)
     }
-
     function _glTexParameteri(x0, x1, x2) {
       GLctx["texParameteri"](x0, x1, x2)
     }
-
     function _glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels) {
       if (GL.currentContext.version >= 2) {
         if (GLctx.currentPixelUnpackBufferBinding) {
@@ -9241,7 +7820,6 @@
       if (pixels) pixelData = emscriptenWebGLGetTexPixelData(type, format, width, height, pixels, 0);
       GLctx.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixelData)
     }
-
     function webglGetUniformLocation(location) {
       var p = GLctx.currentProgram;
       if (p) {
@@ -9254,20 +7832,16 @@
         GL.recordError(1282)
       }
     }
-
     function _glUniform1f(location, v0) {
       GLctx.uniform1f(webglGetUniformLocation(location), v0)
     }
-
     function _glUniform1i(location, v0) {
       GLctx.uniform1i(webglGetUniformLocation(location), v0)
     }
-
     function _glUniform2f(location, v0, v1) {
       GLctx.uniform2f(webglGetUniformLocation(location), v0, v1)
     }
     var miniTempWebGLFloatBuffers = [];
-
     function _glUniform3fv(location, count, value) {
       if (GL.currentContext.version >= 2) {
         count && GLctx.uniform3fv(webglGetUniformLocation(location), HEAPF32, value >> 2, count * 3);
@@ -9285,7 +7859,6 @@
       }
       GLctx.uniform3fv(webglGetUniformLocation(location), view)
     }
-
     function _glUniformMatrix4fv(location, count, transpose, value) {
       if (GL.currentContext.version >= 2) {
         count && GLctx.uniformMatrix4fv(webglGetUniformLocation(location), !!transpose, HEAPF32, value >> 2, count * 16);
@@ -9319,885 +7892,59 @@
       }
       GLctx.uniformMatrix4fv(webglGetUniformLocation(location), !!transpose, view)
     }
-
     function _glUseProgram(program) {
       program = GL.programs[program];
       GLctx.useProgram(program);
       GLctx.currentProgram = program
     }
-
     function _glVertexAttribPointer(index, size, type, normalized, stride, ptr) {
       GLctx.vertexAttribPointer(index, size, type, !!normalized, stride, ptr)
     }
-
     function _glViewport(x0, x1, x2, x3) {
       GLctx["viewport"](x0, x1, x2, x3)
     }
-
-    function GLFW_Window(id, width, height, title, monitor, share) {
-      this.id = id;
-      this.x = 0;
-      this.y = 0;
-      this.fullscreen = false;
-      this.storedX = 0;
-      this.storedY = 0;
-      this.width = width;
-      this.height = height;
-      this.storedWidth = width;
-      this.storedHeight = height;
-      this.title = title;
-      this.monitor = monitor;
-      this.share = share;
-      this.attributes = GLFW.hints;
-      this.inputModes = {
-        208897: 212993,
-        208898: 0,
-        208899: 0
-      };
-      this.buttons = 0;
-      this.keys = new Array;
-      this.domKeys = new Array;
-      this.shouldClose = 0;
-      this.title = null;
-      this.windowPosFunc = null;
-      this.windowSizeFunc = null;
-      this.windowCloseFunc = null;
-      this.windowRefreshFunc = null;
-      this.windowFocusFunc = null;
-      this.windowIconifyFunc = null;
-      this.framebufferSizeFunc = null;
-      this.mouseButtonFunc = null;
-      this.cursorPosFunc = null;
-      this.cursorEnterFunc = null;
-      this.scrollFunc = null;
-      this.dropFunc = null;
-      this.keyFunc = null;
-      this.charFunc = null;
-      this.userptr = null
-    }
-    var GLFW = {
-      WindowFromId: function(id) {
-        if (id <= 0 || !GLFW.windows) return null;
-        return GLFW.windows[id - 1]
-      },
-      joystickFunc: null,
-      errorFunc: null,
-      monitorFunc: null,
-      active: null,
-      windows: null,
-      monitors: null,
-      monitorString: null,
-      versionString: null,
-      initialTime: null,
-      extensions: null,
-      hints: null,
-      defaultHints: {
-        131073: 0,
-        131074: 0,
-        131075: 1,
-        131076: 1,
-        131077: 1,
-        135169: 8,
-        135170: 8,
-        135171: 8,
-        135172: 8,
-        135173: 24,
-        135174: 8,
-        135175: 0,
-        135176: 0,
-        135177: 0,
-        135178: 0,
-        135179: 0,
-        135180: 0,
-        135181: 0,
-        135182: 0,
-        135183: 0,
-        139265: 196609,
-        139266: 1,
-        139267: 0,
-        139268: 0,
-        139269: 0,
-        139270: 0,
-        139271: 0,
-        139272: 0
-      },
-      DOMToGLFWKeyCode: function(keycode) {
-        switch (keycode) {
-          case 32:
-            return 32;
-          case 222:
-            return 39;
-          case 188:
-            return 44;
-          case 173:
-            return 45;
-          case 189:
-            return 45;
-          case 190:
-            return 46;
-          case 191:
-            return 47;
-          case 48:
-            return 48;
-          case 49:
-            return 49;
-          case 50:
-            return 50;
-          case 51:
-            return 51;
-          case 52:
-            return 52;
-          case 53:
-            return 53;
-          case 54:
-            return 54;
-          case 55:
-            return 55;
-          case 56:
-            return 56;
-          case 57:
-            return 57;
-          case 59:
-            return 59;
-          case 61:
-            return 61;
-          case 187:
-            return 61;
-          case 65:
-            return 65;
-          case 66:
-            return 66;
-          case 67:
-            return 67;
-          case 68:
-            return 68;
-          case 69:
-            return 69;
-          case 70:
-            return 70;
-          case 71:
-            return 71;
-          case 72:
-            return 72;
-          case 73:
-            return 73;
-          case 74:
-            return 74;
-          case 75:
-            return 75;
-          case 76:
-            return 76;
-          case 77:
-            return 77;
-          case 78:
-            return 78;
-          case 79:
-            return 79;
-          case 80:
-            return 80;
-          case 81:
-            return 81;
-          case 82:
-            return 82;
-          case 83:
-            return 83;
-          case 84:
-            return 84;
-          case 85:
-            return 85;
-          case 86:
-            return 86;
-          case 87:
-            return 87;
-          case 88:
-            return 88;
-          case 89:
-            return 89;
-          case 90:
-            return 90;
-          case 219:
-            return 91;
-          case 220:
-            return 92;
-          case 221:
-            return 93;
-          case 192:
-            return 96;
-          case 27:
-            return 256;
-          case 13:
-            return 257;
-          case 9:
-            return 258;
-          case 8:
-            return 259;
-          case 45:
-            return 260;
-          case 46:
-            return 261;
-          case 39:
-            return 262;
-          case 37:
-            return 263;
-          case 40:
-            return 264;
-          case 38:
-            return 265;
-          case 33:
-            return 266;
-          case 34:
-            return 267;
-          case 36:
-            return 268;
-          case 35:
-            return 269;
-          case 20:
-            return 280;
-          case 145:
-            return 281;
-          case 144:
-            return 282;
-          case 44:
-            return 283;
-          case 19:
-            return 284;
-          case 112:
-            return 290;
-          case 113:
-            return 291;
-          case 114:
-            return 292;
-          case 115:
-            return 293;
-          case 116:
-            return 294;
-          case 117:
-            return 295;
-          case 118:
-            return 296;
-          case 119:
-            return 297;
-          case 120:
-            return 298;
-          case 121:
-            return 299;
-          case 122:
-            return 300;
-          case 123:
-            return 301;
-          case 124:
-            return 302;
-          case 125:
-            return 303;
-          case 126:
-            return 304;
-          case 127:
-            return 305;
-          case 128:
-            return 306;
-          case 129:
-            return 307;
-          case 130:
-            return 308;
-          case 131:
-            return 309;
-          case 132:
-            return 310;
-          case 133:
-            return 311;
-          case 134:
-            return 312;
-          case 135:
-            return 313;
-          case 136:
-            return 314;
-          case 96:
-            return 320;
-          case 97:
-            return 321;
-          case 98:
-            return 322;
-          case 99:
-            return 323;
-          case 100:
-            return 324;
-          case 101:
-            return 325;
-          case 102:
-            return 326;
-          case 103:
-            return 327;
-          case 104:
-            return 328;
-          case 105:
-            return 329;
-          case 110:
-            return 330;
-          case 111:
-            return 331;
-          case 106:
-            return 332;
-          case 109:
-            return 333;
-          case 107:
-            return 334;
-          case 16:
-            return 340;
-          case 17:
-            return 341;
-          case 18:
-            return 342;
-          case 91:
-            return 343;
-          case 93:
-            return 348;
-          default:
-            return -1
-        }
-      },
-      getModBits: function(win) {
-        var mod = 0;
-        if (win.keys[340]) mod |= 1;
-        if (win.keys[341]) mod |= 2;
-        if (win.keys[342]) mod |= 4;
-        if (win.keys[343]) mod |= 8;
-        return mod
-      },
-      onKeyPress: function(event) {
-        if (!GLFW.active || !GLFW.active.charFunc) return;
-        if (event.ctrlKey || event.metaKey) return;
-        var charCode = event.charCode;
-        if (charCode == 0 || charCode >= 0 && charCode <= 31) return;
-        getWasmTableEntry(GLFW.active.charFunc)(GLFW.active.id, charCode)
-      },
-      onKeyChanged: function(keyCode, status) {
-        if (!GLFW.active) return;
-        var key = GLFW.DOMToGLFWKeyCode(keyCode);
-        if (key == -1) return;
-        var repeat = status && GLFW.active.keys[key];
-        GLFW.active.keys[key] = status;
-        GLFW.active.domKeys[keyCode] = status;
-        if (!GLFW.active.keyFunc) return;
-        if (repeat) status = 2;
-        getWasmTableEntry(GLFW.active.keyFunc)(GLFW.active.id, key, keyCode, status, GLFW.getModBits(GLFW.active))
-      },
-      onGamepadConnected: function(event) {
-        GLFW.refreshJoysticks()
-      },
-      onGamepadDisconnected: function(event) {
-        GLFW.refreshJoysticks()
-      },
-      onKeydown: function(event) {
-        GLFW.onKeyChanged(event.keyCode, 1);
-        if (event.keyCode === 8 || event.keyCode === 9) {
-          event.preventDefault()
-        }
-      },
-      onKeyup: function(event) {
-        GLFW.onKeyChanged(event.keyCode, 0)
-      },
-      onBlur: function(event) {
-        if (!GLFW.active) return;
-        for (var i = 0; i < GLFW.active.domKeys.length; ++i) {
-          if (GLFW.active.domKeys[i]) {
-            GLFW.onKeyChanged(i, 0)
-          }
-        }
-      },
-      onMousemove: function(event) {
-        if (!GLFW.active) return;
-        Browser.calculateMouseEvent(event);
-        if (event.target != Module["canvas"] || !GLFW.active.cursorPosFunc) return;
-        getWasmTableEntry(GLFW.active.cursorPosFunc)(GLFW.active.id, Browser.mouseX, Browser.mouseY)
-      },
-      DOMToGLFWMouseButton: function(event) {
-        var eventButton = event["button"];
-        if (eventButton > 0) {
-          if (eventButton == 1) {
-            eventButton = 2
-          } else {
-            eventButton = 1
-          }
-        }
-        return eventButton
-      },
-      onMouseenter: function(event) {
-        if (!GLFW.active) return;
-        if (event.target != Module["canvas"] || !GLFW.active.cursorEnterFunc) return;
-        getWasmTableEntry(GLFW.active.cursorEnterFunc)(GLFW.active.id, 1)
-      },
-      onMouseleave: function(event) {
-        if (!GLFW.active) return;
-        if (event.target != Module["canvas"] || !GLFW.active.cursorEnterFunc) return;
-        getWasmTableEntry(GLFW.active.cursorEnterFunc)(GLFW.active.id, 0)
-      },
-      onMouseButtonChanged: function(event, status) {
-        if (!GLFW.active) return;
-        Browser.calculateMouseEvent(event);
-        if (event.target != Module["canvas"]) return;
-        var eventButton = GLFW.DOMToGLFWMouseButton(event);
-        if (status == 1) {
-          GLFW.active.buttons |= 1 << eventButton;
-          try {
-            event.target.setCapture()
-          } catch (e) {}
-        } else {
-          GLFW.active.buttons &= ~(1 << eventButton)
-        }
-        if (!GLFW.active.mouseButtonFunc) return;
-        getWasmTableEntry(GLFW.active.mouseButtonFunc)(GLFW.active.id, eventButton, status, GLFW.getModBits(GLFW.active))
-      },
-      onMouseButtonDown: function(event) {
-        if (!GLFW.active) return;
-        GLFW.onMouseButtonChanged(event, 1)
-      },
-      onMouseButtonUp: function(event) {
-        if (!GLFW.active) return;
-        GLFW.onMouseButtonChanged(event, 0)
-      },
-      onMouseWheel: function(event) {
-        var delta = -Browser.getMouseWheelDelta(event);
-        delta = delta == 0 ? 0 : delta > 0 ? Math.max(delta, 1) : Math.min(delta, -1);
-        GLFW.wheelPos += delta;
-        if (!GLFW.active || !GLFW.active.scrollFunc || event.target != Module["canvas"]) return;
-        var sx = 0;
-        var sy = delta;
-        if (event.type == "mousewheel") {
-          sx = event.wheelDeltaX
-        } else {
-          sx = event.deltaX
-        }
-        getWasmTableEntry(GLFW.active.scrollFunc)(GLFW.active.id, sx, sy);
-        event.preventDefault()
-      },
-      onCanvasResize: function(width, height) {
-        if (!GLFW.active) return;
-        var resizeNeeded = true;
-        if (document["fullscreen"] || document["fullScreen"] || document["mozFullScreen"] || document["webkitIsFullScreen"]) {
-          GLFW.active.storedX = GLFW.active.x;
-          GLFW.active.storedY = GLFW.active.y;
-          GLFW.active.storedWidth = GLFW.active.width;
-          GLFW.active.storedHeight = GLFW.active.height;
-          GLFW.active.x = GLFW.active.y = 0;
-          GLFW.active.width = screen.width;
-          GLFW.active.height = screen.height;
-          GLFW.active.fullscreen = true
-        } else if (GLFW.active.fullscreen == true) {
-          GLFW.active.x = GLFW.active.storedX;
-          GLFW.active.y = GLFW.active.storedY;
-          GLFW.active.width = GLFW.active.storedWidth;
-          GLFW.active.height = GLFW.active.storedHeight;
-          GLFW.active.fullscreen = false
-        } else if (GLFW.active.width != width || GLFW.active.height != height) {
-          GLFW.active.width = width;
-          GLFW.active.height = height
-        } else {
-          resizeNeeded = false
-        }
-        if (resizeNeeded) {
-          Browser.setCanvasSize(GLFW.active.width, GLFW.active.height, true);
-          GLFW.onWindowSizeChanged();
-          GLFW.onFramebufferSizeChanged()
-        }
-      },
-      onWindowSizeChanged: function() {
-        if (!GLFW.active) return;
-        if (!GLFW.active.windowSizeFunc) return;
-        callUserCallback(function() {
-          getWasmTableEntry(GLFW.active.windowSizeFunc)(GLFW.active.id, GLFW.active.width, GLFW.active.height)
-        })
-      },
-      onFramebufferSizeChanged: function() {
-        if (!GLFW.active) return;
-        if (!GLFW.active.framebufferSizeFunc) return;
-        callUserCallback(function() {
-          getWasmTableEntry(GLFW.active.framebufferSizeFunc)(GLFW.active.id, GLFW.active.width, GLFW.active.height)
-        })
-      },
-      getTime: function() {
-        return _emscripten_get_now() / 1e3
-      },
-      setWindowTitle: function(winid, title) {
-        var win = GLFW.WindowFromId(winid);
-        if (!win) return;
-        win.title = UTF8ToString(title);
-        if (GLFW.active.id == win.id) {
-          document.title = win.title
-        }
-      },
-      setJoystickCallback: function(cbfun) {
-        GLFW.joystickFunc = cbfun;
-        GLFW.refreshJoysticks()
-      },
-      joys: {},
-      lastGamepadState: [],
-      lastGamepadStateFrame: null,
-      refreshJoysticks: function() {
-        if (Browser.mainLoop.currentFrameNumber !== GLFW.lastGamepadStateFrame || !Browser.mainLoop.currentFrameNumber) {
-          GLFW.lastGamepadState = navigator.getGamepads ? navigator.getGamepads() : navigator.webkitGetGamepads ? navigator.webkitGetGamepads : [];
-          GLFW.lastGamepadStateFrame = Browser.mainLoop.currentFrameNumber;
-          for (var joy = 0; joy < GLFW.lastGamepadState.length; ++joy) {
-            var gamepad = GLFW.lastGamepadState[joy];
-            if (gamepad) {
-              if (!GLFW.joys[joy]) {
-                out("glfw joystick connected:", joy);
-                GLFW.joys[joy] = {
-                  id: allocateUTF8(gamepad.id),
-                  buttonsCount: gamepad.buttons.length,
-                  axesCount: gamepad.axes.length,
-                  buttons: _malloc(gamepad.buttons.length),
-                  axes: _malloc(gamepad.axes.length * 4)
-                };
-                if (GLFW.joystickFunc) {
-                  getWasmTableEntry(GLFW.joystickFunc)(joy, 262145)
-                }
-              }
-              var data = GLFW.joys[joy];
-              for (var i = 0; i < gamepad.buttons.length; ++i) {
-                HEAP8[data.buttons + i >> 0] = gamepad.buttons[i].pressed
-              }
-              for (var i = 0; i < gamepad.axes.length; ++i) {
-                HEAPF32[data.axes + i * 4 >> 2] = gamepad.axes[i]
-              }
-            } else {
-              if (GLFW.joys[joy]) {
-                out("glfw joystick disconnected", joy);
-                if (GLFW.joystickFunc) {
-                  getWasmTableEntry(GLFW.joystickFunc)(joy, 262146)
-                }
-                _free(GLFW.joys[joy].id);
-                _free(GLFW.joys[joy].buttons);
-                _free(GLFW.joys[joy].axes);
-                delete GLFW.joys[joy]
-              }
-            }
-          }
-        }
-      },
-      setKeyCallback: function(winid, cbfun) {
-        var win = GLFW.WindowFromId(winid);
-        if (!win) return null;
-        var prevcbfun = win.keyFunc;
-        win.keyFunc = cbfun;
-        return prevcbfun
-      },
-      setCharCallback: function(winid, cbfun) {
-        var win = GLFW.WindowFromId(winid);
-        if (!win) return null;
-        var prevcbfun = win.charFunc;
-        win.charFunc = cbfun;
-        return prevcbfun
-      },
-      setMouseButtonCallback: function(winid, cbfun) {
-        var win = GLFW.WindowFromId(winid);
-        if (!win) return null;
-        var prevcbfun = win.mouseButtonFunc;
-        win.mouseButtonFunc = cbfun;
-        return prevcbfun
-      },
-      setCursorPosCallback: function(winid, cbfun) {
-        var win = GLFW.WindowFromId(winid);
-        if (!win) return null;
-        var prevcbfun = win.cursorPosFunc;
-        win.cursorPosFunc = cbfun;
-        return prevcbfun
-      },
-      setScrollCallback: function(winid, cbfun) {
-        var win = GLFW.WindowFromId(winid);
-        if (!win) return null;
-        var prevcbfun = win.scrollFunc;
-        win.scrollFunc = cbfun;
-        return prevcbfun
-      },
-      setDropCallback: function(winid, cbfun) {
-        var win = GLFW.WindowFromId(winid);
-        if (!win) return null;
-        var prevcbfun = win.dropFunc;
-        win.dropFunc = cbfun;
-        return prevcbfun
-      },
-      onDrop: function(event) {
-        if (!GLFW.active || !GLFW.active.dropFunc) return;
-        if (!event.dataTransfer || !event.dataTransfer.files || event.dataTransfer.files.length == 0) return;
-        event.preventDefault();
-        var filenames = _malloc(event.dataTransfer.files.length * 4);
-        var filenamesArray = [];
-        var count = event.dataTransfer.files.length;
-        var written = 0;
-        var drop_dir = ".glfw_dropped_files";
-        FS.createPath("/", drop_dir);
-
-        function save(file) {
-          var path = "/" + drop_dir + "/" + file.name.replace(/\//g, "_");
-          var reader = new FileReader;
-          reader.onloadend = e => {
-            if (reader.readyState != 2) {
-              ++written;
-              out("failed to read dropped file: " + file.name + ": " + reader.error);
-              return
-            }
-            var data = e.target.result;
-            FS.writeFile(path, new Uint8Array(data));
-            if (++written === count) {
-              getWasmTableEntry(GLFW.active.dropFunc)(GLFW.active.id, count, filenames);
-              for (var i = 0; i < filenamesArray.length; ++i) {
-                _free(filenamesArray[i])
-              }
-              _free(filenames)
-            }
-          };
-          reader.readAsArrayBuffer(file);
-          var filename = allocateUTF8(path);
-          filenamesArray.push(filename);
-          HEAPU32[filenames + i * 4 >> 2] = filename
-        }
-        for (var i = 0; i < count; ++i) {
-          save(event.dataTransfer.files[i])
-        }
-        return false
-      },
-      onDragover: function(event) {
-        if (!GLFW.active || !GLFW.active.dropFunc) return;
-        event.preventDefault();
-        return false
-      },
-      setWindowSizeCallback: function(winid, cbfun) {
-        var win = GLFW.WindowFromId(winid);
-        if (!win) return null;
-        var prevcbfun = win.windowSizeFunc;
-        win.windowSizeFunc = cbfun;
-        return prevcbfun
-      },
-      setWindowCloseCallback: function(winid, cbfun) {
-        var win = GLFW.WindowFromId(winid);
-        if (!win) return null;
-        var prevcbfun = win.windowCloseFunc;
-        win.windowCloseFunc = cbfun;
-        return prevcbfun
-      },
-      setWindowRefreshCallback: function(winid, cbfun) {
-        var win = GLFW.WindowFromId(winid);
-        if (!win) return null;
-        var prevcbfun = win.windowRefreshFunc;
-        win.windowRefreshFunc = cbfun;
-        return prevcbfun
-      },
-      onClickRequestPointerLock: function(e) {
-        if (!Browser.pointerLock && Module["canvas"].requestPointerLock) {
-          Module["canvas"].requestPointerLock();
-          e.preventDefault()
-        }
-      },
-      setInputMode: function(winid, mode, value) {
-        var win = GLFW.WindowFromId(winid);
-        if (!win) return;
-        switch (mode) {
-          case 208897: {
-            switch (value) {
-              case 212993: {
-                win.inputModes[mode] = value;
-                Module["canvas"].removeEventListener("click", GLFW.onClickRequestPointerLock, true);
-                Module["canvas"].exitPointerLock();
-                break
-              }
-              case 212994: {
-                out("glfwSetInputMode called with GLFW_CURSOR_HIDDEN value not implemented.");
-                break
-              }
-              case 212995: {
-                win.inputModes[mode] = value;
-                Module["canvas"].addEventListener("click", GLFW.onClickRequestPointerLock, true);
-                Module["canvas"].requestPointerLock();
-                break
-              }
-              default: {
-                out("glfwSetInputMode called with unknown value parameter value: " + value + ".");
-                break
-              }
-            }
-            break
-          }
-          case 208898: {
-            out("glfwSetInputMode called with GLFW_STICKY_KEYS mode not implemented.");
-            break
-          }
-          case 208899: {
-            out("glfwSetInputMode called with GLFW_STICKY_MOUSE_BUTTONS mode not implemented.");
-            break
-          }
-          default: {
-            out("glfwSetInputMode called with unknown mode parameter value: " + mode + ".");
-            break
-          }
-        }
-      },
-      getKey: function(winid, key) {
-        var win = GLFW.WindowFromId(winid);
-        if (!win) return 0;
-        return win.keys[key]
-      },
-      getMouseButton: function(winid, button) {
-        var win = GLFW.WindowFromId(winid);
-        if (!win) return 0;
-        return (win.buttons & 1 << button) > 0
-      },
-      getCursorPos: function(winid, x, y) {
-        HEAPF64[x >> 3] = Browser.mouseX;
-        HEAPF64[y >> 3] = Browser.mouseY
-      },
-      getMousePos: function(winid, x, y) {
-        HEAP32[x >> 2] = Browser.mouseX;
-        HEAP32[y >> 2] = Browser.mouseY
-      },
-      setCursorPos: function(winid, x, y) {},
-      getWindowPos: function(winid, x, y) {
-        var wx = 0;
-        var wy = 0;
-        var win = GLFW.WindowFromId(winid);
-        if (win) {
-          wx = win.x;
-          wy = win.y
-        }
-        if (x) {
-          HEAP32[x >> 2] = wx
-        }
-        if (y) {
-          HEAP32[y >> 2] = wy
-        }
-      },
-      setWindowPos: function(winid, x, y) {
-        var win = GLFW.WindowFromId(winid);
-        if (!win) return;
-        win.x = x;
-        win.y = y
-      },
-      getWindowSize: function(winid, width, height) {
-        var ww = 0;
-        var wh = 0;
-        var win = GLFW.WindowFromId(winid);
-        if (win) {
-          ww = win.width;
-          wh = win.height
-        }
-        if (width) {
-          HEAP32[width >> 2] = ww
-        }
-        if (height) {
-          HEAP32[height >> 2] = wh
-        }
-      },
-      setWindowSize: function(winid, width, height) {
-        var win = GLFW.WindowFromId(winid);
-        if (!win) return;
-        if (GLFW.active.id == win.id) {
-          if (width == screen.width && height == screen.height) {
-            Browser.requestFullscreen()
-          } else {
-            Browser.exitFullscreen();
-            Browser.setCanvasSize(width, height);
-            win.width = width;
-            win.height = height
-          }
-        }
-        if (!win.windowSizeFunc) return;
-        getWasmTableEntry(win.windowSizeFunc)(win.id, width, height)
-      },
-      createWindow: function(width, height, title, monitor, share) {
-        var i, id;
-        for (i = 0; i < GLFW.windows.length && GLFW.windows[i] !== null; i++) {}
-        if (i > 0) throw "glfwCreateWindow only supports one window at time currently";
-        id = i + 1;
-        if (width <= 0 || height <= 0) return 0;
-        if (monitor) {
-          Browser.requestFullscreen()
-        } else {
-          Browser.setCanvasSize(width, height)
-        }
-        for (i = 0; i < GLFW.windows.length && GLFW.windows[i] == null; i++) {}
-        var useWebGL = GLFW.hints[139265] > 0;
-        if (i == GLFW.windows.length) {
-          if (useWebGL) {
-            var contextAttributes = {
-              antialias: GLFW.hints[135181] > 1,
-              depth: GLFW.hints[135173] > 0,
-              stencil: GLFW.hints[135174] > 0,
-              alpha: GLFW.hints[135172] > 0
-            };
-            Module.ctx = Browser.createContext(Module["canvas"], true, true, contextAttributes)
-          } else {
-            Browser.init()
-          }
-        }
-        if (!Module.ctx && useWebGL) return 0;
-        var win = new GLFW_Window(id, width, height, title, monitor, share);
-        if (id - 1 == GLFW.windows.length) {
-          GLFW.windows.push(win)
-        } else {
-          GLFW.windows[id - 1] = win
-        }
-        GLFW.active = win;
-        return win.id
-      },
-      destroyWindow: function(winid) {
-        var win = GLFW.WindowFromId(winid);
-        if (!win) return;
-        if (win.windowCloseFunc) getWasmTableEntry(win.windowCloseFunc)(win.id);
-        GLFW.windows[win.id - 1] = null;
-        if (GLFW.active.id == win.id) GLFW.active = null;
-        for (var i = 0; i < GLFW.windows.length; i++)
-          if (GLFW.windows[i] !== null) return;
-        Module.ctx = Browser.destroyContext(Module["canvas"], true, true)
-      },
-      swapBuffers: function(winid) {},
-      GLFW2ParamToGLFW3Param: function(param) {
-        var table = {
-          196609: 0,
-          196610: 0,
-          196611: 0,
-          196612: 0,
-          196613: 0,
-          196614: 0,
-          131073: 0,
-          131074: 0,
-          131075: 0,
-          131076: 0,
-          131077: 135169,
-          131078: 135170,
-          131079: 135171,
-          131080: 135172,
-          131081: 135173,
-          131082: 135174,
-          131083: 135183,
-          131084: 135175,
-          131085: 135176,
-          131086: 135177,
-          131087: 135178,
-          131088: 135179,
-          131089: 135180,
-          131090: 0,
-          131091: 135181,
-          131092: 139266,
-          131093: 139267,
-          131094: 139270,
-          131095: 139271,
-          131096: 139272
-        };
-        return table[param]
-      }
-    };
-
     function _glfwCreateWindow(width, height, title, monitor, share) {
-      return GLFW.createWindow(width, height, title, monitor, share)
+      var i, id;
+      for (i = 0; i < GLFW.windows.length && GLFW.windows[i] !== null; i++) {}
+      if (i > 0) throw "glfwCreateWindow only supports one window at time currently";
+      id = i + 1;
+      if (width <= 0 || height <= 0) return 0;
+      if (monitor) {
+        Browser.requestFullscreen()
+      } else {
+        Browser.setCanvasSize(width, height)
+      }
+      for (i = 0; i < GLFW.windows.length && GLFW.windows[i] == null; i++) {}
+      var useWebGL = GLFW.hints[139265] > 0;
+      if (i == GLFW.windows.length) {
+        if (useWebGL) {
+          var contextAttributes = {
+            antialias: GLFW.hints[135181] > 1,
+            depth: GLFW.hints[135173] > 0,
+            stencil: GLFW.hints[135174] > 0,
+            alpha: GLFW.hints[135172] > 0
+          };
+          Module.ctx = Browser.createContext(Module["canvas"], true, true, contextAttributes)
+        } else {
+          Browser.init()
+        }
+      }
+      if (!Module.ctx && useWebGL) return 0;
+      var win = new GLFW_Window(id, width, height, title, monitor, share);
+      if (id - 1 == GLFW.windows.length) {
+        GLFW.windows.push(win)
+      } else {
+        GLFW.windows[id - 1] = win
+      }
+      GLFW.active = win;
+      return win.id
     }
-
     function _glfwGetPrimaryMonitor() {
       return 1
     }
-
     function _glfwGetVideoMode(monitor) {
       return 0
     }
-
     function _glfwInit() {
       if (GLFW.windows) return 1;
       GLFW.initialTime = GLFW.getTime();
@@ -10228,45 +7975,34 @@
       });
       return 1
     }
-
     function _glfwMakeContextCurrent(winid) {}
-
     function _glfwPollEvents() {}
-
     function _glfwSetClipboardString(win, string) {}
-
     function _glfwSetDropCallback(winid, cbfun) {
       return GLFW.setDropCallback(winid, cbfun)
     }
-
     function _glfwSetErrorCallback(cbfun) {
       var prevcbfun = GLFW.errorFunc;
       GLFW.errorFunc = cbfun;
       return prevcbfun
     }
-
     function _glfwSetKeyCallback(winid, cbfun) {
       return GLFW.setKeyCallback(winid, cbfun)
     }
-
     function _glfwSetScrollCallback(winid, cbfun) {
       return GLFW.setScrollCallback(winid, cbfun)
     }
-
     function _glfwSetWindowSizeCallback(winid, cbfun) {
       return GLFW.setWindowSizeCallback(winid, cbfun)
     }
-
     function _glfwSwapBuffers(winid) {
       GLFW.swapBuffers(winid)
     }
-
     function _glfwSwapInterval(interval) {
       interval = Math.abs(interval);
       if (interval == 0) _emscripten_set_main_loop_timing(0, 0);
       else _emscripten_set_main_loop_timing(1, interval)
     }
-
     function _glfwTerminate() {
       window.removeEventListener("gamepadconnected", GLFW.onGamepadConnected, true);
       window.removeEventListener("gamepaddisconnected", GLFW.onGamepadDisconnected, true);
@@ -10291,7 +8027,6 @@
       GLFW.windows = null;
       GLFW.active = null
     }
-
     function _glfwWindowHint(target, hint) {
       GLFW.hints[target] = hint
     }
@@ -10375,7 +8110,6 @@
     for (var i = 0; i < 288; ++i) {
       miniTempWebGLFloatBuffers[i] = miniTempWebGLFloatBuffersStorage.subarray(0, i + 1)
     }
-
     function intArrayFromString(stringy, dontAddNull, length) {
       var len = length > 0 ? length : lengthBytesUTF8(stringy) + 1;
       var u8array = new Array(len);
@@ -10507,218 +8241,14 @@
     var ___wasm_call_ctors = Module["___wasm_call_ctors"] = function() {
       return (___wasm_call_ctors = Module["___wasm_call_ctors"] = Module["asm"]["lb"]).apply(null, arguments)
     };
-    var _ad_on_inited = Module["_ad_on_inited"] = function() {
-      return (_ad_on_inited = Module["_ad_on_inited"] = Module["asm"]["mb"]).apply(null, arguments)
-    };
-    var _ad_interstitial_on_loaded = Module["_ad_interstitial_on_loaded"] = function() {
-      return (_ad_interstitial_on_loaded = Module["_ad_interstitial_on_loaded"] = Module["asm"]["nb"]).apply(null, arguments)
-    };
-    var _ad_interstitial_on_showed = Module["_ad_interstitial_on_showed"] = function() {
-      return (_ad_interstitial_on_showed = Module["_ad_interstitial_on_showed"] = Module["asm"]["ob"]).apply(null, arguments)
-    };
-    var _ad_rewarded_on_loaded = Module["_ad_rewarded_on_loaded"] = function() {
-      return (_ad_rewarded_on_loaded = Module["_ad_rewarded_on_loaded"] = Module["asm"]["pb"]).apply(null, arguments)
-    };
-    var _ad_rewarded_on_reward = Module["_ad_rewarded_on_reward"] = function() {
-      return (_ad_rewarded_on_reward = Module["_ad_rewarded_on_reward"] = Module["asm"]["qb"]).apply(null, arguments)
-    };
-    var _ad_rewarded_on_showed = Module["_ad_rewarded_on_showed"] = function() {
-      return (_ad_rewarded_on_showed = Module["_ad_rewarded_on_showed"] = Module["asm"]["rb"]).apply(null, arguments)
-    };
-    var _app_error = Module["_app_error"] = function() {
-      return (_app_error = Module["_app_error"] = Module["asm"]["sb"]).apply(null, arguments)
-    };
     var _free = Module["_free"] = function() {
       return (_free = Module["_free"] = Module["asm"]["tb"]).apply(null, arguments)
-    };
-    var _hint_file_exists = Module["_hint_file_exists"] = function() {
-      return (_hint_file_exists = Module["_hint_file_exists"] = Module["asm"]["ub"]).apply(null, arguments)
     };
     var _malloc = Module["_malloc"] = function() {
       return (_malloc = Module["_malloc"] = Module["asm"]["vb"]).apply(null, arguments)
     };
-    var _menu_query_games_add_result = Module["_menu_query_games_add_result"] = function() {
-      return (_menu_query_games_add_result = Module["_menu_query_games_add_result"] = Module["asm"]["wb"]).apply(null, arguments)
-    };
-    var _menu_query_games_finished = Module["_menu_query_games_finished"] = function() {
-      return (_menu_query_games_finished = Module["_menu_query_games_finished"] = Module["asm"]["xb"]).apply(null, arguments)
-    };
-    var _menu_read_game_finished = Module["_menu_read_game_finished"] = function() {
-      return (_menu_read_game_finished = Module["_menu_read_game_finished"] = Module["asm"]["yb"]).apply(null, arguments)
-    };
-    var _menu_read_counts_finished = Module["_menu_read_counts_finished"] = function() {
-      return (_menu_read_counts_finished = Module["_menu_read_counts_finished"] = Module["asm"]["zb"]).apply(null, arguments)
-    };
-    var _menu_read_ledger_finished = Module["_menu_read_ledger_finished"] = function() {
-      return (_menu_read_ledger_finished = Module["_menu_read_ledger_finished"] = Module["asm"]["Ab"]).apply(null, arguments)
-    };
-    var _menu_write_ledger_finished = Module["_menu_write_ledger_finished"] = function() {
-      return (_menu_write_ledger_finished = Module["_menu_write_ledger_finished"] = Module["asm"]["Bb"]).apply(null, arguments)
-    };
-    var _menu_read_gems_finished = Module["_menu_read_gems_finished"] = function() {
-      return (_menu_read_gems_finished = Module["_menu_read_gems_finished"] = Module["asm"]["Cb"]).apply(null, arguments)
-    };
     var _memcpy = Module["_memcpy"] = function() {
       return (_memcpy = Module["_memcpy"] = Module["asm"]["Db"]).apply(null, arguments)
-    };
-    var _state_menu_deeplink_stop = Module["_state_menu_deeplink_stop"] = function() {
-      return (_state_menu_deeplink_stop = Module["_state_menu_deeplink_stop"] = Module["asm"]["Eb"]).apply(null, arguments)
-    };
-    var _menu_file_upload_finished = Module["_menu_file_upload_finished"] = function() {
-      return (_menu_file_upload_finished = Module["_menu_file_upload_finished"] = Module["asm"]["Fb"]).apply(null, arguments)
-    };
-    var _share_file_finished = Module["_share_file_finished"] = function() {
-      return (_share_file_finished = Module["_share_file_finished"] = Module["asm"]["Gb"]).apply(null, arguments)
-    };
-    var _iap_cancelled = Module["_iap_cancelled"] = function() {
-      return (_iap_cancelled = Module["_iap_cancelled"] = Module["asm"]["Hb"]).apply(null, arguments)
-    };
-    var _state_menu_payout_add = Module["_state_menu_payout_add"] = function() {
-      return (_state_menu_payout_add = Module["_state_menu_payout_add"] = Module["asm"]["Ib"]).apply(null, arguments)
-    };
-    var _state_menu_payout_stop = Module["_state_menu_payout_stop"] = function() {
-      return (_state_menu_payout_stop = Module["_state_menu_payout_stop"] = Module["asm"]["Jb"]).apply(null, arguments)
-    };
-    var _menu_on_password_reset_email_sent = Module["_menu_on_password_reset_email_sent"] = function() {
-      return (_menu_on_password_reset_email_sent = Module["_menu_on_password_reset_email_sent"] = Module["asm"]["Kb"]).apply(null, arguments)
-    };
-    var _menu_sync_upload_finished = Module["_menu_sync_upload_finished"] = function() {
-      return (_menu_sync_upload_finished = Module["_menu_sync_upload_finished"] = Module["asm"]["Lb"]).apply(null, arguments)
-    };
-    var _menu_sync_download_finished = Module["_menu_sync_download_finished"] = function() {
-      return (_menu_sync_download_finished = Module["_menu_sync_download_finished"] = Module["asm"]["Mb"]).apply(null, arguments)
-    };
-    var _game_download_finished = Module["_game_download_finished"] = function() {
-      return (_game_download_finished = Module["_game_download_finished"] = Module["asm"]["Ob"]).apply(null, arguments)
-    };
-    var _app_fetch_url_done = Module["_app_fetch_url_done"] = function() {
-      return (_app_fetch_url_done = Module["_app_fetch_url_done"] = Module["asm"]["Pb"]).apply(null, arguments)
-    };
-    var _app_webview_message = Module["_app_webview_message"] = function() {
-      return (_app_webview_message = Module["_app_webview_message"] = Module["asm"]["Qb"]).apply(null, arguments)
-    };
-    var _app_pause = Module["_app_pause"] = function() {
-      return (_app_pause = Module["_app_pause"] = Module["asm"]["Rb"]).apply(null, arguments)
-    };
-    var _app_resume = Module["_app_resume"] = function() {
-      return (_app_resume = Module["_app_resume"] = Module["asm"]["Sb"]).apply(null, arguments)
-    };
-    var _app_on_signin = Module["_app_on_signin"] = function() {
-      return (_app_on_signin = Module["_app_on_signin"] = Module["asm"]["Tb"]).apply(null, arguments)
-    };
-    var _app_on_signout = Module["_app_on_signout"] = function() {
-      return (_app_on_signout = Module["_app_on_signout"] = Module["asm"]["Ub"]).apply(null, arguments)
-    };
-    var _notification_show_inapp = Module["_notification_show_inapp"] = function() {
-      return (_notification_show_inapp = Module["_notification_show_inapp"] = Module["asm"]["Vb"]).apply(null, arguments)
-    };
-    var _app_init = Module["_app_init"] = function() {
-      return (_app_init = Module["_app_init"] = Module["asm"]["Wb"]).apply(null, arguments)
-    };
-    var _set_is_mobile = Module["_set_is_mobile"] = function() {
-      return (_set_is_mobile = Module["_set_is_mobile"] = Module["asm"]["Xb"]).apply(null, arguments)
-    };
-    var _get_app_version = Module["_get_app_version"] = function() {
-      return (_get_app_version = Module["_get_app_version"] = Module["asm"]["Yb"]).apply(null, arguments)
-    };
-    var _use_test_api_server = Module["_use_test_api_server"] = function() {
-      return (_use_test_api_server = Module["_use_test_api_server"] = Module["asm"]["Zb"]).apply(null, arguments)
-    };
-    var _level_select_menu_start_level = Module["_level_select_menu_start_level"] = function() {
-      return (_level_select_menu_start_level = Module["_level_select_menu_start_level"] = Module["asm"]["_b"]).apply(null, arguments)
-    };
-    var _set_game_focus = Module["_set_game_focus"] = function() {
-      return (_set_game_focus = Module["_set_game_focus"] = Module["asm"]["$b"]).apply(null, arguments)
-    };
-    var _set_ad_freq = Module["_set_ad_freq"] = function() {
-      return (_set_ad_freq = Module["_set_ad_freq"] = Module["asm"]["ac"]).apply(null, arguments)
-    };
-    var _set_ad_duration_offline = Module["_set_ad_duration_offline"] = function() {
-      return (_set_ad_duration_offline = Module["_set_ad_duration_offline"] = Module["asm"]["bc"]).apply(null, arguments)
-    };
-    var _set_abtest_in_game_get = Module["_set_abtest_in_game_get"] = function() {
-      return (_set_abtest_in_game_get = Module["_set_abtest_in_game_get"] = Module["asm"]["cc"]).apply(null, arguments)
-    };
-    var _set_user_premium_ends = Module["_set_user_premium_ends"] = function() {
-      return (_set_user_premium_ends = Module["_set_user_premium_ends"] = Module["asm"]["dc"]).apply(null, arguments)
-    };
-    var _get_user_premium_ends = Module["_get_user_premium_ends"] = function() {
-      return (_get_user_premium_ends = Module["_get_user_premium_ends"] = Module["asm"]["ec"]).apply(null, arguments)
-    };
-    var _set_user_banned = Module["_set_user_banned"] = function() {
-      return (_set_user_banned = Module["_set_user_banned"] = Module["asm"]["fc"]).apply(null, arguments)
-    };
-    var _set_user_gems = Module["_set_user_gems"] = function() {
-      return (_set_user_gems = Module["_set_user_gems"] = Module["asm"]["gc"]).apply(null, arguments)
-    };
-    var _set_user_nick = Module["_set_user_nick"] = function() {
-      return (_set_user_nick = Module["_set_user_nick"] = Module["asm"]["hc"]).apply(null, arguments)
-    };
-    var _set_user_state = Module["_set_user_state"] = function() {
-      return (_set_user_state = Module["_set_user_state"] = Module["asm"]["ic"]).apply(null, arguments)
-    };
-    var _set_user_uid = Module["_set_user_uid"] = function() {
-      return (_set_user_uid = Module["_set_user_uid"] = Module["asm"]["jc"]).apply(null, arguments)
-    };
-    var _set_user_adfree_ends = Module["_set_user_adfree_ends"] = function() {
-      return (_set_user_adfree_ends = Module["_set_user_adfree_ends"] = Module["asm"]["kc"]).apply(null, arguments)
-    };
-    var _get_app_inited = Module["_get_app_inited"] = function() {
-      return (_get_app_inited = Module["_get_app_inited"] = Module["asm"]["lc"]).apply(null, arguments)
-    };
-    var _log_simple = Module["_log_simple"] = function() {
-      return (_log_simple = Module["_log_simple"] = Module["asm"]["mc"]).apply(null, arguments)
-    };
-    var _app_terminate_if_necessary = Module["_app_terminate_if_necessary"] = function() {
-      return (_app_terminate_if_necessary = Module["_app_terminate_if_necessary"] = Module["asm"]["nc"]).apply(null, arguments)
-    };
-    var _score_set_top_nicks_and_scores = Module["_score_set_top_nicks_and_scores"] = function() {
-      return (_score_set_top_nicks_and_scores = Module["_score_set_top_nicks_and_scores"] = Module["asm"]["oc"]).apply(null, arguments)
-    };
-    var _score_set_above_nicks_and_scores = Module["_score_set_above_nicks_and_scores"] = function() {
-      return (_score_set_above_nicks_and_scores = Module["_score_set_above_nicks_and_scores"] = Module["asm"]["pc"]).apply(null, arguments)
-    };
-    var _score_set_below_nicks_and_scores = Module["_score_set_below_nicks_and_scores"] = function() {
-      return (_score_set_below_nicks_and_scores = Module["_score_set_below_nicks_and_scores"] = Module["asm"]["qc"]).apply(null, arguments)
-    };
-    var _score_read_finished_em = Module["_score_read_finished_em"] = function() {
-      return (_score_read_finished_em = Module["_score_read_finished_em"] = Module["asm"]["rc"]).apply(null, arguments)
-    };
-    var _keydown_browser = Module["_keydown_browser"] = function() {
-      return (_keydown_browser = Module["_keydown_browser"] = Module["asm"]["sc"]).apply(null, arguments)
-    };
-    var _update_screen_size = Module["_update_screen_size"] = function() {
-      return (_update_screen_size = Module["_update_screen_size"] = Module["asm"]["tc"]).apply(null, arguments)
-    };
-    var _request_fullscreen = Module["_request_fullscreen"] = function() {
-      return (_request_fullscreen = Module["_request_fullscreen"] = Module["asm"]["uc"]).apply(null, arguments)
-    };
-    var _user_accepted_and_clicked = Module["_user_accepted_and_clicked"] = function() {
-      return (_user_accepted_and_clicked = Module["_user_accepted_and_clicked"] = Module["asm"]["vc"]).apply(null, arguments)
-    };
-    var _main = Module["_main"] = function() {
-      return (_main = Module["_main"] = Module["asm"]["wc"]).apply(null, arguments)
-    };
-    var _ntp_set_server_time = Module["_ntp_set_server_time"] = function() {
-      return (_ntp_set_server_time = Module["_ntp_set_server_time"] = Module["asm"]["xc"]).apply(null, arguments)
-    };
-    var _moderation_publish_perform = Module["_moderation_publish_perform"] = function() {
-      return (_moderation_publish_perform = Module["_moderation_publish_perform"] = Module["asm"]["yc"]).apply(null, arguments)
-    };
-    var _play_counter_falloff = Module["_play_counter_falloff"] = function() {
-      return (_play_counter_falloff = Module["_play_counter_falloff"] = Module["asm"]["zc"]).apply(null, arguments)
-    };
-    var _news_create = Module["_news_create"] = function() {
-      return (_news_create = Module["_news_create"] = Module["asm"]["Ac"]).apply(null, arguments)
-    };
-    var _news_update_started = Module["_news_update_started"] = function() {
-      return (_news_update_started = Module["_news_update_started"] = Module["asm"]["Bc"]).apply(null, arguments)
-    };
-    var _news_update_finished = Module["_news_update_finished"] = function() {
-      return (_news_update_finished = Module["_news_update_finished"] = Module["asm"]["Cc"]).apply(null, arguments)
-    };
-    var ___errno_location = Module["___errno_location"] = function() {
-      return (___errno_location = Module["___errno_location"] = Module["asm"]["Dc"]).apply(null, arguments)
     };
     var stackSave = Module["stackSave"] = function() {
       return (stackSave = Module["stackSave"] = Module["asm"]["Ec"]).apply(null, arguments)
@@ -10740,7 +8270,6 @@
     Module["FS_createDevice"] = FS.createDevice;
     Module["FS_unlink"] = FS.unlink;
     var calledRun;
-
     function ExitStatus(status) {
       this.name = "ExitStatus";
       this.message = "Program terminated with exit(" + status + ")";
@@ -10751,7 +8280,6 @@
       if (!calledRun) run();
       if (!calledRun) dependenciesFulfilled = runCaller
     };
-
     function callMain(args) {
       var entryFunction = Module["_main"];
       args = args || [];
@@ -10773,7 +8301,6 @@
         calledMain = true
       }
     }
-
     function run(args) {
       args = args || arguments_;
       if (runDependencies > 0) {
@@ -10783,7 +8310,6 @@
       if (runDependencies > 0) {
         return
       }
-
       function doRun() {
         if (calledRun) return;
         calledRun = true;
@@ -10808,12 +8334,10 @@
       }
     }
     Module["run"] = run;
-
     function exit(status, implicit) {
       EXITSTATUS = status;
       procExit(status)
     }
-
     function procExit(code) {
       EXITSTATUS = code;
       if (!keepRuntimeAlive()) {
@@ -10833,10 +8357,4 @@
     run();
   </script>
 </body>
-
 </html>
-    
-  </body>
-  
-</html>
-
