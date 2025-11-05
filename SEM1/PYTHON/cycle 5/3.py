@@ -2,7 +2,7 @@ print("<=== Read Specific Columns of given CSV file and print their content ===>
 
 import csv
 
-csv_path = "data.csv"
+csv_path = "SEM1\PYTHON\cycle 5\data.csv"
 columns_to_read = ["Name", "Age"] 
 try:
     with open(csv_path, mode="r", newline="", encoding="utf-8") as f:
