@@ -3,7 +3,6 @@
 
 #define MAX 100
 
-
 void topologicalSort(int n, int adj[MAX][MAX]) {
     int inDegree[MAX] = {0};
     int queue[MAX], front = 0, rear = 0;
