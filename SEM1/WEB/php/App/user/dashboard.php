@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
     header("Location: login.php");
     exit;
 }
@@ -10,7 +10,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Student Management</title>
+    <title>Student Dashboard - Student Management</title>
     <style>
         * {
             margin: 0;
@@ -73,13 +73,9 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 </head>
 <body>
     <div class="sidebar">
-        <h2>Admin Panel</h2>
+        <h2>User Panel</h2>
         <ul>
-            <li><a href="student.php" target="contentFrame">Student</a></li>
-            <li><a href="add_student.php" target="contentFrame">Add Student</a></li>
-            <li><a href="edit_student.php" target="contentFrame">Edit Student</a></li>
-            <li><a href="mark_add.php" target="contentFrame">Add or Edit Mark</a></li>
-            <li><a href="top_students.php" target="contentFrame">Top Students</a></li>
+            <li><a href="profile.php" target="contentFrame">Student</a></li>
             <li style="margin-top: 40px;"><a style="background-color: red; color: white;" href="logout.php" target="_top">Logout</a></li>
         </ul>
     </div>

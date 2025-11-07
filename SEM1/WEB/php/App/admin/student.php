@@ -1,23 +1,41 @@
-<h2>Student Management</h2>
-<p>Here you can view and manage student information.</p>
+<?php
+    $conn = mysqli_connect("localhost", "root", "", "ajmal");
 
-<table border="1" cellpadding="8">
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Class</th>
-        <th>Age</th>
-    </tr>
-    <tr>
-        <td>1</td>
-        <td>Alice</td>
-        <td>10th</td>
-        <td>15</td>
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>Bob</td>
-        <td>9th</td>
-        <td>14</td>
-    </tr>
-</table>
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    $sql = "SELECT * FROM student";
+
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) <= 0) {
+        echo "Not Student Yet";
+    }
+    else{
+        echo <<<EOF
+        <h2>Student Management</h2>
+        <p>Here you can view and manage student information.</p>
+
+        <table border="1" cellpadding="8">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Email</th>
+            </tr>
+        EOF;
+
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo <<<EOF
+                    <tr>
+                        <th>{$row['rollno']}</th>
+                        <th>{$row['name']}</th>
+                        <th>{$row['gender']}</th>
+                        <th>{$row['email']}</th>
+                    </tr>
+                EOF;
+        }
+        echo "</table>";
+    }
+?>

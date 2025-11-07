@@ -3,6 +3,7 @@ $conn = mysqli_connect("localhost", "root", "", "ajmal");
 
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
+    
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -49,9 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <select name="rollno" required>
         <option value="">-- Select Roll No --</option>
         <?php
-        $result = mysqli_query($conn, "SELECT rollno, std_name FROM student");
+        $result = mysqli_query($conn, "SELECT rollno, name FROM student");
         while ($row = mysqli_fetch_assoc($result)) {
-            echo "<option value='" . $row['rollno'] . "'>" . $row['rollno'] . " - " . htmlspecialchars($row['std_name']) . "</option>";
+            echo "<option value='" . $row['rollno'] . "'>" . $row['rollno'] . " - " . htmlspecialchars($row['name']) . "</option>";
         }
         ?>
     </select><br><br>
