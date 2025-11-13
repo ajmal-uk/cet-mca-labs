@@ -1,13 +1,7 @@
-# Ignore all compiled executables
 *.exe
 
-# Ignore VS Code settings
 .vscode/
 
-# Keep C source files
 !*.c
-
-
-SEM1/DS/
 
 directory_structure.json
