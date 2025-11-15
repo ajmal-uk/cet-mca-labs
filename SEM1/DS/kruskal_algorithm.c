@@ -1,48 +1,56 @@
 #include<stdio.h>
 #define MAX 10
+#define INF 9999
 
 int parent[MAX];
 
-int find(int i){
-    while(parent[i]!=i){
+int find(int i) {
+    while (parent[i] != i) {
         i = parent[i];
     }
     return i;
 }
 
-void unionSet(int i, int j){
+void unionSet(int i, int j) {
     int a = find(i);
     int b = find(j);
     parent[a] = b;
 }
 
-int main(){
-    int n, e;
-    int u,v,w;
-    int min,a,b;
-    int cost = 0;
-    int edgesAccepted = 0;
+int main() {
+    int n = 4;
+    int e = 5;
+    int cost[MAX][MAX] = {
+        {0, 10, 20, 0},
+        {10, 0, 5, 0},
+        {20, 5, 0, 10},
+        {0, 0, 10, 0}
+    };
+    
     int weight[MAX][3];
+    int costMST = 0, edgesAccepted = 0;
 
-    printf("Enter the number of vertex :");
-    scanf("%d",&n);
-    printf("Enter the number of edges :");
-    scanf("%d",&e);
-
-    printf("Enter the edges :(u,v,weight)");
-    for(int i = 0;i<e;i++){
-        scanf("%d%d%d",&weight[i][0],&weight[i][1],&weight[i][2]);
+    int k = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (cost[i][j] != 0) {
+                weight[k][0] = i;
+                weight[k][1] = j;
+                weight[k][2] = cost[i][j];
+                k++;
+            }
+        }
     }
 
-    for(int i = 0;i<n;i++){
-        parent[i]=i;
+    for (int i = 0; i < n; i++) {
+        parent[i] = i;
     }
 
-    while(edgesAccepted<n-1){
-        min =9999;
+    while (edgesAccepted < n - 1) {
+        int min = INF, a, b, u = -1;
 
-        for(int i = 0 ; i < e ; i++ ){
-            if(weight[i][2]<min){
+        for (int i = 0; i < e; i++) {
+            if (weight[i][2] < min) {
                 min = weight[i][2];
                 a = weight[i][0];
                 b = weight[i][1];
@@ -50,17 +58,16 @@ int main(){
             }
         }
 
-        int set_a = find(a);
-        int set_b = find(b);
-
-        if(set_a!=set_b){
-            printf("%d --- %d --weight--> %d",a,b,min);
-            cost+=min;
+        if (find(a) != find(b)) {
+            printf("%d - %d : %d\n", a, b, min);
+            costMST += min;
             edgesAccepted++;
-            unionSet(set_a,set_b);
+            unionSet(a, b);
         }
-        weight[u][2]=9999;
+
+        weight[u][2] = INF;
     }
-    printf("Minimum cost = %d",cost);
+
+    printf("Minimum cost = %d\n", costMST);
     return 0;
 }
