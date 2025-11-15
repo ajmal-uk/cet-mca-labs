@@ -49,15 +49,12 @@ void topologicalSort(int n, int adj[MAX][MAX]) {
 }
 
 int main() {
-    int n=6;
-    int adj[MAX][MAX] = {0};
-
-    adj[5][0] = 1;
-    adj[5][2] = 1;
-    adj[4][0] = 1;
-    adj[4][1] = 1;
-    adj[2][3] = 1;
-    adj[3][1] = 1;
+    int n=3;
+    int adj[MAX][MAX] = {
+        {0,1,1},
+        {0,0,1},
+        {0,0,0}
+    };
 
     printf("Adjacency Matrix Representation:\n");
     for (int i = 0; i < n; i++) {

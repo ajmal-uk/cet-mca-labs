@@ -5,7 +5,7 @@
 #define Max 100
 
 
-int frond, rear , maxSize , i , item , option;
+int front, rear , maxSize , i , item , option;
 int queue[Max];
 
 void enQueue();
@@ -14,7 +14,7 @@ void traversal();
 void search();
 
 int main(){
-    frond = rear = -1;
+    front = rear = -1;
     printf("\nEnter the Maximum Size of Queue : ");
     scanf("%d",&maxSize);
     while(1){
@@ -49,17 +49,17 @@ void enQueue(){
 }
 
 void decQueue(){
-    if(frond == -1){
+    if(front == -1){
         printf("\nUnderflow!!");
     }
     else{
-        printf("\nItem '%d' removed Successfully!!",queue[frond]);
-        if(frond == rear){
-            frond = -1;
+        printf("\nItem '%d' removed Successfully!!",queue[front]);
+        if(front == rear){
+            front = -1;
             rear = -1;
         }
         else{
-            frond++;
+            front++;
         }
     }
 }
@@ -67,7 +67,7 @@ void decQueue(){
 
 void traversal(){
     printf("\n");
-    for(i = frond ; i <= rear; i++){
+    for(i = front ; i <= rear; i++){
         printf("| %d ", queue[i]);
     }
 }
@@ -76,7 +76,7 @@ void search(){
     printf("\nEnter the Item to Search : ");
     scanf("%d", &item);
     bool itemFound = false;
-    for(i=frond; i<=rear; i++){
+    for(i=front; i<=rear; i++){
         if(queue[i] == item){
             printf("\nItem ' %d ' Found on ' %d ' ",item, i);
             itemFound = true;
