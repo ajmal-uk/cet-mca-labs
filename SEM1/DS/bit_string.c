@@ -1,121 +1,146 @@
 #include <stdio.h>
 
-int n, n1, n2;
+#define MAX 8   // universal set U = {0,1,2,...,MAX-1}
 
-void clearset(int arr[], int n) {
-    for (int i = 0; i < n; i++)
-        arr[i] = 0;
+// Helpers
+void initSet(int S[]) {
+    for (int i = 0; i < MAX; ++i) S[i] = 0;
 }
 
-int ispresent(int arr[], int size, int ele) {
-    for (int i = 0; i < size; i++) {
-        if (arr[i] == ele)
-            return 1;
-    }
-    return 0;
+void insertElement(int S[], int x) {
+    if (x >= 0 && x < MAX) S[x] = 1;
 }
 
-void display(int set[], int size) {
+void deleteElement(int S[], int x) {
+    if (x >= 0 && x < MAX) S[x] = 0;
+}
+
+int isMember(int S[], int x) {
+    if (x < 0 || x >= MAX) return 0;
+    return S[x];
+}
+
+void printBitstring(int S[]) {
+    for (int i = MAX - 1; i >= 0; --i) printf("%d", S[i]);
+    printf("\n");
+}
+
+void printSetElements(int S[]) {
+    int first = 1;
     printf("{");
-    for (int i = 0; i < size; i++) {
-        printf("%d", set[i]);
-        if (i != size - 1)
-            printf(", ");
-    }
-    printf("}\n");
-}
-
-void makeSet(int uniset[], int set[], int n, int bitstr[]) {
-    clearset(bitstr, n);
-    for (int i = 0; i < n; i++) {
-        bitstr[i] = ispresent(set, n, uniset[i]);
-    }
-}
-
-void Union(int set1[], int set2[], int n) {
-    int uni[n];
-    for (int i = 0; i < n; i++) {
-        uni[i] = set1[i] || set2[i];
-    }
-    display(uni, n);
-}
-
-void Intersection(int set1[], int set2[], int n) {
-    int inter[n];
-    for (int i = 0; i < n; i++) {
-        inter[i] = set1[i] && set2[i];
-    }
-    display(inter, n);
-}
-
-void Difference(int set1[], int set2[], int n) {
-    int diff[n];
-    for (int i = 0; i < n; i++) {
-        diff[i] = set1[i] && !set2[i];
-    }
-    display(diff, n);
-}
-
-void createset(int universal[], int set[], int n1) {
-    clearset(set, n1);
-    for (int i = 0; i < n1; i++) {
-        int element;
-        printf("Enter element %d: ", i + 1);
-        scanf("%d", &element);
-        if (ispresent(set, n1, element) == 0 && ispresent(universal, n, element) == 1)
-            set[i] = element;
-        else {
-            printf("Invalid or duplicate element! Try again.\n");
-            i--;
+    for (int i = 0; i < MAX; ++i) {
+        if (S[i]) {
+            if (!first) printf(", ");
+            printf("%d", i);
+            first = 0;
         }
     }
+    if (first) printf("}"); else printf("}");
+    printf("\n");
 }
 
+// Set operations (result stored in R)
+void setUnion(int A[], int B[], int R[]) {
+    for (int i = 0; i < MAX; ++i) R[i] = (A[i] || B[i]) ? 1 : 0;
+}
+
+void setIntersection(int A[], int B[], int R[]) {
+    for (int i = 0; i < MAX; ++i) R[i] = (A[i] && B[i]) ? 1 : 0;
+}
+
+void setDifference(int A[], int B[], int R[]) {
+    // A \ B  -> elements in A that are not in B
+    for (int i = 0; i < MAX; ++i) R[i] = (A[i] && !B[i]) ? 1 : 0;
+}
+
+void setSymmetricDifference(int A[], int B[], int R[]) {
+    for (int i = 0; i < MAX; ++i) R[i] = (A[i] ^ B[i]) ? 1 : 0;
+}
+
+void setComplement(int A[], int R[]) {
+    for (int i = 0; i < MAX; ++i) R[i] = A[i] ? 0 : 1;
+}
+
+// Predicates
+int isSubset(int A[], int B[]) {
+    // A subset of B -> every element of A is also in B
+    for (int i = 0; i < MAX; ++i) {
+        if (A[i] && !B[i]) return 0;
+    }
+    return 1;
+}
+
+int isEqual(int A[], int B[]) {
+    for (int i = 0; i < MAX; ++i) if (A[i] != B[i]) return 0;
+    return 1;
+}
+
+// Demo
 int main() {
-    int element;
-    printf("Enter number of elements in Universal Set: ");
-    scanf("%d", &n);
-    int universal[n], bitstr1[n], bitstr2[n];
-    clearset(universal, n);
-    for (int i = 0; i < n; i++) {
-        printf("Enter element %d: ", i + 1);
-        scanf("%d", &element);
-        if (ispresent(universal, n, element) == 0)
-            universal[i] = element;
-        else {
-            printf("Duplicate element! Try again.\n");
-            i--;
-        }
-    }
+    int A[MAX], B[MAX], R[MAX];
+    initSet(A); initSet(B); initSet(R);
 
-    printf("Enter number of elements in Set 1: ");
-    scanf("%d", &n1);
-    int Set1[n1];
-    createset(universal, Set1, n1);
+    // A = {1, 3, 4}
+    insertElement(A, 1);
+    insertElement(A, 3);
+    insertElement(A, 4);
 
-    printf("Enter number of elements in Set 2: ");
-    scanf("%d", &n2);
-    int Set2[n2];
-    createset(universal, Set2, n2);
+    // B = {2, 3, 6}
+    insertElement(B, 2);
+    insertElement(B, 3);
+    insertElement(B, 6);
 
-    printf("Universal Set: ");
-    display(universal, n);
-    printf("Set 1: ");
-    display(Set1, n1);
-    printf("Set 2: ");
-    display(Set2, n2);
+    printf("Universal set size MAX = %d (elements 0..%d)\n\n", MAX, MAX-1);
 
-    makeSet(universal, Set1, n, bitstr1);
-    makeSet(universal, Set2, n, bitstr2);
+    printf("A (bits): ");
+    printBitstring(A);
+    printf("A (elements): "); printSetElements(A);
+    printf("\n");
 
-    printf("\nUnion of Set 1 and Set 2: ");
-    Union(bitstr1, bitstr2, n);
-    printf("Intersection of Set 1 and Set 2: ");
-    Intersection(bitstr1, bitstr2, n);
-    printf("Set 1 - Set 2: ");
-    Difference(bitstr1, bitstr2, n);
-    printf("Set 2 - Set 1: ");
-    Difference(bitstr2, bitstr1, n);
+    printf("B (bits): ");
+    printBitstring(B);
+    printf("B (elements): "); printSetElements(B);
+    printf("\n");
+
+    setUnion(A, B, R);
+    printf("A ∪ B (bits): ");
+    printBitstring(R);
+    printf("A ∪ B (elements): "); printSetElements(R);
+    printf("\n");
+
+    setIntersection(A, B, R);
+    printf("A ∩ B (bits): ");
+    printBitstring(R);
+    printf("A ∩ B (elements): "); printSetElements(R);
+    printf("\n");
+
+    setDifference(A, B, R);
+    printf("A \\ B (bits): ");
+    printBitstring(R);
+    printf("A \\ B (elements): "); printSetElements(R);
+    printf("\n");
+
+    setDifference(B, A, R);
+    printf("B \\ A (bits): ");
+    printBitstring(R);
+    printf("B \\ A (elements): "); printSetElements(R);
+    printf("\n");
+
+    setSymmetricDifference(A, B, R);
+    printf("A △ B (bits): ");
+    printBitstring(R);
+    printf("A △ B (elements): "); printSetElements(R);
+    printf("\n");
+
+    setComplement(A, R);
+    printf("Complement of A (w.r.t U) (bits): ");
+    printBitstring(R);
+    printf("Complement of A (elements): "); printSetElements(R);
+    printf("\n");
+
+    printf("Is A subset of B? %s\n", isSubset(A,B) ? "Yes" : "No");
+    printf("Is B subset of A? %s\n", isSubset(B,A) ? "Yes" : "No");
+    printf("Are A and B equal? %s\n", isEqual(A,B) ? "Yes" : "No");
 
     return 0;
 }
