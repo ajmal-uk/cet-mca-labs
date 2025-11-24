@@ -7,6 +7,13 @@ if (!$conn) {
 
 $message = '';
 
+// Fetch existing roll numbers
+$existing_rollnos = [];
+$roll_query = mysqli_query($conn, "SELECT rollno FROM student");
+while ($row = mysqli_fetch_assoc($roll_query)) {
+    $existing_rollnos[] = (int)$row['rollno'];
+}
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $rollno = (int)$_POST['rollno'];
@@ -33,21 +40,33 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 mysqli_close($conn);
 ?>
-
 <?php if($message) echo "<p>$message</p>"; ?>
 
 <form action="" method="POST">
     <input type="text" name="name" id="name" placeholder="Full Name" required>
-    <input type="number" name="rollno" id="rollno" placeholder="Roll No" required>
+
+    <select name="rollno" id="rollno" required>
+        <option value="">Select Roll No</option>
+        <?php
+            for ($i = 1; $i <= 60; $i++) {
+                if (!in_array($i, $existing_rollnos)) {
+                    echo "<option value='$i'>$i</option>";
+                }
+            }
+        ?>
+    </select>
 
     <input type="radio" name="gender" value="male" id="male" required>
     <label for="male">Male</label>
+
     <input type="radio" name="gender" value="female" id="female" required>
     <label for="female">Female</label>
+
     <input type="radio" name="gender" value="other" id="other" required>
     <label for="other">Other</label>
 
     <input type="email" name="email" id="email" placeholder="Email" required>
     <input type="password" name="password" id="password" placeholder="Password" required>
+
     <input type="submit" value="Submit">
 </form>

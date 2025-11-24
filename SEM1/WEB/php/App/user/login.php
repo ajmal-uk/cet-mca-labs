@@ -40,6 +40,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Login</title>
+    <style>
+        :root{
+        --primary-color : #20a7db;
+        --button-color : #097969;
+        --input-color : #cfecf7;
+        }
+        body{
+            font-family:Arial, Helvetica, sans-serif;
+            background: var(--primary-color);
+        }
+        form{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        form input[type="email"]{
+            margin-top: 100px;
+        }
+        form input[type="password"],form input[type="email"]{
+            width: 300px;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: var(--input-color);
+            border: none;
+            border-radius: 15px;
+        }
+        form input[type="submit"]{
+            width: 200px;
+            padding: 10px;
+            background-color: var(--button-color);
+            color: #fff;
+            border: none;
+            border-radius: 15px;
+        }
+    </style>
 </head>
 <body>
     <div>

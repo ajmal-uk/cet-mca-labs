@@ -16,7 +16,7 @@ if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true)
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family:Arial, Helvetica, sans-serif;
         }
 
         .sidebar {
@@ -75,12 +75,14 @@ if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true)
     <div class="sidebar">
         <h2>User Panel</h2>
         <ul>
-            <li><a href="profile.php" target="contentFrame">Student</a></li>
+            <li><a href="profile.php" target="contentFrame">Profile</a></li>
+            <li><a href="mark_list.php" target="contentFrame">Mark List</a></li>
+            <li><a href="change_password.php" target="contentFrame">Change Password</a></li>
             <li style="margin-top: 40px;"><a style="background-color: red; color: white;" href="logout.php" target="_top">Logout</a></li>
         </ul>
     </div>
     <div class="main-content">
-        <iframe name="contentFrame" src="student.php" frameborder="0"></iframe>
+        <iframe name="contentFrame" src="profile.php" frameborder="0"></iframe>
     </div>
 </body>
 </html>

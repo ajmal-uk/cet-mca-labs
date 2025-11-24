@@ -13,12 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $mark3 = $_POST['mark3'];
 
     if (!empty($rollno) && $mark1 !== '' && $mark2 !== '' && $mark3 !== '') {
-        // Check if rollno already exists in the mark table
         $check_query = "SELECT * FROM mark WHERE rollno = '$rollno'";
         $result = mysqli_query($conn, $check_query);
 
         if (mysqli_num_rows($result) > 0) {
-            // Roll number exists → update marks
             $update_query = "UPDATE mark 
                              SET mark1 = '$mark1', mark2 = '$mark2', mark3 = '$mark3' 
                              WHERE rollno = '$rollno'";
@@ -28,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo "<script>alert('Error updating marks: " . mysqli_error($conn) . "');</script>";
             }
         } else {
-            // Roll number not found → insert new record
             $insert_query = "INSERT INTO mark (rollno, mark1, mark2, mark3) 
                              VALUES ('$rollno', '$mark1', '$mark2', '$mark3')";
             if (mysqli_query($conn, $insert_query)) {
