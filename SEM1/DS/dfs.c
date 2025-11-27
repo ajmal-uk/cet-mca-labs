@@ -2,51 +2,37 @@
 
 #define MAX 100
 
-int stack[MAX];
 int visited[MAX] = {0};
-int top = -1; 
-
-
-int pop(){
-    if(top == -1){
-        return -1;
-    }
-    return stack[top--];
-}
- 
-void push(int data){
-    if(top == MAX-1){
-        return;
-    }
-    stack[++top] = data;
-}
+int stack[MAX];
+int top=-1;
 
 int isEmpty(){
-    return(top ==-1);
+    if(top == -1){
+        return 1;
+    }
+    return 0;
 }
 
-void setVisited(int i){
-    visited[i] = 1;
-}
-
-void dfs(int adj[][MAX], int n, int start){
-    push(start);
-    printf("DFS Started\n");
-
+void dfs(int n,int adj[MAX][MAX],int start){
+    stack[++top] = start;
     
     while(!isEmpty()){
-        int vertex = pop();
-        if(!visited[vertex]){
-            printf("%d",vertex);
-            visited[vertex] = 1;
-            for(int i = 0; i< n;i++){
-                if(adj[vertex][i] && !visited[i]) push(i);
+        int u = stack[top--];
+        if(!visited[u]){
+            printf("%d",u);
+            visited[u] = 1;
+            for(int v=0;v<n;v++){
+                if(adj[u][v]==1 && !visited[v]){
+                    stack[++top] = v;
+                }
             }
         }
+        
     }
 }
 
-int main(){
+
+void main(){
     int n = 5;
     int adj[MAX][MAX] = {
         {0,1,1,0,0},
@@ -57,5 +43,7 @@ int main(){
     };
     int start = 0;
     
-    dfs(adj, n , start);
+    dfs(n,adj,start);
 }
+
+
