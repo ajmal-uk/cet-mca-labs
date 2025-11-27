@@ -1,85 +1,75 @@
 #include<stdio.h>
-#include<stdlib.h>
-#include<stdbool.h>
 
-#define Max 100
-int i,top, maxSize, item;
-int stack[Max];
-void push();
-void pop();
-void traversal();
-void search();
+#define MAX 100
 
-int main(){
-    top = -1;
-    printf("\nEnter the Maximum Size of Stack : ");
-    scanf("%d",&maxSize);
-    int option;
-    while(1){
-        printf("\n\n1.Push\n2.Pop\n3.Traversal\n4.Search\n5.Exit\n\nEnter the Option : ");
-        scanf("%d",&option);
-        switch (option)
-        {
-            case 1 : push(); break;
-            case 2 : pop(); break;
-            case 3 : traversal(); break;
-            case 4 : search(); break;
-            case 5 : exit(0);
-            default:
-                break;
-        }
-    }
-    return 0;
-}
+int stack[MAX];
+int top = -1;
 
-
-void push(){
-    if(top == maxSize-1){
+void push(int item){
+    if(top == MAX-1){
         printf("\nOverflow");
-
+        return;
     }
-    else{
-        printf("\nEnter the item to Insert in Stack  : ");
-        scanf("%d",&item);
-        stack[++top] = item;
-        printf("\n%d inserted Sucess fully!!",item);
-    }
+    stack[++top] = item;
 }
 
-void pop(){
+int pop(){
     if(top == -1){
-        printf("\nUnderflow");
+        printf("\nUnderflow\n");
+        return -1;
     }
-    else{
-        printf("\n%d Removed!!" , stack[top]);
-        top--;
-    }
+    return stack[top--];
 }
 
 void traversal(){
-    printf("\n");
     if(top == -1){
-        printf("No items in stack");
+        printf("\nStack is empty\n");
+        return;
     }
-    else{
-        for(i = top; i>=0; i--){
-            printf("| %d |\n", stack[i]);
-            printf(" ___ \n");
-        }
+    for(int i = top; i >= 0; i--){
+        printf("| %d |\n", stack[i]);
+        if(i != 0)
+            printf("-----\n");
     }
+    printf("-----\n");
 }
 
-void search(){
-    printf("\nEnter the Item to to search  : ");
-    scanf("%d",&item);
-    bool itemFound = false;
-    for(i = top; i>=0; i--){
-        if(stack[i] == item){
-            printf("\nItem ' %d ' Found Success Fully. At the %d",item,i);
-            itemFound = true;
+int main(){
+    int choice, item;
+
+    while(1){
+        printf("\n\n--- STACK MENU ---\n");
+        printf("1. Push\n");
+        printf("2. Pop\n");
+        printf("3. Display\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch(choice){
+            case 1:
+                printf("Enter element to push: ");
+                scanf("%d", &item);
+                push(item);
+                break;
+
+            case 2:
+                item = pop();
+                if(item != -1)
+                    printf("Popped element: %d\n", item);
+                break;
+
+            case 3:
+                printf("\nStack contents:\n");
+                traversal();
+                break;
+
+            case 4:
+                printf("Exiting...\n");
+                return 0;
+
+            default:
+                printf("Invalid choice! Try again.\n");
         }
-    }
-    if(!itemFound){
-        printf("Item Not Found in Stack");
     }
 }
