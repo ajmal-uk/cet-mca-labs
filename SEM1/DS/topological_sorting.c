@@ -1,51 +1,50 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include<stdio.h>
 
 #define MAX 100
 
-void topologicalSort(int n, int adj[MAX][MAX]) {
-    int inDegree[MAX] = {0};
-    int queue[MAX], front = 0, rear = 0;
-    int topoOrder[MAX];
-    int count = 0;
-
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (adj[i][j] == 1) {
-                inDegree[j]++;
+void topoSorting(int adj[MAX][MAX],int n){
+    int inDegree[MAX]={0};
+    int queue[MAX];
+    int topoSort[MAX];
+    int f=0,r=0,count=0;
+    
+    
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            if(adj[i][j]==1){
+                inDegree[j]+=1;
             }
         }
     }
-
-    for (int i = 0; i < n; i++) {
-        if (inDegree[i] == 0)
-            queue[rear++] = i;
+    
+    
+    for(int i= 0;i<n;i++){
+        if(inDegree[i]==0){
+            queue[r++] = i;
+        }
     }
-
-    while (front < rear) {
-        int u = queue[front++];
-        topoOrder[count++] = u;
-
-        for (int v = 0; v < n; v++) {
-            if (adj[u][v] == 1) {
-                inDegree[v]--;
-                if (inDegree[v] == 0) {
-                    queue[rear++] = v;
+    
+    while(f<r){
+        int u = queue[f++];
+        topoSort[count++] = u;
+        for (int v=0;v<n;v++){
+            if(adj[u][v] == 1){
+                inDegree[v] -=1;
+                if(inDegree[v]==0){
+                    queue[r++] = v;
                 }
             }
         }
     }
-
-    if (count != n) {
-        printf("\nGraph has a cycle! Topological sorting not possible.\n");
-        return;
+    
+    if(count!=n){
+        printf("Cycle Exist");
+    }else{
+        printf("topological order is \n");
+        for(int i=0;i<n;i++){
+            printf("%d ",topoSort[i]);
+        }
     }
-
-    printf("\nTopological Order: ");
-    for (int i = 0; i < count; i++) {
-        printf("%d ", topoOrder[i]);
-    }
-    printf("\n");
 }
 
 int main() {
@@ -63,7 +62,7 @@ int main() {
         printf("\n");
     }
 
-    topologicalSort(n, adj);
+    topoSorting(adj,n);
 
     return 0;
 }
