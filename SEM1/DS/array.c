@@ -1,3 +1,4 @@
+// Online C compiler to run C program online
 #include <stdio.h>
 #define MAX 100
 
@@ -61,7 +62,7 @@ void insert_element(){
         printf("Maximum Size Used");
         return;
     }
-    printf("\n1. Insert Begning\n2.Insert End\n3.Insert Position\n4.Exit\nEnter your Choice : ");
+    printf("\n1.Insert Begning\n2.Insert End\n3.Insert Position\n4.Exit\nEnter your Choice : ");
     scanf("%d",&op);
     if(op==1 || op==2 || op ==3){
         printf("\nEnter the Item to Insert in Array : ");
