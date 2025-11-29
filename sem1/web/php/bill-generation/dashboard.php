@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<frameset cols="20%,80%">
+    <frame name="sideBar" src="sidebar.html">
+    <frame name="dash" src="consumer_reg.php">
+</frameset>
+</html>
