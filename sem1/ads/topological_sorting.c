@@ -2,52 +2,9 @@
 
 #define MAX 100
 
-void topoSorting(int adj[MAX][MAX],int n){
-    int inDegree[MAX]={0};
-    int queue[MAX];
-    int topoSort[MAX];
-    int f=0,r=0,count=0;
-    
-    
-    for(int i=0;i<n;i++){
-        for(int j=0;j<n;j++){
-            if(adj[i][j]==1){
-                inDegree[j]+=1;
-            }
-        }
-    }
-    
-    
-    for(int i= 0;i<n;i++){
-        if(inDegree[i]==0){
-            queue[r++] = i;
-        }
-    }
-    
-    while(f<r){
-        int u = queue[f++];
-        topoSort[count++] = u;
-        for (int v=0;v<n;v++){
-            if(adj[u][v] == 1){
-                inDegree[v] -=1;
-                if(inDegree[v]==0){
-                    queue[r++] = v;
-                }
-            }
-        }
-    }
-    
-    if(count!=n){
-        printf("Cycle Exist");
-    }else{
-        printf("topological order is \n");
-        for(int i=0;i<n;i++){
-            printf("%d ",topoSort[i]);
-        }
-    }
-}
+int queue[MAX],inDegree[MAX]={0},topo[MAX],count=0,front = 0, rear = 0;
 
-int main() {
+int main(){
     int n=3;
     int adj[MAX][MAX] = {
         {0,1,1},
@@ -55,14 +12,40 @@ int main() {
         {0,0,0}
     };
 
-    printf("Adjacency Matrix Representation:\n");
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++)
-            printf("%d ", adj[i][j]);
-        printf("\n");
+    for(int i=0;i<n;i++){
+        for(int j = 0;j<n;j++){
+            if(adj[i][j] == 1){
+                inDegree[j]++;
+            }
+        }
     }
 
-    topoSorting(adj,n);
+    for(int i = 0;i<n;i++){
+        if(inDegree[i] == 0){
+            queue[rear++] = i;
+        }
+    }
 
-    return 0;
+    while(front<rear){
+        int vertex = queue[front++];
+        topo[count++] = vertex;
+        for(int i = 0;i< n;i++){
+            if(adj[vertex][i] == 1){
+                inDegree[i]--;
+                if(inDegree[i] == 0){
+                    queue[rear++] = i;
+                }
+            }
+        }
+    }
+
+    if(count != n){
+        printf("The Graph Have Cycle ! ");
+        return 0;
+    }
+
+    for(int i=0;i<count;i++){
+        printf("%d ",topo[i] );
+    }
 }
+
