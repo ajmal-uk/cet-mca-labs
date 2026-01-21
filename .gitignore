@@ -3,5 +3,6 @@
 .vscode/
 
 !*.c
+*.class
 
 directory_structure.json
