@@ -13,28 +13,15 @@ class products {
         return this.p_code;
     }
 
-    public void setCode(int code) {
-        this.p_code = code;
-    }
-
     public String getName() {
         return this.p_name;
-    }
-
-    public void setName(String name) {
-        this.p_name = name;
     }
 
     public int getPrice() {
         return this.p_price;
     }
-
-    public void setPrice(int price) {
-        this.p_price = price;
-    }
 }
 
-@SuppressWarnings("unused")
 class main{
     public static void main(String[] args) {
         products p1 = new products(1, "Biscut", 100);
