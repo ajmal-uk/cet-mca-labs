@@ -20,9 +20,6 @@ class products {
     public int getPrice() {
         return this.p_price;
     }
-}
-
-class main{
     public static void main(String[] args) {
         products p1 = new products(1, "Biscut", 100);
         products p2 = new products(2, "Biriyani", 400);

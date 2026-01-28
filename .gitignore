@@ -6,3 +6,5 @@
 *.class
 
 directory_structure.json
+
+.bytecoder
